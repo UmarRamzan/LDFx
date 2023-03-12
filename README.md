@@ -1,7 +1,7 @@
 LDFx
 
-Firebase account details
-Email: ldfx2023@gmail.com
+Firebase account details <br>
+Email: ldfx2023@gmail.com <br>
 Password: Bolivia-786
 
 Create a new branch with your name to upload your files. Do not edit the main branch
