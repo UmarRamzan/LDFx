@@ -5,7 +5,7 @@
 	let email = '';
 	let password = '';
 
-	let user = null;
+	let user = 'Yahoo';
 
 	const actionCodeSettings = {
 		// URL you want to redirect back to. The domain (www.example.com) for this
@@ -30,10 +30,12 @@
 		// The link was successfully sent. Inform the user.
 		// Save the email locally so you don't need to ask the user for it again
 		// if they open the link on the same device.
+		console.log("we win bois")
 		window.localStorage.setItem('emailForSignIn', email);
 		// ...
 	})
 	.catch((error) => {
+		console.log(error)
 		const errorCode = error.code;
 		const errorMessage = error.message;
 		// ...
@@ -42,8 +44,8 @@
 	
 </script>
 
-<h1>Signup</h1>
-<h1>user {user}</h1>
+<h1>Signup [temp]</h1>
+<p>This needs to be in a modal aswell as the login</p>
 <input type="email" id="email" placeholder="email" bind:value={email} />
 <input type="password" id="password" placeholder="password" bind:value={password} />
 <button on:click={signup}>signup</button>
