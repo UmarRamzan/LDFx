@@ -1,13 +1,13 @@
 <script>
-	import { signup } from "../api/signup/+server";
+
+    import { login } from "../api/login/+server";
 
 	let email = '';
 	let password = '';
-	let accountType = '';
 
 </script>
 
-<h1>Signup</h1>
+<h1>Login</h1>
 <input type="email" id="email" placeholder="email" bind:value={email} />
 <input type="password" id="password" placeholder="password" bind:value={password} />
-<button on:click={()=>{signup(email, password, accountType)}}>signup</button>
+<button on:click={()=>{login(email, password)}}>login</button>
