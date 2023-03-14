@@ -1,9 +1,5 @@
 LDFx
 
-Firebase account details <br>
-Email: ldfx2023@gmail.com <br>
-Password: Bolivia-786
-
 Create a new branch with your name to upload your files. Do not edit the main branch <br>
 If your code is working and you want to merge it with main, create a pull request from your branch to main <br>
 
