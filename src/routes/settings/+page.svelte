@@ -6,6 +6,7 @@
     let accountType = '';
 
     const getData = async () => {
+        
         const { data, error } = await supabase.auth.getSession()
         if (error) {console.log(error);}
         else {
