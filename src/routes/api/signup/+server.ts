@@ -6,6 +6,9 @@ import {
     createUserWithEmailAndPassword
 } from "firebase/auth"
 
+import { addUser } from '$lib/userDB';
+import { json } from "@sveltejs/kit";
+
 const signup = (email:string, password:string, accountType:string) => {
 
     const auth = getAuth(app);
@@ -57,4 +60,36 @@ const emailLinkConfirmation = () => {
       }
 }
 
-export { signup, emailLinkConfirmation }
+interface User {
+    email: string;
+    password: string;
+    accountType: string;
+  }
+  
+interface SignUpResponse {
+    success: boolean;
+    body?: User;
+    error?: {
+      message: string;
+    };
+}
+  
+const SignUpDummy = async (userData: User): Promise<SignUpResponse> => {
+    if (!userData.email || !userData.password || !userData.accountType) {
+      return {
+        success: false,
+        error: {
+          message: "Please provide email, password, and account type.",
+        },
+      };
+    }
+  
+    const user = await addUser(userData.email, userData.password, userData.accountType);
+    return {
+        success: true,
+        body: user.user,
+    }
+};
+
+
+export { signup, emailLinkConfirmation, SignUpDummy }

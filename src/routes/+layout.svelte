@@ -2,8 +2,8 @@
 // @ts-nocheck
 
   import "carbon-components-svelte/css/white.css";
-  import {signup} from './api/signup/+server'
-  import {login} from './api/login/+server'
+  import {signup,SignUpDummy} from './api/signup/+server'
+  import {login,LoginDummy} from './api/login/+server'
 
   import { setContext } from 'svelte';
   import { writable } from 'svelte/store';
@@ -35,25 +35,45 @@ let loginModal = false;
 let signUpModal = false;
 
 //HOW DO WORK
-export let data;
+/* export let data;
 const user = writable([])
 $: user.set(data.user)
-setContext("user",user)
+setContext("user",user) */
 
 let userObj = {email:'',password:'',accountType:"Student",isLoggedIn:false}
 
-function submitLogin(){
-  userObj.isLoggedIn = true
-  loginModal = false
-  alert(JSON.stringify({email:userObj.email,pass:userObj.password}))
+
+const submitLoginCred = async () => {
+  let res = await LoginDummy(userObj)
+  console.log(res)
+  if (res.success){
+    userObj.isLoggedIn = true
+    loginModal = false
+  }
+  else{
+    alert(res.error)
+  }
+
+}
+
+const submitSignUpCred = async () => {
+  let res = await SignUpDummy(userObj)
+  console.log(res)
+  if (res.success){
+    userObj.isLoggedIn = true
+    signUpModal = false
+  }
+  else{
+    alert(res.error)
+  }
+
 }
 
 
-function submitSignUp(){
-  userObj.isLoggedIn = true
-  signUpModal = false
-  alert(JSON.stringify({email:userObj.email,pass:userObj.password}))
-}
+function logOut(){
+  userObj = {email:'',password:'',accountType:"Student",isLoggedIn:false}
+} 
+
 
 
 </script>
@@ -76,6 +96,8 @@ bind:isSideNavOpen
   {#if !userObj.isLoggedIn}
     <Button kind="secondary" on:click={() => (loginModal = true)}>Login</Button>
     <Button kind="secondary" on:click={() => (signUpModal = true)}>Sign Up</Button>
+  {:else}
+    <Button kind="secondary" on:click={() => (logOut())}>Log Out</Button>
   {/if}
 
 </HeaderNav>
@@ -92,11 +114,11 @@ bind:isSideNavOpen
   on:click:button--secondary={() => (loginModal = false)}
   on:open
   on:close
-  on:submit={submitLogin}
+  on:submit={submitLoginCred}
 >
   <p>Login to account</p>
   <br />
-  <Form on:submit={submitLogin}>
+  <Form on:submit={submitLoginCred}>
   <TextInput
     id="email"
     labelText="Email"
@@ -122,11 +144,11 @@ bind:isSideNavOpen
   on:click:button--secondary={() => (signUpModal = false)}
   on:open
   on:close
-  on:submit = {submitSignUp}
+  on:submit = {submitSignUpCred}
 >
   <p>Make an account</p>
   <br />
-  <Form on:submit={submitSignUp}>
+  <Form on:submit={submitSignUpCred}>
   <Dropdown
     titleText="AcountType"
     selectedId="0"
@@ -152,7 +174,7 @@ bind:isSideNavOpen
 </Modal>
 
 <!--THE SIDEBAR-->
-
+{#if userObj.isLoggedIn}
 <SideNav bind:isOpen={isSideNavOpen}>
 <SideNavItems>
   <SideNavLink text="Link 1" />
@@ -165,6 +187,7 @@ bind:isSideNavOpen
   </SideNavMenu>
 </SideNavItems>
 </SideNav>
+{/if}
 
 <Content>
 <Grid>
