@@ -3,7 +3,7 @@
     import { onMount } from "svelte/internal";
 
     let searchString = '';
-    let searchResults = '';
+    let searchResults = [];
 
     const getSearchResults = async (searchString) => {
         
