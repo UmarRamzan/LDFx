@@ -1,24 +1,5 @@
-import { app } from "$lib/firebase";
-import { json } from "@sveltejs/kit";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import type { RequestHandler } from "./$types";
-import { signIn } from "$lib/userDB";
+import { signIn,addUser } from "$lib/userDB";
 
-
-const auth = getAuth(app);
-
-const login = (email:string, password:string) => {
-    signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-        const user = userCredential.user;
-        return user;
-    })
-    .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorMessage);
-    });
-}
 
 
 interface User {
@@ -34,7 +15,17 @@ interface LoginResponse {
       message: string;
     };
 }
+
+interface SignUpResponse {
+    success: boolean;
+    body?: User;
+    error?: {
+      message: string;
+    };
+}
   
+
+
 const LoginDummy = async (userData: User): Promise<LoginResponse> => {
     if (!userData) {
       return {
@@ -61,4 +52,23 @@ const LoginDummy = async (userData: User): Promise<LoginResponse> => {
 
 };
 
-export { login,LoginDummy }
+
+const SignUpDummy = async (userData: User): Promise<SignUpResponse> => {
+    if (!userData.email || !userData.password || !userData.accountType) {
+      return {
+        success: false,
+        error: {
+          message: "Please provide email, password, and account type.",
+        },
+      };
+    }
+  
+    const user = await addUser(userData.email, userData.password, userData.accountType);
+    return {
+        success: true,
+        body: user.user,
+    }
+};
+
+
+export { LoginDummy,SignUpDummy}

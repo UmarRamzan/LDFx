@@ -2,8 +2,7 @@
 // @ts-nocheck
 
   import "carbon-components-svelte/css/white.css";
-  import {signup,SignUpDummy} from './api/signup/+server'
-  import {login,LoginDummy} from './api/login/+server'
+  import {LoginDummy,SignUpDummy} from './api/dummyAPI/+server'
 
   import { setContext } from 'svelte';
   import { writable } from 'svelte/store';
