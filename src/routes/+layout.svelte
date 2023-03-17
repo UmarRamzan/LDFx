@@ -6,6 +6,7 @@
 
   import { setContext } from 'svelte';
   import { writable } from 'svelte/store';
+  import { onMount } from "svelte";
 
   import {
   Header,
@@ -33,21 +34,26 @@ let isSideNavOpen = false;
 let loginModal = false;
 let signUpModal = false;
 
-//HOW DO WORK
-/* export let data;
-const user = writable([])
-$: user.set(data.user)
-setContext("user",user) */
 
 let userObj = {email:'',password:'',accountType:"Student",isLoggedIn:false}
 
+//declare a store for user
+const user = writable();
+//set store to userObj when updated
+$: user.set(userObj);
+//set default 
+setContext("user", user);
 
 const submitLoginCred = async () => {
   let res = await LoginDummy(userObj)
   console.log(res)
   if (res.success){
+    userObj.email = res.body.email
+    userObj.password = res.body.password
+    userObj.accountType = res.body.accountType
     userObj.isLoggedIn = true
     loginModal = false
+    setContext("user", user)
   }
   else{
     alert(res.error)
@@ -59,8 +65,12 @@ const submitSignUpCred = async () => {
   let res = await SignUpDummy(userObj)
   console.log(res)
   if (res.success){
+    userObj.email = res.body.email
+    userObj.password = res.body.password
+    userObj.accountType = res.body.accountType
     userObj.isLoggedIn = true
     signUpModal = false
+    setContext("user", user)
   }
   else{
     alert(res.error)
@@ -68,15 +78,20 @@ const submitSignUpCred = async () => {
 
 }
 
-
 function logOut(){
   userObj = {email:'',password:'',accountType:"Student",isLoggedIn:false}
-} 
+  setContext("user", user)
+}
 
-
+//idk if u need this
+onMount(async()=>{submitLoginCred,submitSignUpCred,logOut})
 
 </script>
 
+<!--
+  align nav items to center
+
+-->
 <Header
 persistentHamburgerMenu={true}
 company="LDFX"
@@ -90,6 +105,7 @@ bind:isSideNavOpen
   <HeaderNavItem href="/about" text="about us" />
   <HeaderNavItem href="/HowWeWork" text="How We Work" />
   <HeaderNavItem href="/FAQ" text="FAQs" />
+  <HeaderNavItem text="\t\t\t\t\t" />
 <!--   <HeaderNavItem href="/" text="login"/>
   <HeaderNavItem href="/signup" text="signup" /> -->
   {#if !userObj.isLoggedIn}
@@ -173,7 +189,7 @@ bind:isSideNavOpen
 </Modal>
 
 <!--THE SIDEBAR-->
-{#if userObj.isLoggedIn}
+
 <SideNav bind:isOpen={isSideNavOpen}>
 <SideNavItems>
   <SideNavLink text="Link 1" />
@@ -186,7 +202,7 @@ bind:isSideNavOpen
   </SideNavMenu>
 </SideNavItems>
 </SideNav>
-{/if}
+
 
 <Content>
 <Grid>
@@ -197,5 +213,13 @@ bind:isSideNavOpen
 </Grid>
 </Content>
 
+<style>
+  
+  .bx--header__nav-item {
+    display: flex;
+    align-items: center;
+  }
+
+</style>
 
 <slot></slot>

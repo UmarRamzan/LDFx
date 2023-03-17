@@ -1,7 +1,7 @@
 <script>
-    import { emailLinkConfirmation } from "../api/signup/+server";
+    //import { emailLinkConfirmation } from "../api/signup/+server";
     import { onMount } from "svelte";
 
-    onMount(emailLinkConfirmation);
+    //onMount(emailLinkConfirmation);
 
 </script>
