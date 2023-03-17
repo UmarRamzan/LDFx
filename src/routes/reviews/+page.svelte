@@ -12,6 +12,8 @@
         .select('CourseTitle, subject_code, catalog')
         .ilike('subject_code', `%${searchString}%`)
 
+        console.log(courses);
+
         searchResults = courses;
 
     }

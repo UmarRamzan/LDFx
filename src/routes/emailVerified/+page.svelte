@@ -1,1 +1,1 @@
-<h1>Email Verified</h1>
+<h3>Email Verified</h3>
