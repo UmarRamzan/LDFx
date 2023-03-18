@@ -1,36 +1,41 @@
 <script lang="ts">
 
-    import {
-      Button,
-      Modal,
-      ModalBody,
-      ModalFooter,
-      ModalHeader,
-      Badge,
-      Form,
-      FormGroup, 
-      Input, 
-      Label,
-      Alert,
-      Spinner
-    } from 'sveltestrap';
+  import {
+    Button,
+    Modal,
+    ModalBody,
+    ModalFooter,
+    ModalHeader,
+    Badge,
+    Form,
+    FormGroup, 
+    Input, 
+    Label,
+    Alert,
+    Spinner
+  } from 'sveltestrap';
 
-    import { supabase } from "$lib/supabaseClient";
+  import { supabase } from "$lib/supabaseClient";
 
-    let open = false;
-    const toggle = () => (open = !open);
+  let open = false;
+  const toggle = () => {
+    open = !open;
+    email = '';
+    password = '';
+    accountType = 'Student';
+  };
 
 	let email = '';
 	let password = '';
 	let accountType = '';
 
-    let pending = false;
+  let pending = false;
 	let linkSent = false;
-    let error = '';
+  let errorMessage = '';
 
 	const handleSignup = async () => {
 
-        pending = true;
+    pending = true;
 
 		const { data, error } = await supabase.auth.signUp({
 			email: email,
@@ -43,13 +48,14 @@
 			}
 		})
 
-		if (error) {console.log(error);}
+		if (error) {console.log(error); errorMessage = error}
 		else {console.log(data); linkSent=true;}
 
         pending = false;
 	}
 
-    $: email, password && (()=>{error='';})
+    const resetError = (email, password, accountType) => {errorMessage = ''}
+    $: resetError(email, password, accountType)
 
   </script>
 
@@ -57,33 +63,45 @@
     <Button color="outline-dark" on:click={toggle}>Sign-Up</Button>
     <Modal isOpen={open} {toggle}>
       <ModalHeader {toggle}>Sign-Up</ModalHeader>
-      <ModalBody>
-        <Form>
-            <FormGroup floating label="Email">
-              <Input placeholder="Email" type="email" bind:value={email}/>
+      
+        <Form on:submit={handleSignup}>
+          <ModalBody>
+            <FormGroup>
+              <Input type="email" id="email" placeholder="Email" bind:value={email} required/>
             </FormGroup>
           
-            <FormGroup floating label="Password">
-              <Input placeholder="Password" type="password" bind:value={password}/>
+            <FormGroup>
+              <Input type="password" id="password" placeholder="Password" bind:value={password} required/>
             </FormGroup>  
+
+            <FormGroup>
+              <Input type="select" bind:value={accountType}>
+                <option>Student</option>
+                <option>Alumnus</option>
+              </Input>
+            </FormGroup>
 
             {#if linkSent}
             <Alert color='success'>Email verification link has been sent</Alert>
             {/if}
 
-            {#if error}
-            <Alert color='danger'>{error}</Alert>
+            {#if errorMessage}
+            <Alert color='danger'>{errorMessage}</Alert>
             {/if}
-        </Form>
+
+            
       </ModalBody>
       <ModalFooter>
-        <Button color="outline-secondary" on:click={toggle}>Cancel</Button>
+        
+      
+      <Button color="outline-secondary" on:click={toggle}>Cancel</Button>
         {#if !pending}
-            <Button color="outline-success" on:click={handleSignup}>Submit</Button>
+            <Button color="outline-success" type="submit">Submit</Button>
         {:else}
-            <Button color="outline-success" on:click={handleSignup}><Spinner color="success" type="border" size="sm" /></Button>
+            <Button color="outline-success"><Spinner color="success" type="border" size="sm" /></Button>
         {/if}
       </ModalFooter>
+        </Form>
     </Modal>
   </div>
 

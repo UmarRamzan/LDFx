@@ -8,7 +8,7 @@
     <Button color="outline-secondary" on:click={toggle}><Icon name="arrow-right" /></Button>
 
     <Offcanvas
-      header="LDFx"
+      header=""
       scroll
       isOpen={open}
       {toggle}
