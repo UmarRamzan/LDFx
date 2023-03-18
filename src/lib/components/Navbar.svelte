@@ -1,4 +1,6 @@
 <script>
+// @ts-nocheck
+
     import { Styles } from 'sveltestrap';
     import Signup from './Signup.svelte';
     import Login from './Login.svelte';
