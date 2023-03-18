@@ -20,9 +20,10 @@
 
     let open = false;
     const toggle = () => {
-      open=!open;
-      email='';
-      password=''
+      open = !open;
+      email = '';
+      password = ''
+      errorMessage = '';
     };
 
 	  let email = '';

@@ -22,12 +22,14 @@
     open = !open;
     email = '';
     password = '';
+    errorMessage = '';
+    linkSent = false;
     accountType = 'Student';
   };
 
 	let email = '';
 	let password = '';
-	let accountType = '';
+	let accountType = 'Student';
 
   let pending = false;
 	let linkSent = false;
