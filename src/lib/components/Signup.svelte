@@ -25,6 +25,7 @@
     errorMessage = '';
     linkSent = false;
     accountType = 'Student';
+    pending = false;
   };
 
 	let email = '';

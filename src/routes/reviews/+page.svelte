@@ -8,6 +8,8 @@
 
     let tempResults = [];
 
+    
+
     const getSearchResults = async () => {
         
         let { data: courses, error } = await supabase
@@ -27,21 +29,20 @@
 </script>
 
 <Row>
-    <Col sm={{ size: 6, order: 2, offset: 1 }}>
+    <Col>
         <h1>Reviews</h1>
     </Col>
 </Row>
 
 <input type="text" class="search-input" bind:value={searchString} placeholder="Search">
-
 {#if tempResults}
 <ul class="search-results">
     {#each tempResults as result (result.course_id)}
-        <a href="">
-        <Card class="mb-3">
-            <CardBody>{result.subject_code} {result.catalog} {result.course_title}</CardBody>
-        </Card>
+    <div class="shadow-sm p-3 mb-5 bg-white rounded">
+        <a href="/reviews/{result.course_id}">
+            {result.subject_code} {result.catalog} {result.course_title}
         </a>
+        </div> 
     {/each}
 </ul>
 {/if}
@@ -57,7 +58,6 @@
         max-width: 400px;
         color: black;
         margin: auto;
-        margin-top: 30px;
         padding: 10px;
     }
 

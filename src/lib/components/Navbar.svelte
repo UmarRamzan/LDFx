@@ -50,14 +50,18 @@
 <Navbar color="light" light expand="md">
     <Sidebar />
 
+    <div class="brand">
     <NavbarBrand href="/">LDFx</NavbarBrand>
+  </div>
     <NavbarToggler on:click={() => (isOpen = !isOpen)} />
     
     <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
       <Nav class="ms-auto" navbar>
         {#if !currentUser}
         <NavItem>
+          <div class="account-button">
             <Signup />
+          </div>
         </NavItem>
         <NavItem>
             <Login />
@@ -76,3 +80,15 @@
     </Collapse>
 </Navbar>
 
+<style>
+  .brand {
+    color: red;
+    margin-left: 10px;
+  }
+
+  .account-button {
+    margin-right: 10px;
+  }
+
+  
+</style>
