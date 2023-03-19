@@ -54,11 +54,26 @@
 
     <div class="brand">
     <NavbarBrand href="/">LDFx</NavbarBrand>
-  </div>
+    </div>
     <NavbarToggler on:click={() => (isOpen = !isOpen)} />
     
     <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
-      <Nav class="ms-auto" navbar>
+      <Nav class="ms-auto" navbar >
+        <NavItem>
+          <div class="aboutUs">
+          <NavLink href="/">About Us</NavLink>
+          </div>
+        </NavItem>
+        <NavItem>
+          <div class="FAQ">
+          <NavLink href="/">FAQ</NavLink>
+          </div>
+        </NavItem>
+        <NavItem>
+          <div class="howWeWork">
+          <NavLink href="/HowWeWork">How We Work</NavLink>
+          </div>
+        </NavItem>
         {#if !currentUser}
         <NavItem>
           <div class="account-button">
@@ -83,6 +98,15 @@
 </Navbar>
 
 <style>
+  .navbar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+  .howWeWork {
+    margin-left: 10px;
+    
+  }
   .brand {
     color: red;
     margin-left: 10px;

@@ -1,5 +1,5 @@
 <script lang="ts">
-
+// @ts-nocheck
   import {
     Button,
     Modal,
@@ -57,7 +57,7 @@
         pending = false;
 	}
 
-    const resetError = (email, password, accountType) => {errorMessage = ''}
+    const resetError = (email: string, password: string, accountType: string) => {errorMessage = ''}
     $: resetError(email, password, accountType)
 
   </script>
