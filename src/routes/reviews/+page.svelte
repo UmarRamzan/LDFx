@@ -1,4 +1,6 @@
 <script>
+// @ts-nocheck
+
     import { supabase } from "$lib/supabaseClient";
     import { Col, Container, Row, Card, CardBody } from 'sveltestrap';
     import { onMount } from "svelte/internal";
