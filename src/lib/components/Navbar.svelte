@@ -61,7 +61,7 @@
       <Nav class="ms-auto" navbar >
         <NavItem>
           <div class="aboutUs">
-          <NavLink href="/">About Us</NavLink>
+          <NavLink href="/about">About Us</NavLink>
           </div>
         </NavItem>
         <NavItem>
