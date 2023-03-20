@@ -19,7 +19,7 @@
         <ListGroupItem tag="a" href="#" >Swaps</ListGroupItem>
         <ListGroupItem tag="a" href="/reviews" on:click={toggle}>Reviews</ListGroupItem>
         <ListGroupItem tag="a" href="#">Donations</ListGroupItem>
-        <ListGroupItem tag="a" href="#">Jobs</ListGroupItem>
+        <ListGroupItem tag="a" href="/jobs" on:click={toggle}>Jobs</ListGroupItem>
       </ListGroup>
     </Offcanvas>
   </div>
