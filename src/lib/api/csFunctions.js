@@ -125,3 +125,35 @@ export const addReview = async (review, rating, courseId,userId) => {
     }
     return {success: success, data: data, error: error}
 }
+
+//api function to edit reviews in reviews table with (review_id)
+export const editReview = async (review_id, review, rating) => {
+    let success = false
+    let data = null
+    const {data:reviewData, error} = await supabase.from('reviews').update({review_text: review, rating: rating}).eq('id', review_id)
+    if(error){
+        console.log(error)
+    }
+    else{
+        console.log("editReview: ",reviewData)
+        success = true
+        data = reviewData
+    }
+    return {success: success, data: data, error: error}
+}
+
+//api function to delete reviews in reviews table with (review_id) by setting deleted to true
+export const deleteReview = async (review_id) => {
+    let success = false
+    let data = null
+    const {data:reviewData, error} = await supabase.from('reviews').update({deleted: true}).eq('id', review_id)
+    if(error){
+        console.log(error)
+    }
+    else{
+        console.log("deleteReview: ",reviewData)
+        success = true
+        data = reviewData
+    }
+    return {success: success, data: data, error: error}
+}
