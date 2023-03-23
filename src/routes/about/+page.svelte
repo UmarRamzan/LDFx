@@ -1,2 +1,114 @@
-<h1>ABOUT</h1>
-<p>SUP SUP YO MA NAMES SKYLER WHITE YO</p>
+<script>
+
+</script>
+
+
+
+<main>
+<div class = "bg">
+        <div class="container">
+            <div><img src= "src/routes/about/AboutUs.png" alt="About Us" class = "responsive"></div>
+            <div class="about">
+                <div class = "rect">
+                    <div>
+                        <p class = "aboutt"><strong>About Us</strong></p>
+                    </div>
+                    <div>
+                        <hr class = "hor">
+                    </div>
+                </div>
+                <div class = "intro">
+                    <p class = "intro">
+                    Welcome to our website! We are a team of dedicated individuals who believe in making university life easier for students. 
+                    Our platform is designed to streamline the process of finding course swaps, job opportunities, and donation requests. 
+                    Our team has spent countless hours developing and refining our platform to ensure that it meets the needs of our users.               
+                    Whether you are a student looking for a course swap, a job opportunity, or a way to give back to your community through a donation, our platform has got you covered.    
+                    Thank you for choosing our platform, and we look forward to serving you. </p> 
+                </div>
+            </div>
+        </div>
+</div>
+</main>
+
+<style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;1,300&family=Chau+Philomene+One&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;1,300&display=swap');
+
+    .rect
+    {
+        padding-top: 0px;
+        margin-top: 0px;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        margin-left: 20px;
+    }  
+    .hor
+    {
+        border: 2.5px solid #FA5F30;
+        padding-top: 0px;
+        padding-left: 150px;
+        margin-right: 900px;
+        padding-right: 2px;
+        margin-left: 635px; 
+        text-align: left;
+        height: auto;
+        position: fixed;
+        float: right;
+    }
+    .aboutt
+    {
+        color: #3464AA;
+        padding-top: 100px;
+        padding-left: 37.95%;
+        font-size: 50px;
+        margin-bottom: -26px;
+        font-family: 'Chau Philomene One';
+        height: auto;
+        text-align: left;
+    }
+    .bg
+    {
+        background-color: #FFE5D5;
+        background-size: cover;
+        background-position: center center;
+        background-attachment: fixed;
+    }
+    .responsive  
+    {  
+        height: auto; 
+        width: 550%;  
+        padding-left: 48px;
+        padding-top: 5em;
+        margin-bottom: 10em; 
+    } 
+    .intro
+    {
+        padding-top: 8px;
+        margin-top: 20px;
+        padding-left: 22.45%;
+        padding-right: 5%;
+        font-size: 26px;
+        padding-bottom: 50px;
+        font-family: 'Chakra Petch';
+        font-style: normal;
+        color: #1B2E35;
+        src: url(https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;1,300&family=Chau+Philomene+One&display=swap);
+    }
+    .intro
+    {
+        @font-face 
+        {
+            font-family: 'Chakra Petch';
+            font-style: normal;
+            font-weight: bold;
+            src: url(https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;1,300&family=Chau+Philomene+One&display=swap);
+        }
+    }
+    .container 
+    {
+        display: flex; 
+    }
+
+</style>
