@@ -73,7 +73,7 @@
     }
     
     .howWeWork {
-        background-color: #ffefe5;
+        background-color: #fefae0;
         display: flex;
         justify-content: space-between;
         align-items: center;
