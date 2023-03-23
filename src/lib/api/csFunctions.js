@@ -92,3 +92,36 @@ export const updateUsername = async (username, userId) => {
     }
     return {success: success, data: data, error: error}
 }
+
+//api function to get reviews from course id
+export const getReviews = async (courseId) => {
+    let success = false
+    let data = null
+    const {data:reviewData, error} = await supabase.from('reviews').select('*').eq('course_id', courseId)
+    if(error){
+        console.log(error)
+    }
+    else{
+        console.log("getReviews: ",reviewData)
+        success = true
+        data = reviewData
+    }
+    return {success: success, data: data, error: error}
+}
+
+//api function to add review to the reviews table with (review,rating,userid,courseid)
+export const addReview = async (review, rating, courseId,userId) => {
+    let success = false
+    let data = null
+    const {data:reviewData, error} = await supabase.from('reviews').insert([
+        {review_text: review, rating: rating, user_id: userId, course_id: courseId}]).select('*')
+    if(error){
+        console.log(error)
+    }
+    else{
+        console.log("addReview: ",reviewData)
+        success = true
+        data = reviewData
+    }
+    return {success: success, data: data, error: error}
+}
