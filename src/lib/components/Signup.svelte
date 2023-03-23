@@ -16,6 +16,7 @@
   } from 'sveltestrap';
 
   import { supabase } from "$lib/supabaseClient";
+  import { signUp } from '$lib/api/csFunctions';
 
   let open = false;
   const toggle = () => {
@@ -25,37 +26,32 @@
     errorMessage = '';
     linkSent = false;
     accountType = 'Student';
+    let username = ''
     pending = false;
   };
 
 	let email = '';
 	let password = '';
 	let accountType = 'Student';
+  let username = ''
 
   let pending = false;
 	let linkSent = false;
   let errorMessage = '';
 
-	const handleSignup = async () => {
-
+  const handleSignup = async () => {
+    //Set pending to true to indicate loading state
     pending = true;
+    let res = await signUp(email, password, accountType, username);
+    if (res.error) {
+      errorMessage = res.error;
+    } else {
+      linkSent = true;
+    }
+    pending = false;
 
-		const { data, error } = await supabase.auth.signUp({
-			email: email,
-			password: password,
-			options: {
-				data: {
-					accountType: accountType
-				},
-				emailRedirectTo: 'http://localhost:5173/emailVerified'
-			}
-		})
 
-		if (error) {console.log(error); errorMessage = error}
-		else {console.log(data); linkSent=true;}
-
-        pending = false;
-	}
+  };
 
     const resetError = (email: string, password: string, accountType: string) => {errorMessage = ''}
     $: resetError(email, password, accountType)
@@ -69,6 +65,10 @@
       
         <Form on:submit={handleSignup}>
           <ModalBody>
+            <FormGroup>
+              <Input type="username" id="username" placeholder="Username" bind:value={username} required/>
+            </FormGroup>
+
             <FormGroup>
               <Input type="email" id="email" placeholder="Email" bind:value={email} required/>
             </FormGroup>

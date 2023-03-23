@@ -1,5 +1,5 @@
 <script lang="ts">
-
+// @ts-nocheck
     import {
       Button,
       Modal,
@@ -17,6 +17,7 @@
 
     import { supabase } from "$lib/supabaseClient";
     import { user } from "../../routes/UserStore"
+    import { logIn } from '$lib/api/csFunctions';
 
     let open = false;
     const toggle = () => {
@@ -35,18 +36,15 @@
     const handleLogin = async () => {
 
           pending = true;
-
-          const { data, error } = await supabase.auth.signInWithPassword({
-              email: email,
-              password: password,
-          })
-
-          if (error) {console.log(error); errorMessage = error}
-          else {
-            user.set(data)
-            open = false;
+          let res = await logIn(email, password);
+          if (res.error) {
+            errorMessage = res.error;
+          } else {
+            console.log(res.data)
+            console.log(res.data.user.user_metadata)
+            user.set(res.data)
+            toggle()
           }
-
           pending = false;
       }
 
