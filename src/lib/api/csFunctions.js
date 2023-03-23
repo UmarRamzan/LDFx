@@ -58,3 +58,37 @@ export const logIn = async (email, password) => {
     }
     return {success: success, data: data, error: error}
 }
+
+
+//api function to get username from the usernames table
+export const getUsername = async (userId) => {
+    let success = false
+    let data = null
+    const {data:usernameData, error} = await supabase.from('usernames').select('username').eq('user_id', userId)
+    if(error){
+        console.log(error)
+    }
+    else{
+        console.log("getUsername: ", usernameData)
+        success = true
+        data = usernameData
+    }
+    return {success: success, data: data, error: error}
+}
+
+//api function to update username in the usernames table
+//note that userid is obtained from the session
+export const updateUsername = async (username, userId) => {
+    let success = false
+    let data = null
+    const {data:usernameData, error} = await supabase.from('usernames').update({username: username}).eq('user_id', userId)
+    if(error){
+        console.log(error)
+    }
+    else{
+        console.log("updateUsername: ",usernameData)
+        success = true
+        data = usernameData
+    }
+    return {success: success, data: data, error: error}
+}

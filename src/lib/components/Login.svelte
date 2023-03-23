@@ -16,8 +16,8 @@
     } from 'sveltestrap';
 
     import { supabase } from "$lib/supabaseClient";
-    import { user } from "../../routes/UserStore"
-    import { logIn } from '$lib/api/csFunctions';
+    import { user,username } from "../../routes/UserStore"
+    import { logIn,getUsername } from '$lib/api/csFunctions';
 
     let open = false;
     const toggle = () => {
@@ -43,6 +43,11 @@
             console.log(res.data)
             console.log(res.data.user.user_metadata)
             user.set(res.data)
+
+            let _username = await getUsername(res.data.user.id)
+            console.log(_username)
+            username.set(_username.data[0].username)
+
             toggle()
           }
           pending = false;

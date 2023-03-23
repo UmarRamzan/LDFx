@@ -7,7 +7,8 @@
     import Sidebar from './Sidebar.svelte';
 
     import { supabase } from '$lib/supabaseClient';
-    import { user } from '../../routes/UserStore';
+    import { user,username } from '../../routes/UserStore';
+    import { getUsername } from '$lib/api/csFunctions';
 
     import {
         Collapse,
@@ -29,6 +30,12 @@
       const { data, error } = await supabase.auth.getSession()
       if (data) {user.set(data.session)}
       console.log("Data", data)
+
+      //get username
+      let _username = await getUsername(data.session.user.id)
+      console.log("username: " ,_username.data[0].username)
+      username.set(_username.data[0].username)
+
     })
 
     let currentUser;
@@ -85,7 +92,7 @@
         </NavItem>
         {:else}
         <Dropdown nav inNavbar>
-          <DropdownToggle nav caret>{currentUser.user.email}</DropdownToggle>
+          <DropdownToggle nav caret>{$username}</DropdownToggle>
           <DropdownMenu end>
             <DropdownItem>Settings</DropdownItem>
             <DropdownItem divider />
