@@ -1,6 +1,4 @@
 <script>
-// @ts-nocheck
-
     import { supabase } from "$lib/supabaseClient";
     import { onMount } from "svelte/internal";
 

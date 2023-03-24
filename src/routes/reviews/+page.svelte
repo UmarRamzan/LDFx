@@ -1,6 +1,4 @@
 <script>
-// @ts-nocheck
-
     import { supabase } from "$lib/supabaseClient";
     import { Col, Container, Row, Card, CardBody } from 'sveltestrap';
     import { onMount } from "svelte/internal";
@@ -9,8 +7,6 @@
     let searchResults = [];
 
     let tempResults = [];
-
-    
 
     const getSearchResults = async () => {
         
@@ -36,7 +32,9 @@
     </Col>
 </Row>
 
-<input type="text" class="search-input" bind:value={searchString} placeholder="Search">
+<div class="search-input">
+<input type="text" bind:value={searchString} class="search-bar" placeholder="Search">
+</div>
 {#if tempResults}
 <ul class="search-results">
     {#each tempResults as result (result.course_id)}
@@ -50,9 +48,18 @@
 {/if}
 
 <style>
+    h1 {
+        text-align: center;
+    }
+
     .search-input {
-        margin: auto;
-        margin-left: 100px;
+        width:100%;
+        
+    }
+
+    .search-bar {
+        margin-left: 500px;
+        width: 400px;
     }
 
     .search-results {
