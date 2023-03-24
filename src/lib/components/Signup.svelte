@@ -1,111 +1,66 @@
-<script lang="ts">
+<script>
 
-  import {
-    Button,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-    Badge,
-    Form,
-    FormGroup, 
-    Input, 
-    Label,
-    Alert,
-    Spinner
-  } from 'sveltestrap';
-
-  import { supabase } from "$lib/supabaseClient";
-
-  let open = false;
-  const toggle = () => {
-    open = !open;
-    email = '';
-    password = '';
-    errorMessage = '';
-    linkSent = false;
-    accountType = 'Student';
-    pending = false;
-  };
+  import { signup } from "$lib/api/accountFunctions";
 
 	let email = '';
 	let password = '';
+  let username = '';
 	let accountType = 'Student';
 
   let pending = false;
 	let linkSent = false;
   let errorMessage = '';
 
-	const handleSignup = async () => {
+  const handleSignup = async () => {await signup(email, password, accountType, username)}
 
-    pending = true;
+</script>
 
-		const { data, error } = await supabase.auth.signUp({
-			email: email,
-			password: password,
-			options: {
-				data: {
-					accountType: accountType
-				},
-				emailRedirectTo: 'http://localhost:5173/emailVerified'
-			}
-		})
-
-		if (error) {console.log(error); errorMessage = error}
-		else {console.log(data); linkSent=true;}
-
-        pending = false;
-	}
-
-    const resetError = (email, password, accountType) => {errorMessage = ''}
-    $: resetError(email, password, accountType)
-
-  </script>
-
-<div>
-    <Button color="outline-dark" on:click={toggle}>Sign-Up</Button>
-    <Modal isOpen={open} {toggle}>
-      <ModalHeader {toggle}>Sign-Up</ModalHeader>
-      
-        <Form on:submit={handleSignup}>
-          <ModalBody>
-            <FormGroup>
-              <Input type="email" id="email" placeholder="Email" bind:value={email} required/>
-            </FormGroup>
-          
-            <FormGroup>
-              <Input type="password" id="password" placeholder="Password" bind:value={password} required/>
-            </FormGroup>  
-
-            <FormGroup>
-              <Input type="select" bind:value={accountType}>
-                <option>Student</option>
-                <option>Alumnus</option>
-              </Input>
-            </FormGroup>
-
-            {#if linkSent}
-            <Alert color='success'>Email verification link has been sent</Alert>
-            {/if}
-
-            {#if errorMessage}
-            <Alert color='danger'>{errorMessage}</Alert>
-            {/if}
-
-            
-      </ModalBody>
-      <ModalFooter>
-        
-      
-      <Button color="outline-secondary" on:click={toggle}>Cancel</Button>
-        {#if !pending}
-            <Button color="outline-success" type="submit">Submit</Button>
-        {:else}
-            <Button color="outline-success"><Spinner color="success" type="border" size="sm" /></Button>
-        {/if}
-      </ModalFooter>
-        </Form>
-    </Modal>
-  </div>
-
+<!-- Signup modal -->
+<div class="modal fade" id="signup-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   
+  <div class="modal-dialog">
+    <div class="modal-content" id="signup-content">
+      
+    <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Signup</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    
+      <div class="modal-body">
+        <div class="mb-3">
+            <input type="email" class="form-control" id="email" placeholder="Email" bind:value={email}>
+        </div>
+        <div class="mb-3">
+            <input type="password" class="form-control" id="password" placeholder="Password" bind:value={password}>
+        </div>   
+        <div class="mb-3">
+          <input type="text" class="form-control" id="username" placeholder="Username" bind:value={username}>
+        </div>  
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="account-type">Account Type</label>
+          <select class="form-select" id="account-type" placeholder="Hello">
+            <option value="student" selected>Student</option>
+            <option value="alumni">Alumni</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-outline-dark" id="submit-button" on:click={handleSignup}>Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  #signup-content {
+    background-color: #ffe5d9;
+  }
+  #submit-button:hover {
+    background-color: #fec5bb;
+    color: black;
+  }
+  .form-control, #account-type {
+    background-color: #fcfbf2;
+  }
+</style>
