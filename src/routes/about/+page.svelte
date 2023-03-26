@@ -50,6 +50,7 @@
         padding: 0;
         border: 0;
         margin-left: 20px;
+        position: relative;
     }  
     .hor
     {
@@ -58,7 +59,7 @@
         padding-left: 150px;
         margin-right: 900px;
         padding-right: 2px;
-        margin-left: 500px; 
+        margin-left: 525px; 
         text-align: left;
         height: auto;
         position: fixed;
@@ -68,12 +69,14 @@
     {
         color: #3464AA;
         padding-top: 100px;
-        padding-left: 37.95%;
+        padding-left: 40%;
         font-size: 50px;
         margin-bottom: -34px;
         font-family: 'Chau Philomene One';
         height: auto;
         text-align: left;
+        /* margin-left: 120%; */
+        padding-right: 2%;
     }
     .bg
     {
@@ -88,12 +91,12 @@
         width: 620%;  
         padding-right: 20%;
         margin-right: 20px;
-        padding-top: 9em;
+        padding-top: 11em;
         margin-bottom: 10em; 
     } 
     .intro
     {
-        padding-top: 8px;
+        padding-top: 2%;
         margin-top: 20px;
         padding-left: 22.75%;
         padding-right: 5%;
@@ -118,5 +121,4 @@
     {
         display: flex; 
     }
-
 </style>
