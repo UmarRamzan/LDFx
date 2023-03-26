@@ -194,7 +194,7 @@ export const addJobPosts = async (organizationName, contactNumber, payRange, ema
 }
 
 // api function to edit job posts:
-export const editJobPosts = async (organizationName, contactNumber, payRange, emailAddress, jobType, description_job) => {
+export const editJobPosts = async (organizationName, contactNumber, payRange, emailAddress, jobType, description_job, job_id) => {
     let success = false
     let data = null
     const {data:jobData, error} = await supabase.from('jobposting').update({description: description_job, organization_name: organizationName, contact_number: contactNumber, email_address: emailAddress, pay_range: payRange, job_type: jobType}).eq('id', job_id)
