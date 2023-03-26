@@ -41,14 +41,14 @@
 <nav class="navbar sticky-top navbar-expand-lg navbar-light" id="navbar">
   <div class="container-fluid">
 
-    <div class="row justify-content-start align-items-center">
-    <!-- Sidebar button -->
-    <div class="col">
-    <i class="bi bi-list" id="sidebar-icon" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="staticBackdrop" ></i>
-  </div>
-    <div class="col">
-    <a class="navbar-brand" href="/">LDFx</a>
-  </div>
+    <div class="row g-2 justify-content-start align-items-center">
+      <!-- Sidebar button -->
+      <div class="col">
+        <i class="bi bi-list" id="sidebar-icon" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="staticBackdrop" ></i>
+      </div>
+      <div class="col">
+        <a class="navbar-brand" href="/">LDFx</a>
+      </div>
     </div>
 
     <div class="row justify-content-center">
@@ -100,7 +100,7 @@
   }
   #sidebar, #navbar, li, .dropdown-menu{
     background-color: #ffe5d9;
-    border-color: #940000;
+    border-color: black;
     color: black;
   }
 

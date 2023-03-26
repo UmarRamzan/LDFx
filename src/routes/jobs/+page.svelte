@@ -141,6 +141,10 @@
         background-color: #fcfbf2;
     }
 
+    #create-posting-button {
+        background-color: #ffe5d9;
+    }
+
     #create-posting-button:hover, #submit-button:hover {
         background-color: #fec5bb;
         color: black;
