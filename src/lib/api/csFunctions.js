@@ -81,7 +81,7 @@ export const getUsername = async (userId) => {
 export const updateUsername = async (username, userId) => {
     let success = false
     let data = null
-    const {data:usernameData, error} = await supabase.from('usernames').update({username: username}).eq('user_id', userId)
+    const {data:usernameData, error} = await supabase.from('usernames').update({username: username}).eq('user_id', userId).select()
     if(error){
         console.log(error)
     }
@@ -130,7 +130,7 @@ export const addReview = async (review, rating, courseId,userId) => {
 export const editReview = async (review_id, review, rating) => {
     let success = false
     let data = null
-    const {data:reviewData, error} = await supabase.from('reviews').update({review_text: review, rating: rating}).eq('id', review_id)
+    const {data:reviewData, error} = await supabase.from('reviews').update({review_text: review, rating: rating}).eq('id', review_id).select()
     if(error){
         console.log(error)
     }
@@ -146,7 +146,7 @@ export const editReview = async (review_id, review, rating) => {
 export const deleteReview = async (review_id) => {
     let success = false
     let data = null
-    const {data:reviewData, error} = await supabase.from('reviews').update({deleted: true}).eq('id', review_id)
+    const {data:reviewData, error} = await supabase.from('reviews').update({deleted: true}).eq('id', review_id).select()
     if(error){
         console.log(error)
     }

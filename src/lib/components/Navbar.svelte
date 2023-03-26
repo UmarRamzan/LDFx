@@ -94,7 +94,7 @@
         <Dropdown nav inNavbar>
           <DropdownToggle nav caret>{$username}</DropdownToggle>
           <DropdownMenu end>
-            <DropdownItem>Settings</DropdownItem>
+            <DropdownItem href="/settings" >Settings</DropdownItem>
             <DropdownItem divider />
             <DropdownItem on:click={handleLogout}>Logout</DropdownItem>
           </DropdownMenu>
