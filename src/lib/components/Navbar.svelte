@@ -73,7 +73,7 @@
         </NavItem>
         <NavItem>
           <div class="FAQ">
-          <NavLink href="/">FAQ</NavLink>
+          <NavLink href="/FAQ">FAQ</NavLink>
           </div>
         </NavItem>
         <NavItem>
