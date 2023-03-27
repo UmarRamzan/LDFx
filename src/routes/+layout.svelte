@@ -10,5 +10,6 @@
 <style>
     :global(body) {
         background-color: #fefae0;
+        font-style: Garamond;
     }
 </style>
