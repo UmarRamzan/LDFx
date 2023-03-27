@@ -1,6 +1,6 @@
 <script>
 
-  import { signup } from "$lib/api/accountFunctions";
+  import { signup } from "$lib/api/clientFunctions";
 
 	let email = '';
 	let password = '';
@@ -40,7 +40,7 @@
           <label class="input-group-text" for="account-type">Account Type</label>
           <select class="form-select" id="account-type" placeholder="Hello">
             <option value="student" selected>Student</option>
-            <option value="alumni">Alumni</option>
+            <option value="alumni">Alumnus</option>
           </select>
         </div>
       </div>

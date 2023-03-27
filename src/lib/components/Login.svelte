@@ -1,6 +1,6 @@
 <script>
 
-  import { login } from "$lib/api/accountFunctions";
+  import { login } from "$lib/api/clientFunctions";
   import { user } from "../../routes/UserStore"
 
   let email = '';

@@ -32,13 +32,28 @@
     </Col>
 </Row>
 
-<div class="search-input">
+<!-- <div class="search-input">
 <input type="text" bind:value={searchString} class="search-bar" placeholder="Search">
+</div> -->
+
+<div class ="container w-50">
+    <form class= "d-flex">
+        <input class = "form-control me-1" type = "search" placeholder="Search">
+        <button class="btn btn-outline-info" type="send">Search</button>
+    </form>
 </div>
+
+<!-- <div class="input-group rounded">
+    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+    <span class="input-group-text border-0" id="search-addon">
+        <i class="fas fa-search"></i>
+    </span>
+</div> -->
+
 {#if tempResults}
 <ul class="search-results">
     {#each tempResults as result (result.course_id)}
-    <div class="shadow-sm p-3 mb-5 bg-white rounded">
+    <div class="shadow-sm p-1 mb-2 bg-white rounded">
         <a href="/reviews/{result.course_id}">
             {result.subject_code} {result.catalog} {result.course_title}
         </a>

@@ -1,22 +1,22 @@
 <script>
+
+    // @ts-nocheck
+
     import Signup from './Signup.svelte';
     import Login from './Login.svelte';
 
-    import { getUserData } from '$lib/api/accountFunctions';
-    import { logout } from '$lib/api/accountFunctions';
+    import { getUserData } from '$lib/api/clientFunctions';
+    import { logout } from '$lib/api/clientFunctions';
 
-    import { user } from '../../routes/UserStore';
     import { onMount } from 'svelte';
 
+    let currentUser;
     onMount( async () => {
       const user = await getUserData();
-      if (user) {null}
+      if (user) { currentUser = user }
     })
 
-    let currentUser;
-    user.subscribe((data) => {currentUser = data; currentUser = currentUser; console.log(currentUser)})
-
-    const handleLogout = async () => {await logout()}
+    const handleLogout = async () => {await logout(); currentUser = null}
 </script>
 
 
@@ -33,6 +33,8 @@
         <li class="list-group-item"><a href="/reviews">Reviews</a></li>
         <li class="list-group-item"><a href="/donations">Donations</a></li>
         <li class="list-group-item"><a href="/jobs">Jobs</a></li>
+        <li class="list-group-item"><a href="/howWeWork">How We Work</a></li>
+        <li class="list-group-item"><a href="/about">About Us</a></li>
       </ul>
     </div>
   </div>

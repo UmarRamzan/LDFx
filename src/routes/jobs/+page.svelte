@@ -1,21 +1,34 @@
 <script>
 
-    let jobPostings = [{
-        "job_id": 1,
-        "organization_name": "LUMS",
-        "contact_number": "03134350573",
-        "job_type": "content writing",
-        "pay_range": "20000-30000",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    },
-    {
-        "job_id": 2,
-        "organization_name": "LUMS",
-        "contact_number": "03134350573",
-        "job_type": "content writing",
-        "pay_range": "20000-30000",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    }]
+    // @ts-nocheck
+
+    import { 
+        getUserData,
+        addJobPost,
+        getJobPost,
+        editJobPost,
+        deleteJobPost
+    } from "$lib/api/clientFunctions";
+
+
+    import { onMount } from "svelte";
+
+    let currentUser = null;
+    let jobPostings = []
+
+    onMount( async () => {
+        let user = await getUserData();
+        if (user) { currentUser = user } 
+
+        let { success, data, error } = await getJobPost();
+
+        if (success) {
+            jobPostings = data
+        } else {
+            console.log(error)
+        }
+    
+    })
 
     let organization = '';
     let contactNumber = '';
@@ -23,7 +36,24 @@
     let payRange = '';
     let description = '';
 
-    const createJobPosting = () => {}
+    const createJobPosting = async () => {
+        let response = await addJobPost(currentUser.id, organization, contactNumber, jobType, payRange, description)
+        console.log(response)
+        jobPostings.push({userID: currentUser.id, organization: organization, contact_number: contactNumber, job_type: jobType, pay_range: payRange, description: description})
+        jobPostings = jobPostings;
+    }
+
+    const editJobposting = async () => {
+
+    }
+
+    const deleteJobPosting = async (jobPostingID) => {
+        let { success, data, error } = deleteJobPost(jobPostingID)
+        if (error) {console.log(error)}
+        else {
+            jobPostings = jobPostings.filter((posting) => {posting.job_posting_id != jobPostingID})
+        }
+    }
 
 </script>
 
@@ -36,7 +66,7 @@
             <h1>Job Postings</h1>
         </div>
 
-        <!-- Button trigger modal -->
+        <!-- Button trigger create posting modal -->
         <div class="col-3">
             <button type="button" class="btn btn-outline-dark" id="create-posting-button" data-bs-toggle="modal" data-bs-target="#posting-modal">
                 Create Posting
@@ -79,7 +109,42 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-outline-dark" id="submit-button" on:click={createJobPosting}>Create</button>
+            <button type="button" class="btn btn-outline-dark" id="submit-button" data-bs-dismiss="modal" on:click={createJobPosting}>Create</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit posting modal -->
+<div class="modal fade" id="edit-posting-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="create-posting-content">
+
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Posting</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+        <div class="modal-body">
+            <div class="mb-3">
+                <input type="text" class="form-control" id="organization" placeholder="Organization" bind:value={organization}>
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" id="contact-number" placeholder="Contact Number" bind:value={contactNumber}>
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" id="job-type" placeholder="Job Type" bind:value={jobType}>
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" id="pay-range" placeholder="Pay Range" bind:value={payRange}>
+            </div>
+            <div class="mb-3">
+                <textarea class="form-control" id="description" rows="4" placeholder="Job Description" bind:value={description}></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-outline-dark" id="submit-button" data-bs-dismiss="modal" on:click={createJobPosting}>Create</button>
         </div>
         </div>
     </div>
@@ -90,7 +155,7 @@
 
     
 
-    {#each jobPostings as jobData (jobData.job_id)}
+    {#each jobPostings as jobData (jobData.job_posting_id)}
     <!-- Code for each card -->
     <div class="job-posting">
     <div class="row mb-4">
@@ -100,7 +165,7 @@
                     <form>
                         <div class="form-group">
                             <label for="organizationName"><b>Organization Name</b></label>
-                            <input type="text" class="form-control" id="organizationName" readonly value={jobData.organization_name}>
+                            <input type="text" class="form-control" id="organizationName" readonly value={jobData.organization}>
                         </div>
                         <div class="form-group">
                             <label for="contactNumber"><b>Contact Number</b></label>
@@ -121,6 +186,18 @@
                     {jobData.description}
                 </div>
             </div>
+            {#if currentUser && currentUser.id == jobData.user_id}
+            <div class="row mt-3">
+                <div class="col w-10">
+                    <button type="button" class="btn btn-outline-dark" id="edit-posting-button" data-bs-toggle="modal" data-bs-target="#edit-posting-modal">
+                        Edit
+                    </button>
+                </div>
+                <div class="col w-10">
+                    <button type="button" class="btn btn-outline-danger" id="submit-button" on:click={()=>deleteJobPosting(jobData.job_posting_id)}>Delete</button>
+                </div>
+            </div>
+            {/if}
         </div>
     </div>
     </div>
