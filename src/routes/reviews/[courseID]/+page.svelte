@@ -4,7 +4,7 @@
     import { onMount } from "svelte/internal";
     import { page } from "$app/stores";
     import { Card, CardBody } from 'sveltestrap';
-
+    import { addReview } from "$lib/api/accountFunctions";
     let courseID = $page.params.courseID
     let reviewList = [];
     onMount(async () => {
@@ -18,7 +18,7 @@
     })
 </script>
 
-<AddReview />
+<AddReview /> 
 
 <ul class="search-results">
     {#each reviewList as review (review.review_id)}

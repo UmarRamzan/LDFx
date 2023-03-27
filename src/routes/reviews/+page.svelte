@@ -36,7 +36,7 @@
 <input type="text" bind:value={searchString} class="search-bar" placeholder="Search">
 </div> -->
 
-<div class ="container">
+<div class ="container w-50">
     <form class= "d-flex">
         <input class = "form-control me-1" type = "search" placeholder="Search">
         <button class="btn btn-outline-info" type="send">Search</button>
