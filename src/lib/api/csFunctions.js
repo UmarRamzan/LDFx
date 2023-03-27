@@ -225,3 +225,70 @@ export const deleteJobPosts = async (job_id) => {
     }
     return {success: success, data: data, error: error}
 }
+
+
+// donoation posts api functions by Ayza
+
+export const getDonationPosts = async () => {
+    let success = false
+    let data = null
+    const {data:donationData, error} = await supabase.from('donationposting').select()
+    if(error){
+        console.log(error)
+    }
+    else{
+        console.log("Get Donation Posts: ", donationData)
+        success = true
+        data = donationData
+    }
+    return {success: success, data: data, error: error}
+}
+
+//api function to add review to the reviews table with (review,rating,userid,courseid)
+export const addDonationPosts = async (fullName, contactNumber, emailAddress, relatedTags, descriptionDon, userID) => {
+    let success = false
+    let data = null
+    const {data:donationData, error} = await supabase.from('donationposting').insert([
+        {full_name: fullName, contact_number: contactNumber, user_id: userID, email_address: emailAddress, related_tags: relatedTags, description: descriptionDon}]).select('*')
+    if(error){
+        console.log(error)
+    }
+    else{
+        console.log("Add Donation Posts: ", donationData)
+        success = true
+        data = donationData
+    }
+    return {success: success, data: data, error: error}
+}
+
+//api function to edit reviews in reviews table with (review_id)
+export const editDonationPosts = async (fullName, contactNumber, emailAddress, relatedTags, descriptionDon, donation_id) => {
+    let success = false
+    let data = null
+    const {data:donationData, error} = await supabase.from('donationposting').update({full_name: fullName, contact_number: contactNumber, email_address: emailAddress, related_tags: relatedTags, description: descriptionDon}).eq('id', donation_id)
+    if(error){
+        console.log(error)
+    }
+    else{
+        console.log("Edit Donation Posts: ", donationData)
+        success = true
+        data = donationData
+    }
+    return {success: success, data: data, error: error}
+}
+
+//api function to delete reviews in reviews table with (review_id) by setting deleted to true
+export const deleteDonationPosts = async (donation_id) => {
+    let success = false
+    let data = null
+    const {data:donationData, error} = await supabase.from('donationposting').update({deleted: true}).eq('id', donation_id)
+    if(error){
+        console.log(error)
+    }
+    else{
+        console.log("Delete Donation Posts: ", donationData)
+        success = true
+        data = donationData
+    }
+    return {success: success, data: data, error: error}
+}
