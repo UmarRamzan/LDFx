@@ -23,7 +23,6 @@
             </ul>
             <br>
             <br>
-            <br>
             <h4><em>Join our community today and start exploring!</em></h4>
         </div>
 
@@ -59,7 +58,7 @@
         margin-left: 7rem;
         list-style-type: '❯❯';
         font-size: x-large;
-        line-height: 4rem;
+        line-height: 3rem;
     }
 
     .responsive {
@@ -73,7 +72,7 @@
     }
     
     .howWeWork {
-        background-color: #ffefe5;
+        background-color: #fefae0;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -86,7 +85,7 @@
         font-size: 50px;
         font-family: 'Chau Philomene One', sans-serif;
         text-align: left;
-        padding-inline-start: 4.5ch;
+        padding-inline-start: 5ch;
         color: #3464aa;
         display: inline-block;
         position: relative;
