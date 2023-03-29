@@ -160,7 +160,7 @@ export const deleteReview = async (review_id) => {
 
 
 // api function to view Jobs posts:
-
+/*
 export const getJobPosts = async () => {
     let success = false
     let data = null
@@ -225,7 +225,67 @@ export const deleteJobPosts = async (job_id) => {
     }
     return {success: success, data: data, error: error}
 }
+*/
 
+// api function to view Jobs posts
+export const getJobPost = async () => {
+
+    let success = false
+    let data = null
+
+    const {data: jobData, error} = await supabase.from('job_posting').select().eq('deleted', false)
+
+    if (error) {console.log(error)}
+    else {success = true, data = jobData}
+
+    return {success: success, data: data, error: error}
+}
+
+// add a new job posting
+export const addJobPost = async (userID, organization, contactNumber, jobType, payRange, description) => {
+
+    let success = false;
+    let data = null
+
+    const {data: jobData, error} = await supabase.from('job_posting').insert([
+        {user_id: userID, organization: organization, contact_number: contactNumber, job_type: jobType, pay_range: payRange, description: description}
+    ]).select()
+
+    if (error) {console.log(error)}
+    else {success = true; data = jobData}
+
+    return {success: success, data: data, error: error}
+}
+
+// edit an existing job posting
+export const editJobPost = async (organizationName, contactNumber, payRange, emailAddress, jobType, description_job, job_id) => {
+    let success = false
+    let data = null
+    const {data:jobData, error} = await supabase.from('jobposting').update({description: description_job, organization_name: organizationName, contact_number: contactNumber, email_address: emailAddress, pay_range: payRange, job_type: jobType}).eq('id', job_id).select()
+    if(error){
+        console.log(error)
+    }
+    else{
+        console.log("Edit Job Post: ", jobData)
+        success = true
+        data = jobData
+    }
+    return {success: success, data: data, error: error}
+}
+
+// delete an existing job posting
+export const deleteJobPost = async (job_posting_id) => {
+
+    let success = false
+    let data = null
+
+    const { data: jobData, error } = await supabase.from('job_posting').update({deleted: true}).eq('job_posting_id', job_posting_id).select()
+    
+    if (error) {console.log(error)}
+    else {success = true, data = jobData}
+
+    return {success: success, data: data, error: error}
+}
 
 // donoation posts api functions by Ayza
 
