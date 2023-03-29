@@ -97,7 +97,7 @@ export const updateUsername = async (username, userId) => {
 
     let success = false
     let data = null
-    const {data:usernameData, error} = await supabase.from('usernames').update({username: username}).eq('user_id', userId)
+    const {data:usernameData, error} = await supabase.from('usernames').update({username: username}).eq('user_id', userId).select()
     if(error){
         console.log(error)
     }
@@ -146,7 +146,7 @@ export const addReview = async (courseId, userId, review, rating) => {
 export const editReview = async (review_id, review, rating) => {
     let success = false
     let data = null
-    const {data:reviewData, error} = await supabase.from('reviews').update({review_text: review, rating: rating}).eq('id', review_id)
+    const {data:reviewData, error} = await supabase.from('reviews').update({review_text: review, rating: rating}).eq('id', review_id).select()
     if(error){
         console.log(error)
     }
@@ -162,7 +162,7 @@ export const editReview = async (review_id, review, rating) => {
 export const deleteReview = async (review_id) => {
     let success = false
     let data = null
-    const {data:reviewData, error} = await supabase.from('reviews').update({deleted: true}).eq('id', review_id)
+    const {data:reviewData, error} = await supabase.from('reviews').update({deleted: true}).eq('id', review_id).select()
     if(error){
         console.log(error)
     }
@@ -196,7 +196,7 @@ export const addJobPost = async (userID, organization, contactNumber, jobType, p
 
     const {data: jobData, error} = await supabase.from('job_posting').insert([
         {user_id: userID, organization: organization, contact_number: contactNumber, job_type: jobType, pay_range: payRange, description: description}
-    ])
+    ]).select()
 
     if (error) {console.log(error)}
     else {success = true; data = jobData}
@@ -208,7 +208,7 @@ export const addJobPost = async (userID, organization, contactNumber, jobType, p
 export const editJobPost = async (organizationName, contactNumber, payRange, emailAddress, jobType, description_job, job_id) => {
     let success = false
     let data = null
-    const {data:jobData, error} = await supabase.from('jobposting').update({description: description_job, organization_name: organizationName, contact_number: contactNumber, email_address: emailAddress, pay_range: payRange, job_type: jobType}).eq('id', job_id)
+    const {data:jobData, error} = await supabase.from('jobposting').update({description: description_job, organization_name: organizationName, contact_number: contactNumber, email_address: emailAddress, pay_range: payRange, job_type: jobType}).eq('id', job_id).select()
     if(error){
         console.log(error)
     }
@@ -226,7 +226,7 @@ export const deleteJobPost = async (job_posting_id) => {
     let success = false
     let data = null
 
-    const { data: jobData, error } = await supabase.from('job_posting').update({deleted: true}).eq('job_posting_id', job_posting_id)
+    const { data: jobData, error } = await supabase.from('job_posting').update({deleted: true}).eq('job_posting_id', job_posting_id).select()
     
     if (error) {console.log(error)}
     else {success = true, data = jobData}
