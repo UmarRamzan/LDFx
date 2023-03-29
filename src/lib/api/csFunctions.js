@@ -244,7 +244,7 @@ export const getJobPost = async () => {
     let success = false
     let data = null
 
-    const {data: jobData, error} = await supabase.from('job_posting').select().eq('deleted', false)
+    const {data: jobData, error} = await supabase.from('job_posting').select().eq('deleted', false||null)
 
     if (error) {console.log(error)}
     else {success = true, data = jobData}
@@ -336,7 +336,7 @@ export const addDonationPosts = async (fullName, contactNumber, emailAddress, re
 export const editDonationPosts = async (fullName, contactNumber, emailAddress, relatedTags, descriptionDon, donation_id) => {
     let success = false
     let data = null
-    const {data:donationData, error} = await supabase.from('donationposting').update({full_name: fullName, contact_number: contactNumber, email_address: emailAddress, related_tags: relatedTags, description: descriptionDon}).eq('id', donation_id)
+    const {data:donationData, error} = await supabase.from('donationposting').update({full_name: fullName, contact_number: contactNumber, email_address: emailAddress, related_tags: relatedTags, description: descriptionDon}).eq('id', donation_id).select()
     if(error){
         console.log(error)
     }
@@ -352,7 +352,7 @@ export const editDonationPosts = async (fullName, contactNumber, emailAddress, r
 export const deleteDonationPosts = async (donation_id) => {
     let success = false
     let data = null
-    const {data:donationData, error} = await supabase.from('donationposting').update({deleted: true}).eq('id', donation_id)
+    const {data:donationData, error} = await supabase.from('donationposting').update({deleted: true}).eq('id', donation_id).select()
     if(error){
         console.log(error)
     }
