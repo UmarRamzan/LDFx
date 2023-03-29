@@ -1,7 +1,10 @@
 <script>
   import { getContext } from "svelte";
+  import { goto } from "$app/navigation";
   const user = getContext("user")
   console.log($user)
+  //add handle function to route on 'see more'
+  const handleSeeMore = () => {goto('/about')}
 </script>
 
 <main>
@@ -15,7 +18,7 @@
               
               <div class="title">
                   <h1>Swap Courses <br> with Ease</h1>
-                  <button class="primary">See More</button>
+                  <button class="primary" on:click={handleSeeMore}>See More</button>
               </div>
               
               <div class="image">

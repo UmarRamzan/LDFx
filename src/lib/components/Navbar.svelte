@@ -1,127 +1,144 @@
 <script>
-// @ts-nocheck
 
-    import { Styles } from 'sveltestrap';
-    import Signup from './Signup.svelte';
-    import Login from './Login.svelte';
-    import Sidebar from './Sidebar.svelte';
+  // @ts-nocheck
 
-    import { supabase } from '$lib/supabaseClient';
-    import { user,username } from '../../routes/UserStore';
-    import { getUsername } from '$lib/api/csFunctions';
+  import Signup from './Signup.svelte';
+  import Login from './Login.svelte';
 
-    import {
-        Collapse,
-        Navbar,
-        NavbarToggler,
-        NavbarBrand,
-        Nav,
-        NavItem,
-        NavLink,
-        Dropdown,
-        DropdownToggle,
-        DropdownMenu,
-        DropdownItem
-    } from 'sveltestrap';
+  import { getUserData,getUsername } from '$lib/api/csFunctions';
+  import { logout } from '$lib/api/csFunctions';
+
+  import { onMount } from 'svelte';
+  let _username;
+  let currentUser;
+  onMount( async () => {
+    const user = await getUserData();
+    if (user) { currentUser = user }
+    const res = await getUsername(currentUser.id);
+    if (res.success){_username = res.data[0].username;}
     
-    import { onMount } from 'svelte/internal';
+  })
 
-    onMount(async ()=>{
-      const { data, error } = await supabase.auth.getSession()
-      if (data) {user.set(data.session)}
-      console.log("Data", data)
-
-      //get username
-      let _username = await getUsername(data.session.user.id)
-      console.log("username: " ,_username.data[0].username)
-      username.set(_username.data[0].username)
-
-    })
-
-    let currentUser;
-    user.subscribe((data) => {currentUser = data; currentUser = currentUser})
-    console.log(currentUser)
-
-    let isOpen = false;
-
-    function handleUpdate(event) {
-        isOpen = event.detail.isOpen;
-    }
-
-    const handleLogout = async () => {
-        const { error } = await supabase.auth.signOut()
-        user.set(null);
-    }
+  const handleLogout = async () => {await logout(); currentUser = null}
 </script>
 
-<Styles />
 
-<Navbar color="light" light expand="md">
-    <Sidebar />
+<!-- Sidebar -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="staticBackdropLabel">
+<div class="offcanvas-header">
+  <!-- svelte-ignore a11y-missing-content -->
+  <h5 class="offcanvas-title" id="staticBackdropLabel"></h5>
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+  <div id="sidebar-links" data-bs-toggle="offcanvas">
+    <ul class="list-group list-group-flush" >
+      <li class="list-group-item"><a href="/swaps" >Swaps</a></li>
+      <li class="list-group-item"><a href="/reviews">Reviews</a></li>
+      <li class="list-group-item"><a href="/donations">Donations</a></li>
+      <li class="list-group-item"><a href="/jobs">Jobs</a></li>
+      <li class="list-group-item"><a href="/FAQ">FAQ</a></li>
+      <li class="list-group-item"><a href="/HowWeWork">How We Work</a></li>
+      <li class="list-group-item"><a href="/about">About Us</a></li>
+    </ul>
+  </div>
+</div>
+</div>
 
-    <div class="brand">
-    <NavbarBrand href="/">LDFx</NavbarBrand>
+<nav class="navbar sticky-top navbar-expand-lg navbar-light" id="navbar">
+<div class="container-fluid">
+
+  <div class="row g-2 justify-content-start align-items-center">
+    <!-- Sidebar button -->
+    <div class="col">
+      <i class="bi bi-list" id="sidebar-icon" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="staticBackdrop" ></i>
     </div>
-    <NavbarToggler on:click={() => (isOpen = !isOpen)} />
-    
-    <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
-      <Nav class="ms-auto" navbar >
-        <NavItem>
-          <div class="aboutUs">
-          <NavLink href="/about">About Us</NavLink>
-          </div>
-        </NavItem>
-        <NavItem>
-          <div class="FAQ">
-          <NavLink href="/FAQ">FAQ</NavLink>
-          </div>
-        </NavItem>
-        <NavItem>
-          <div class="howWeWork">
-          <NavLink href="/HowWeWork">How We Work</NavLink>
-          </div>
-        </NavItem>
-        {#if !currentUser}
-        <NavItem>
-          <div class="account-button">
-            <Signup />
-          </div>
-        </NavItem>
-        <NavItem>
-            <Login />
-        </NavItem>
-        {:else}
-        <Dropdown nav inNavbar>
-          <DropdownToggle nav caret>{$username}</DropdownToggle>
-          <DropdownMenu end>
-            <DropdownItem href="/settings" >Settings</DropdownItem>
-            <DropdownItem divider />
-            <DropdownItem on:click={handleLogout}>Logout</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-        {/if}
-      </Nav>
-    </Collapse>
-</Navbar>
+    <div class="col">
+      <a class="navbar-brand" href="/">LDFx</a>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    {#if currentUser}
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          {_username}
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li><a class="dropdown-item" href="/settings">Settings</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><button class="dropdown-item" on:click={handleLogout}>Logout</button></li>
+        </ul>
+      </li>
+    </ul>
+    {:else}
+    <form class="d-flex">
+      <!-- Signup modal trigger -->
+      <div class="col">
+        <button type="button" class="btn btn-outline-dark" id="signup-button" data-bs-toggle="modal" data-bs-target="#signup-modal">
+            Signup
+        </button>
+      </div>
+      <!-- Login modal trigger -->
+      <div class="col">
+        <button type="button" class="btn btn-outline-dark" id="login-button" data-bs-toggle="modal" data-bs-target="#login-modal">
+            Login
+        </button>
+      </div>
+    </form>
+    {/if}
+  </div>
+  </div>
+</div>
+</nav>
+
+<Signup />
+<Login />
 
 <style>
-  .navbar-nav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+#sidebar-icon {
+  font-size: 2rem;
+  cursor: pointer;
 }
-  .howWeWork {
-    margin-left: 10px;
-    
-  }
-  .brand {
-    color: red;
-    margin-left: 10px;
-  }
+#sidebar, #navbar, li, .dropdown-menu{
+  background-color: #ffe5d9;
+  border-color: black;
+  color: black;
+}
 
-  .account-button {
-    margin-right: 10px;
-  }
+.dropdown-item:hover {
+  background-color: #fec5bb;
+}
 
-  
+#signup-button {
+  margin-right: 10px;
+}
+
+#signup-button:hover {
+  background-color: #fec5bb;
+  color: black;
+}
+
+#login-button {
+  margin-right: 10px;
+}
+
+#login-button:hover {
+  background-color: #fec5bb;
+  color: black;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+#sidebar-links {
+  background-color: #ffe5d9;
+}
 </style>

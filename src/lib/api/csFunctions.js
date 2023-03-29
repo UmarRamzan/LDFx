@@ -3,6 +3,12 @@
 import { supabase } from "../supabaseClient";
 let redirectLink = "http://localhost:5173/emailVerified"
 
+// get the current user session, if one exists
+export const getUserData = async () => {
+    const { data: { user } } = await supabase.auth.getUser()
+    return user;
+}
+
 export const signUp = async (email, password, accountType, username) => {
     let success = false
     let data = null
@@ -59,6 +65,11 @@ export const logIn = async (email, password) => {
     return {success: success, data: data, error: error}
 }
 
+export const logout = async () => {
+    const { error } = await supabase.auth.signOut()
+    user.set(null);
+    if (error) {console.log(error)}
+}
 
 //api function to get username from the usernames table
 export const getUsername = async (userId) => {
