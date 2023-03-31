@@ -42,7 +42,7 @@
 
 
 
-<div class="container w-50 mt-5">
+<div class="container w-50 mt-5" id="content">
     
     <div class="row align-items-center">
         <div class="col">
@@ -53,6 +53,8 @@
         </div>
         
     </div>
+
+    <hr>
 
     <div class="row mt-5">
         <table class="table table-bordered" id="swap-table">
@@ -76,6 +78,17 @@
     </div>
 </div>
 <style>
+
+#content {
+    width: 60%;
+    margin: auto;
+    margin-top: 40px;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    background-color: var(--primary);
+    padding: 40px;
+    box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  }
 
     th, td {
         padding: 20px;
