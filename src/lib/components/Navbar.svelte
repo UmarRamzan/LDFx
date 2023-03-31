@@ -101,13 +101,13 @@
     cursor: pointer;
   }
   #sidebar, #navbar, li, .dropdown-menu{
-    background-color: #ffe5d9;
+    background-color: var(--primary);
     border-color: black;
     color: black;
   }
 
   .dropdown-item:hover {
-    background-color: #fec5bb;
+    background-color: var(--secondary);
   }
 
   #signup-button {
@@ -115,7 +115,7 @@
   }
 
   #signup-button:hover {
-    background-color: #fec5bb;
+    background-color: var(--secondary);
     color: black;
   }
 
@@ -124,7 +124,7 @@
   }
 
   #login-button:hover {
-    background-color: #fec5bb;
+    background-color: var(--secondary);
     color: black;
   }
 
@@ -134,6 +134,6 @@
   }
 
   #sidebar-links {
-    background-color: #ffe5d9;
+    background-color: var(--primary);
   }
 </style>
