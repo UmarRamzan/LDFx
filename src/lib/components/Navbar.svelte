@@ -7,22 +7,22 @@
 
   import { getUserData,getUsername } from '$lib/api/csFunctions';
   import { logout } from '$lib/api/csFunctions';
-  import { username } from '../../routes/UserStore';
+  import { user,username } from '../../routes/UserStore';
 
   import { onMount } from 'svelte';
-  let _username;
-  let currentUser;
+
+
   onMount( async () => {
-    const user = await getUserData();
-    if (user) { 
-      currentUser = user;
-      const res = await getUsername(currentUser.id);
-      if (res.success){_username = res.data[0].username;}
+    const userRes = await getUserData();
+    if (userRes) { 
+      user.set(userRes)
+      const res = await getUsername(userRes.id);
+      if (res.success){username.set(res.data[0].username)}
     }
     
   })
 
-  const handleLogout = async () => {await logout(); currentUser = null}
+  const handleLogout = async () => {await logout();}
 </script>
 
 
@@ -66,13 +66,15 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    {#if currentUser}
+    {#if $user}
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
       <li class="nav-item dropdown">
-        {#if _username}
+        {#if $username}
         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          {_username}
+          {$username}
         </a>
+        {:else}
+        <div>loading...</div>
         {/if}
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
           <li><a class="dropdown-item" href="/settings">Settings</a></li>

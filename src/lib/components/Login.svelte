@@ -4,6 +4,7 @@
 
   import { logIn,getUsername } from "$lib/api/csFunctions";
   import { user,username } from "../../routes/UserStore"
+
   
 
   let email = '';
@@ -11,6 +12,7 @@
 
   let pending = false;
   let errorMessage = '';
+  let open = true;
 
   const handleLogin = async () => {
     const { success, data, error } = await logIn(email, password)
@@ -19,7 +21,8 @@
       user.set(data.user)
       let res = await getUsername(data.user.id)
       if (res.success) {
-        username.set(res.data.username)
+        open = false
+        username.set(res.data[0].username)
       }
     }
   }
@@ -27,8 +30,9 @@
 </script>
 
 
+{#if open}
 <!-- Login modal -->
-<div class="modal fade" id="login-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="login-modal" data-bs-backdrop="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" id="login-content">
 
@@ -50,9 +54,17 @@
           <button type="button" class="btn btn-outline-dark" id="submit-button" on:click={handleLogin}>Confirm</button>
       </div>
     </div>
+
+
+    
   </div>
 </div>
-  
+
+
+
+{/if}
+
+
 <style>
   #login-content {
     background-color: #ffe5d9;
