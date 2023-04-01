@@ -7,18 +7,12 @@
 
   import { onMount } from "svelte";
   import { getDonationPosts,addDonationPosts,editDonationPosts,deleteDonationPosts,getUserData } from "$lib/api/csFunctions";
-
+  import { user } from "../../routes/UserStore";
   let donationPosts = [];
-  let currentUser = null;
+
 
 
   onMount(async () => {
-    //get current user
-    let user = await getUserData();
-    if (user) {
-      currentUser = user;
-    }
-
     let { success, data, error } = await getDonationPosts();
     if (success) {
       donationPosts = data;
@@ -36,16 +30,16 @@
 
   const createDonationPost = async () => {
     let response = await addDonationPosts(
-      currentUser.id,
       fullName,
       contactNumber,
       emailAddress,
       relatedTages,
-      description
+      description,
+      $user.id
     );
     console.log(response);
     donationPosts.push({
-      userID: currentUser.id,
+      userID: $user.id,
       full_name: fullName,
       contact_number: contactNumber,
       email_address: emailAddress,
@@ -58,7 +52,8 @@
   const editDonationPost = async () => {};
 
   const deleteDonationPost = async (donationPostID) => {
-    let { success, data, error } = deleteDonationPosts(donationPostID);
+    console.log(donationPostID)
+    let { success, data, error } = await deleteDonationPosts(donationPostID);
     if (error) {
       console.log(error);
     } else {
@@ -80,7 +75,7 @@
       </div>
 
       <!-- Button trigger create posting modal -->
-      {#if currentUser}
+      {#if $user}
       <div class="col-3">
           <button type="button" class="btn btn-outline-dark" id="create-posting-button" data-bs-toggle="modal" data-bs-target="#posting-modal">
               Create Posting
@@ -170,7 +165,7 @@
 
   
 
-  {#each donationPosts as donationPost (donationPost.donation_id) }
+  {#each donationPosts as donationPost }
   <!-- Code for each card -->
   <div class="job-posting">
   <div class="row mb-4">
@@ -197,15 +192,15 @@
                   {donationPost.description}
               </div>
           </div>
-          {#if currentUser && currentUser.id == donationPost.user_id}
+          {#if $user && $user.id == donationPost.user_id}
           <div class="row mt-3">
               <div class="col w-10">
-                  <button type="button" class="btn btn-outline-dark" id="edit-posting-button" data-bs-toggle="modal" data-bs-target="#edit-posting-modal">
+                  <button type="button" class="btn btn-outline-dark" id="edit-posting-button" data-bs-toggle="modal" data-bs-target="#edit-posting-modal" on:click={()=>{fullName = donationPost.full_name;contactNumber=donationPost.contact_number;emailAddress=donationPost.email_address;relatedTages=donationPost.related_tags;description=donationPost.description} }>
                       Edit
                   </button>
               </div>
               <div class="col w-10">
-                  <button type="button" class="btn btn-outline-danger" id="submit-button" on:click={()=>deleteDonationPosts(donationPost.donation_id)}>Delete</button>
+                  <button type="button" class="btn btn-outline-danger" id="submit-button" on:click={()=>deleteDonationPost(donationPost.donation_id)}>Delete</button>
               </div>
           </div>
           {/if}
@@ -217,6 +212,7 @@
 </div>
 
 <style>
+  
   .card {
       background-color: #ffe5d9;
   }

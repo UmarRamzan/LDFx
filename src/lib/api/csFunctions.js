@@ -305,7 +305,7 @@ export const getDonationPosts = async () => {
     let success = false
     let data = null
 
-    const {data: donationData, error} = await supabase.from('donationposting').select('*')
+    const {data: donationData, error} = await supabase.from('donationposting').select('*').eq('deleted', false)
 
     if (error) {console.log(error)}
     else {success = true, data = donationData}
@@ -351,7 +351,7 @@ export const editDonationPosts = async (fullName, contactNumber, emailAddress, r
 export const deleteDonationPosts = async (donation_id) => {
     let success = false
     let data = null
-    const {data:donationData, error} = await supabase.from('donationposting').update({deleted: true}).eq('id', donation_id).select()
+    const {data:donationData, error} = await supabase.from('donationposting').update({deleted: true}).eq('donation_id', donation_id).select()
     if(error){
         console.log(error)
     }
