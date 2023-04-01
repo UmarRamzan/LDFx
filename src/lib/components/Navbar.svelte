@@ -7,9 +7,10 @@
 
   import { getUserData,getUsername } from '$lib/api/csFunctions';
   import { logout } from '$lib/api/csFunctions';
-  import { user,username } from '../../routes/UserStore';
+  import { user,username,backDropBool } from '../../routes/UserStore';
 
   import { onMount } from 'svelte';
+
 
 
   onMount( async () => {
@@ -93,7 +94,7 @@
       </div>
       <!-- Login modal trigger -->
       <div class="col">
-        <button type="button" class="btn btn-outline-dark" id="login-button" data-bs-toggle="modal" data-bs-target="#login-modal">
+        <button type="button" class="btn btn-outline-dark" id="login-button" data-bs-toggle="modal" data-bs-target="#login-modal" on:click={()=>{backDropBool.set(true)}}>
             Login
         </button>
       </div>
@@ -106,6 +107,9 @@
 
 <Signup />
 <Login />
+{#if $backDropBool}
+<div class="modal-backdrop fade show"></div>
+{/if}
 
 <style>
 #sidebar-icon {

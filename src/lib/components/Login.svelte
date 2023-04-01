@@ -3,7 +3,7 @@
 
 
   import { logIn,getUsername } from "$lib/api/csFunctions";
-  import { user,username } from "../../routes/UserStore"
+  import { user,username,backDropBool } from "../../routes/UserStore"
 
   
 
@@ -22,6 +22,7 @@
       let res = await getUsername(data.user.id)
       if (res.success) {
         open = false
+        backDropBool.set(false)
         username.set(res.data[0].username)
       }
     }
