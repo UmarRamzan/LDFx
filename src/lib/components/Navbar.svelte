@@ -106,6 +106,10 @@
     color: black;
   }
 
+  #navbar {
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+  }
+
   .dropdown-item:hover {
     background-color: var(--secondary);
   }
