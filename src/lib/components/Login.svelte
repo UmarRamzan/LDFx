@@ -16,7 +16,7 @@
 
   const handleLogin = async () => {
     const { success, data, error } = await logIn(email, password)
-    if (error) {console.log(error)}
+    if (error) {console.log(error); errorMessage = error;}
     else {
       user.set(data.user)
       let res = await getUsername(data.user.id)
@@ -39,7 +39,7 @@
 
     <div class="modal-header">
         <h1 class="modal-title fs-5" id="staticBackdropLabel">Login</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" on:click={()=>{backDropBool.set(false)}}></button>
     </div>
     
     <div class="modal-body">
@@ -50,8 +50,15 @@
             <input type="password" class="form-control" id="password" placeholder="Password" bind:value={password}>
         </div>
       </div>
+
+      {#if errorMessage}
+        <div class="alert alert-danger" role="alert">
+          {errorMessage}
+        </div>
+      {/if}
+
       <div class="modal-footer">
-          <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" on:click={()=>{backDropBool.set(false)}}>Cancel</button>
           <button type="button" class="btn btn-outline-dark" id="submit-button" on:click={handleLogin}>Confirm</button>
       </div>
     </div>

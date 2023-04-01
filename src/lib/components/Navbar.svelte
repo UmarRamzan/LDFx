@@ -94,7 +94,7 @@
       </div>
       <!-- Login modal trigger -->
       <div class="col">
-        <button type="button" class="btn btn-outline-dark" id="login-button" data-bs-toggle="modal" data-bs-target="#login-modal" on:click={()=>{backDropBool.set(true)}}>
+        <button type="button" class="btn btn-outline-dark" id="login-button" data-bs-toggle="modal" data-bs-target="#login-modal" on:click={async()=>{backDropBool.set(true)}}>
             Login
         </button>
       </div>
