@@ -2,8 +2,9 @@
 // @ts-nocheck
 
 
-  import { logIn } from "$lib/api/csFunctions";
-  import { user } from "../../routes/UserStore"
+  import { logIn,getUsername } from "$lib/api/csFunctions";
+  import { user,username } from "../../routes/UserStore"
+  
 
   let email = '';
   let password = '';
@@ -14,11 +15,16 @@
   const handleLogin = async () => {
     const { success, data, error } = await logIn(email, password)
     if (error) {console.log(error)}
-    else {user.set(data.user)}
+    else {
+      user.set(data.user)
+      let res = await getUsername(data.user.id)
+      if (res.success) {
+        username.set(res.data.username)
+      }
+    }
   }
 
 </script>
-
 
 
 <!-- Login modal -->

@@ -67,11 +67,13 @@
         </div>
 
         <!-- Button trigger create posting modal -->
+        {#if currentUser}
         <div class="col-3">
             <button type="button" class="btn btn-outline-dark" id="create-posting-button" data-bs-toggle="modal" data-bs-target="#posting-modal">
                 Create Posting
             </button>
         </div>
+        {/if}
 
     </div>
 

@@ -7,15 +7,18 @@
 
   import { getUserData,getUsername } from '$lib/api/csFunctions';
   import { logout } from '$lib/api/csFunctions';
+  import { username } from '../../routes/UserStore';
 
   import { onMount } from 'svelte';
   let _username;
   let currentUser;
   onMount( async () => {
     const user = await getUserData();
-    if (user) { currentUser = user }
-    const res = await getUsername(currentUser.id);
-    if (res.success){_username = res.data[0].username;}
+    if (user) { 
+      currentUser = user;
+      const res = await getUsername(currentUser.id);
+      if (res.success){_username = res.data[0].username;}
+    }
     
   })
 
@@ -66,9 +69,11 @@
     {#if currentUser}
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
       <li class="nav-item dropdown">
+        {#if _username}
         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           {_username}
         </a>
+        {/if}
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
           <li><a class="dropdown-item" href="/settings">Settings</a></li>
           <li><hr class="dropdown-divider"></li>

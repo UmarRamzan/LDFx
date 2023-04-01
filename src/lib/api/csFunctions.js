@@ -1,6 +1,7 @@
 // @ts-nocheck
 //API FUNCTIONS FOR CLIENT SIDE
 import { supabase } from "../supabaseClient";
+import { user } from "../../routes/UserStore";
 let redirectLink = "http://localhost:5173/emailVerified"
 
 // get the current user session, if one exists
@@ -303,15 +304,13 @@ export const deleteJobPost = async (job_posting_id) => {
 export const getDonationPosts = async () => {
     let success = false
     let data = null
-    const {data:donationData, error} = await supabase.from('donationposting').select()
-    if(error){
-        console.log(error)
-    }
-    else{
-        console.log("Get Donation Posts: ", donationData)
-        success = true
-        data = donationData
-    }
+
+    const {data: donationData, error} = await supabase.from('donationposting').select('*')
+
+    if (error) {console.log(error)}
+    else {success = true, data = donationData}
+    console.log("Get Donation Posts: ", data)
+
     return {success: success, data: data, error: error}
 }
 

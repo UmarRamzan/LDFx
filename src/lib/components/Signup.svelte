@@ -1,6 +1,6 @@
 <script>
 
-  import { signup } from "$lib/api/clientFunctions";
+  import { signUp } from "$lib/api/csFunctions";
 
 	let email = '';
 	let password = '';
@@ -11,7 +11,7 @@
 	let linkSent = false;
   let errorMessage = '';
 
-  const handleSignup = async () => {await signup(email, password, accountType, username)}
+  const handleSignup = async () => {await signUp(email, password, accountType, username)}
 
 </script>
 
