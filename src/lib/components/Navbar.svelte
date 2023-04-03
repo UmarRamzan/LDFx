@@ -41,8 +41,8 @@
       <li class="list-group-item"><a href="/reviews">Reviews</a></li>
       <li class="list-group-item"><a href="/donations">Donations</a></li>
       <li class="list-group-item"><a href="/jobs">Jobs</a></li>
-      <li class="list-group-item"><a href="/FAQ">FAQ</a></li>
-      <li class="list-group-item"><a href="/HowWeWork">How We Work</a></li>
+      <li class="list-group-item"><a href="/faq">FAQ</a></li>
+      <li class="list-group-item"><a href="/howWeWork">How We Work</a></li>
       <li class="list-group-item"><a href="/about">About Us</a></li>
     </ul>
   </div>
@@ -63,6 +63,8 @@
   </div>
 
   <div class="row justify-content-center">
+
+    
     <!--add about us-->
     <div class="col">
       <a class="nav-link" href="/about">About us</a>
@@ -73,8 +75,9 @@
     </div>
     <!--add FAQ-->
     <div class="col">
-      <a class="nav-link" href="/FAQ">FAQ</a>
+      <a class="nav-link" href="/faq">FAQ</a>
     </div>
+    
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>

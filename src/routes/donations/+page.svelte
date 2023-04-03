@@ -66,7 +66,9 @@
 
 </script>
 
-<div class="container w-50 mt-4">
+<div class="content">
+
+<div class="container mt-4">
   <div class="row align-items-center">
 
       <!-- Page title -->
@@ -161,7 +163,7 @@
 </div>
   
 
-<div class="container w-50">
+<div class="container">
 
   
 
@@ -211,10 +213,23 @@
 
 </div>
 
+</div>
+
 <style>
+
+.content {
+    width: 60%;
+    margin: auto;
+    margin-top: 40px;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    background-color: var(--primary);
+    padding: 20px;
+    box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  }
   
   .card {
-      background-color: #ffe5d9;
+      background-color: var(--secondary);
   }
 
   #create-posting-content {
@@ -222,6 +237,7 @@
   }
 
   .form-control {
+      margin-top: 10px;
       background-color: #fcfbf2;
   }
 

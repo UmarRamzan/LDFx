@@ -7,8 +7,7 @@
   const handleSeeMore = () => {goto('/about')}
 </script>
 
-<main>
-  <body>
+
       {#if user}
           <p>{$user}</p>
       {:else}
@@ -26,8 +25,7 @@
               </div>
           </div>
       {/if}
-  </body>
-</main>
+
 
 <!-- <h1>MAIN PAGE</h1>
 {#if user}
