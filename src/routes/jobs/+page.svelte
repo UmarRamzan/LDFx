@@ -57,8 +57,9 @@
 
 </script>
 
+<div class="content">
 
-<div class="container w-50 mt-4">
+<div class="container mt-4">
     <div class="row align-items-center">
 
         <!-- Page title -->
@@ -67,13 +68,11 @@
         </div>
 
         <!-- Button trigger create posting modal -->
-        {#if currentUser}
         <div class="col-3">
             <button type="button" class="btn btn-outline-dark" id="create-posting-button" data-bs-toggle="modal" data-bs-target="#posting-modal">
                 Create Posting
             </button>
         </div>
-        {/if}
 
     </div>
 
@@ -153,7 +152,7 @@
 </div>
     
 
-<div class="container w-50">
+<div class="container">
 
     
 
@@ -207,23 +206,36 @@
 
 </div>
 
-<style>
-    .card {
-        background-color: #ffe5d9;
-    }
+</div>
 
+<style>
+    .content {
+    width: 60%;
+    margin: auto;
+    margin-top: 40px;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    background-color: var(--primary);
+    padding: 20px;
+    box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  }
+    .card {
+        background-color: var(--secondary);
+        border: 1px solid black;
+        box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
+    .form-group {
+        margin-top: 10px;
+    }
     #create-posting-content {
         background-color: #ffe5d9;
     }
-
     .form-control {
         background-color: #fcfbf2;
     }
-
     #create-posting-button {
         background-color: #ffe5d9;
     }
-
     #create-posting-button:hover, #submit-button:hover {
         background-color: #fec5bb;
         color: black;
