@@ -26,6 +26,7 @@
     
 </script>
 
+<div id="content">
 <Row>
     <Col>
         <h1>Reviews</h1>
@@ -62,7 +63,20 @@
 </ul>
 {/if}
 
+</div>
+
 <style>
+    #content {
+    width: 60%;
+    margin: auto;
+    margin-top: 40px;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    background-color: var(--primary);
+    padding: 20px;
+    box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  }
+
     h1 {
         text-align: center;
     }

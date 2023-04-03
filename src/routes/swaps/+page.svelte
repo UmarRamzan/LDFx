@@ -42,11 +42,11 @@
 
 
 
-<div class="container w-50 mt-5" id="content">
+<div class="container  mt-5" id="content">
     
     <div class="row align-items-center">
         <div class="col">
-            <h1>Swap Requests</h1>
+            <h2>Swap Requests</h2>
         </div>
         <div class="col d-flex justify-content-end">
             <a href="/swaps/create" class="btn btn-outline-success">Create Swap Request</a>
@@ -94,6 +94,8 @@
         padding: 20px;
     }
 
+
+
      #swap-table {
         text-align: center;
         border: 1px solid rgba(0,0,0,0.5);
@@ -110,4 +112,5 @@
         border: 1px solid rgb(0, 0, 0, 0.5);
         border-radius: 10px;
      }
+
 </style>

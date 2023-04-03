@@ -137,6 +137,10 @@
     color: black;
   }
 
+  a:hover {
+    color: var(--quinary);
+  }
+
   #sidebar-links {
     background-color: var(--primary);
   }

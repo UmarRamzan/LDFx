@@ -66,7 +66,7 @@
 
         <!-- Page title -->
         <div class="col">
-            <h1>Job Postings</h1>
+            <h2>Job Postings</h2>
         </div>
 
         <!-- Button trigger create posting modal -->
@@ -227,6 +227,10 @@
         background-color: var(--secondary);
         border: 1px solid black;
         box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-top: 10px;
     }
 
     #create-posting-content {
