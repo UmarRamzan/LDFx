@@ -53,8 +53,13 @@ const _updateUsername = async()=>{
 }
   
 onMount(getData);
+
+
+
 </script>
   
+
+<!--
 <h2>Account Information</h2>
 <label>Email:<input type="email" bind:value={email} /></label>
 <label>Password:<input type="password" bind:value={password} /></label>
@@ -64,3 +69,138 @@ onMount(getData);
 <label>Username: <input bind:value={_username}></label>
 <p>THIS BUTTON SHOULD GO WITH UPDATE ACCOUNT INFO</p>
 <button on:click={_updateUsername} >Upade Username</button>
+-->
+
+<main>
+  <h1 class="page-heading">Settings</h1>
+
+  <div class="container mt-4">
+      <h2>Account</h2>
+      <br><br>
+        
+        <!--<p>Email: {email}</p>
+        <p>Account Type: {accountType}</p>-->
+        <label class="settings-data">Email:<input type="email" bind:value={email} /></label>
+
+        <button type="button" class="btn-outline-dark" id="change-email-button" onclick="document.getElementById('email-popup').style.display='block'">
+          Change Email
+        </button>
+
+        <br>
+
+
+        <label class="settings-data">Password:<input type="password" bind:value={password} /></label>
+
+        <button type="button" class="btn-outline-dark" id="change-password-button" onclick="document.getElementById('password-popup').style.display='block'">
+          Change Password
+        </button>
+        
+        <br>
+
+
+        <label class="settings-data">Account Type:<input type="text" bind:value={accountType} /></label>
+
+        <button type="button" class="btn-outline-dark" id='change-account-button' onclick="document.getElementById('account-popup').style.display='block'">
+          Change Account Type
+        </button>
+
+        <br>
+
+        <br>
+        <br>
+        <button type="button" class="btn btn-danger" id='delete-button'>
+            Delete Account
+        </button>
+    </div>
+
+
+
+  <div class="popup" id="email-popup">
+      <label class="popup-data" for="email"><b>Enter New Email</b></label>
+      <br>
+      <input type="text" placeholder="email" name="email" required>
+      <br><br>
+  <button onclick="document.getElementById('email-popup').style.display='none'">Submit</button>
+  </div>
+  
+  <div class="popup" id="account-popup">
+      <label class="popup-data" for="account-type"><b>Enter New Account Type</b></label>
+      <br>
+      <input type="text" placeholder="Account Type" name="Account Type" required>
+      <br><br>
+      <button onclick="document.getElementById('account-popup').style.display='none'"> Submit </button>
+  </div>
+
+  <div class="popup" id="password-popup">
+    <label class="popup-data" for="password"><b>Enter New Password</b></label>
+    <br>
+    <input type="text" placeholder="password" name="password" required>
+    <br><br>
+    <button onclick="document.getElementById('password-popup').style.display='none'">Submit</button>
+    </div>
+
+
+</main>   
+  
+
+<style>
+  b{
+      text-align: left;
+      padding-left: 0rem;
+      padding-bottom: 0.0rem;
+      font-size: x-large;
+      font-family: 'Chakra Petch', sans-serif;
+      color: #1b2e35;
+  }
+
+
+  label {
+      text-align: center;
+      padding-left: 30rem;
+      padding-bottom: 0.5rem;
+      font-size: x-large;
+      font-family: 'Chakra Petch', sans-serif;
+      color: #1b2e35;
+  }
+
+  .popup-data {
+      text-align: left;
+      padding-left: 0rem;
+      padding-bottom: 0.5rem;
+      font-size: x-large;
+      font-family: 'Chakra Petch', sans-serif;
+      color: #1b2e35;
+  }
+
+  h2 {
+      text-align: center;
+      padding-left: 0rem;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 10;
+      font-weight: 900;
+      color: #1b2e35;
+  }
+
+  button {
+      padding: 10px 10px;
+      text-align: left;
+      display: block;
+      margin: auto;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 10px;
+  }
+
+  .popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+  }
+
+</style>
