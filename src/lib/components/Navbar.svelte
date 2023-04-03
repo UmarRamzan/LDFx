@@ -61,57 +61,64 @@
       <a class="navbar-brand" href="/">LDFx</a>
     </div>
   </div>
+  <div class="container">
+    <div class="row">
+        
+          <!--add about us-->
+          <div class="col-2">
+            <a class="nav-link" href="/about">About us</a>
+          </div>
+          <!--add how we work-->
+          <div class="col-2">
+            <a class="nav-link" href="/HowWeWork">How we work</a>
+          </div>
+          <!--add FAQ-->
+          <div class="col-2">
+            <a class="nav-link" href="/FAQ">FAQ</a>
+          </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
 
-  <div class="row justify-content-center">
-    <!--add about us-->
-    <div class="col">
-      <a class="nav-link" href="/about">About us</a>
-    </div>
-    <!--add how we work-->
-    <div class="col">
-      <a class="nav-link" href="/HowWeWork">How we work</a>
-    </div>
-    <!--add FAQ-->
-    <div class="col">
-      <a class="nav-link" href="/FAQ">FAQ</a>
-    </div>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      {#if $user}
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item dropdown">
-          {#if $username}
-          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {$username}
-          </a>
-          {:else}
-          <div>loading...</div>
-          {/if}
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="/settings">Settings</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><button class="dropdown-item" on:click={handleLogout}>Logout</button></li>
-          </ul>
-        </li>
-      </ul>
-      {:else}
-      <form class="d-flex">
-        <!-- Signup modal trigger -->
-        <div class="col">
-          <button type="button" class="btn btn-outline-dark" id="signup-button" data-bs-toggle="modal" data-bs-target="#signup-modal">
-              Signup
-          </button>
-        </div>
-        <!-- Login modal trigger -->
-        <div class="col">
-          <button type="button" class="btn btn-outline-dark" id="login-button" data-bs-toggle="modal" data-bs-target="#login-modal" on:click={async()=>{backDropBool.set(true)}}>
-              Login
-          </button>
-        </div>
-      </form>
-      {/if}
+        
+          <div class="col-4">
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                {#if $user}
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item dropdown">
+                    {#if $username}
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      {$username}
+                    </a>
+                    {:else}
+                    <div>loading...</div>
+                    {/if}
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li><a class="dropdown-item" href="/settings">Settings</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><button class="dropdown-item" on:click={handleLogout}>Logout</button></li>
+                    </ul>
+                  </li>
+                </ul>
+                {:else}
+                <form class="d-flex">
+                  <!-- Signup modal trigger -->
+                  <div class="col">
+                    <button type="button" class="btn btn-outline-dark" id="signup-button" data-bs-toggle="modal" data-bs-target="#signup-modal">
+                        Signup
+                    </button>
+                  </div>
+                  <!-- Login modal trigger -->
+                  <div class="col">
+                    <button type="button" class="btn btn-outline-dark" id="login-button" data-bs-toggle="modal" data-bs-target="#login-modal" on:click={async()=>{backDropBool.set(true)}}>
+                        Login
+                    </button>
+                  </div>
+                </form>
+                {/if}
+              </div>
+          </div>
     </div>
   </div>
 </div>
