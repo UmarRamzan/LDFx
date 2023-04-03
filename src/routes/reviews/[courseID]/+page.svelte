@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import AddReview from "$lib/components/AddReview.svelte";
     import { page } from '$app/stores'; // import $page store
     import { onMount } from "svelte";
@@ -8,7 +8,7 @@
     /**
 	 * @type {{ [x: string]: any; }[] | null}
 	 */
-    let reviews = null;
+    let reviews: { [x: string]: any; }[] | null = null;
 
     onMount(async () => {
         let res = await getReviews($page.params.courseID);

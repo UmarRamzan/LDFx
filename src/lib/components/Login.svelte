@@ -1,94 +1,87 @@
-<script lang="ts">
+<script>
 // @ts-nocheck
-    import {
-      Button,
-      Modal,
-      ModalBody,
-      ModalFooter,
-      ModalHeader,
-      Badge,
-      Form,
-      FormGroup, 
-      Input, 
-      Label,
-      Alert,
-      Spinner
-    } from 'sveltestrap';
 
-    import { supabase } from "$lib/supabaseClient";
-    import { user,username } from "../../routes/UserStore"
-    import { logIn,getUsername } from '$lib/api/csFunctions';
 
-    let open = false;
-    const toggle = () => {
-      open = !open;
-      email = '';
-      password = ''
-      errorMessage = '';
-    };
-
-	  let email = '';
-	  let password = '';
-
-    let pending = false;
-    let errorMessage = '';
-
-    const handleLogin = async () => {
-
-          pending = true;
-          let res = await logIn(email, password);
-          if (res.error) {
-            errorMessage = res.error;
-          } else {
-            console.log(res.data)
-            console.log(res.data.user.user_metadata)
-            user.set(res.data)
-
-            let _username = await getUsername(res.data.user.id)
-            console.log(_username)
-            username.set(_username.data[0].username)
-
-            toggle()
-          }
-          pending = false;
-      }
-
-    const resetError = (email, password) => {errorMessage = ''}
-    $: resetError(email, password)
-
-  </script>
-
-<div>
-    <Button color="outline-dark" on:click={toggle}>Login</Button>
-    <Modal isOpen={open} {toggle}>
-      <ModalHeader {toggle}>Login</ModalHeader>
-      
-        <Form on:submit={handleLogin}>
-          <ModalBody>
-            <FormGroup>
-              <Input id="email" placeholder="Email" type="email" bind:value={email} required/>
-            </FormGroup>
-          
-            <FormGroup>
-              <Input id="password" placeholder="Password" type="password" bind:value={password} required/>
-            </FormGroup>  
-
-            {#if errorMessage}
-            <Alert color='danger'>{errorMessage}</Alert>
-            {/if}
-          </ModalBody>
-          <ModalFooter>
-            <Button color="outline-secondary" on:click={toggle}>Cancel</Button>
-            {#if !pending}
-                <Button color="outline-success">Submit</Button>
-            {:else}
-                <Button color="outline-success"><Spinner color="success" type="border" size="sm" /></Button>
-            {/if}
-          </ModalFooter>
-        </Form>
-      
-      
-    </Modal>
-  </div>
+  import { logIn,getUsername } from "$lib/api/csFunctions";
+  import { user,username,backDropBool } from "../../routes/UserStore"
 
   
+
+  let email = '';
+  let password = '';
+
+  let pending = false;
+  let errorMessage = '';
+  let open = true;
+
+  const handleLogin = async () => {
+    const { success, data, error } = await logIn(email, password)
+    if (error) {console.log(error); errorMessage = error;}
+    else {
+      user.set(data.user)
+      let res = await getUsername(data.user.id)
+      if (res.success) {
+        open = false
+        backDropBool.set(false)
+        username.set(res.data[0].username)
+      }
+    }
+  }
+
+</script>
+
+
+{#if open}
+<!-- Login modal -->
+<div class="modal fade" id="login-modal" data-bs-backdrop="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" id="login-content">
+
+    <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Login</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" on:click={()=>{backDropBool.set(false)}}></button>
+    </div>
+    
+    <div class="modal-body">
+        <div class="mb-3">
+            <input type="email" class="form-control" id="email" placeholder="Email" bind:value={email}>
+        </div>
+        <div class="mb-3">
+            <input type="password" class="form-control" id="password" placeholder="Password" bind:value={password}>
+        </div>
+      </div>
+
+      {#if errorMessage}
+        <div class="alert alert-danger" role="alert">
+          {errorMessage}
+        </div>
+      {/if}
+
+      <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" on:click={()=>{backDropBool.set(false)}}>Cancel</button>
+          <button type="button" class="btn btn-outline-dark" id="submit-button" on:click={handleLogin}>Confirm</button>
+      </div>
+    </div>
+
+
+    
+  </div>
+</div>
+
+
+
+{/if}
+
+
+<style>
+  #login-content {
+    background-color: #ffe5d9;
+  }
+  #submit-button:hover {
+    background-color: #fec5bb;
+    color: black;
+  }
+  .form-control {
+    background-color: #fcfbf2;
+  }
+</style>

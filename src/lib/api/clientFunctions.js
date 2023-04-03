@@ -1,20 +1,18 @@
 // @ts-nocheck
-//API FUNCTIONS FOR CLIENT SIDE
-import { supabase } from "../supabaseClient";
+// @ts-nocheck
+
+import { supabase } from "$lib/supabaseClient";
 import { user } from "../../routes/UserStore";
+
 let redirectLink = "http://localhost:5173/emailVerified"
 
-// get the current user session, if one exists
-export const getUserData = async () => {
-    const { data: { user } } = await supabase.auth.getUser()
-    return user;
-}
+export const signup = async (email, password, accountType, username) => {
 
-export const signUp = async (email, password, accountType, username) => {
     let success = false
     let data = null
     let error = null
-    const {data:signupData, error:signupError} = await supabase.auth.signUp({
+
+    const { data: signupData, error: signupError } = await supabase.auth.signUp({
         email: email,
         password: password,
         options: {
@@ -22,7 +20,8 @@ export const signUp = async (email, password, accountType, username) => {
         },
         emailRedirectTo: redirectLink
     })
-    if(signupError){
+    
+    if (signupError) {
         console.log(signupError)
         error = signupError
     }
@@ -32,37 +31,35 @@ export const signUp = async (email, password, accountType, username) => {
         data = signupData
 
         //set username and userid in username table
-        const {data:usernameData, error:usernameError} = await supabase.from('usernames').insert([
+        const { data: usernameData, error: usernameError} = await supabase.from('usernames').insert([
             {user_id: signupData.user.id, username: username}])
-        if(usernameError){
+        if (usernameError) {
             console.log(usernameError)
             error = usernameError
             success = false
         }
-
     }
 
-
     return {success: success, data: data, error: error}
-
 }
 
+export const login = async (email, password) => {
 
-export const logIn = async (email, password) => {
     let success = false
     let data = null
+
     const {data:loginData , error} = await supabase.auth.signInWithPassword({
         email: email,
         password: password,
     })
-    if(error){
-        console.log(error)
-    }
+
+    if (error) {console.log(error)}
     else{
         console.log(loginData)
         success = true
         data = loginData
     }
+
     return {success: success, data: data, error: error}
 }
 
@@ -74,12 +71,13 @@ export const logout = async () => {
 
 //api function to get username from the usernames table
 export const getUsername = async (userId) => {
+
     let success = false
     let data = null
+
     const {data:usernameData, error} = await supabase.from('usernames').select('username').eq('user_id', userId)
-    if(error){
-        console.log(error)
-    }
+
+    if (error) {console.log(error)}
     else{
         console.log("getUsername: ", usernameData)
         success = true
@@ -88,9 +86,16 @@ export const getUsername = async (userId) => {
     return {success: success, data: data, error: error}
 }
 
+// get the current user session, if one exists
+export const getUserData = async () => {
+    const { data: { user } } = await supabase.auth.getUser()
+    return user;
+}
+
 //api function to update username in the usernames table
 //note that userid is obtained from the session
 export const updateUsername = async (username, userId) => {
+
     let success = false
     let data = null
     const {data:usernameData, error} = await supabase.from('usernames').update({username: username}).eq('user_id', userId).select()
@@ -122,7 +127,7 @@ export const getReviews = async (courseId) => {
 }
 
 //api function to add review to the reviews table with (review,rating,userid,courseid)
-export const addReview = async (review, rating, courseId,userId) => {
+export const addReview = async (courseId, userId, review, rating) => {
     let success = false
     let data = null
     const {data:reviewData, error} = await supabase.from('reviews').insert([
@@ -170,82 +175,13 @@ export const deleteReview = async (review_id) => {
     return {success: success, data: data, error: error}
 }
 
-
-// api function to view Jobs posts:
-/*
-export const getJobPosts = async () => {
-    let success = false
-    let data = null
-    const {data:jobData, error} = await supabase.from('jobposting').select()
-    if(error){
-        console.log(error)
-    }
-    else{
-        console.log("Get Job Posts: ",jobData)
-        success = true
-        data = jobData
-    }
-    return {success: success, data: data, error: error}
-}
-
-// api function to add Job posts:
-export const addJobPosts = async (organizationName, contactNumber, payRange, emailAddress, jobType, description_job, userID) => {
-    let success = false
-    let data = null
-    const {data:jobData, error} = await supabase.from('jobposting').insert([
-        {description: description_job, organization_name: organizationName, contact_number: contactNumber, email_address: emailAddress, pay_range: payRange, job_type: jobType, user_id: userID}]).select('*')
-    if(error){
-        console.log(error)
-    }
-    else{
-        console.log("Add Job Post: ",jobData)
-        success = true
-        data = jobData
-    }
-    return {success: success, data: data, error: error}
-}
-
-// api function to edit job posts:
-export const editJobPosts = async (organizationName, contactNumber, payRange, emailAddress, jobType, description_job, job_id) => {
-    let success = false
-    let data = null
-    const {data:jobData, error} = await supabase.from('jobposting').update({description: description_job, organization_name: organizationName, contact_number: contactNumber, email_address: emailAddress, pay_range: payRange, job_type: jobType}).eq('id', job_id)
-    if(error){
-        console.log(error)
-    }
-    else{
-        console.log("Edit Job Post: ", jobData)
-        success = true
-        data = jobData
-    }
-    return {success: success, data: data, error: error}
-}
-
-// api function to delete job posts:
-
-export const deleteJobPosts = async (job_id) => {
-    let success = false
-    let data = null
-    const {data:jobData, error} = await supabase.from('jobposting').update({deleted: true}).eq('id', job_id)
-    if(error){
-        console.log(error)
-    }
-    else{
-        console.log("Delete Job Post: ",jobData)
-        success = true
-        data = jobData
-    }
-    return {success: success, data: data, error: error}
-}
-*/
-
 // api function to view Jobs posts
 export const getJobPost = async () => {
 
     let success = false
     let data = null
 
-    const {data: jobData, error} = await supabase.from('job_posting').select().eq('deleted', false||null)
+    const {data: jobData, error} = await supabase.from('job_posting').select().eq('deleted', false)
 
     if (error) {console.log(error)}
     else {success = true, data = jobData}
@@ -296,69 +232,5 @@ export const deleteJobPost = async (job_posting_id) => {
     if (error) {console.log(error)}
     else {success = true, data = jobData}
 
-    return {success: success, data: data, error: error}
-}
-
-// donoation posts api functions by Ayza
-
-export const getDonationPosts = async () => {
-    let success = false
-    let data = null
-
-    const {data: donationData, error} = await supabase.from('donationposting').select('*').eq('deleted', false)
-
-    if (error) {console.log(error)}
-    else {success = true, data = donationData}
-    console.log("Get Donation Posts: ", data)
-
-    return {success: success, data: data, error: error}
-}
-
-//api function to add review to the reviews table with (review,rating,userid,courseid)
-export const addDonationPosts = async (fullName, contactNumber, emailAddress, relatedTags, descriptionDon, userID) => {
-    let success = false
-    let data = null
-    const {data:donationData, error} = await supabase.from('donationposting').insert([
-        {full_name: fullName, contact_number: contactNumber, user_id: userID, email_address: emailAddress, related_tags: relatedTags, description: descriptionDon}]).select('*')
-    if(error){
-        console.log(error)
-    }
-    else{
-        console.log("Add Donation Posts: ", donationData)
-        success = true
-        data = donationData
-    }
-    return {success: success, data: data, error: error}
-}
-
-//api function to edit reviews in reviews table with (review_id)
-export const editDonationPosts = async (fullName, contactNumber, emailAddress, relatedTags, descriptionDon, donation_id) => {
-    let success = false
-    let data = null
-    const {data:donationData, error} = await supabase.from('donationposting').update({full_name: fullName, contact_number: contactNumber, email_address: emailAddress, related_tags: relatedTags, description: descriptionDon}).eq('id', donation_id).select()
-    if(error){
-        console.log(error)
-    }
-    else{
-        console.log("Edit Donation Posts: ", donationData)
-        success = true
-        data = donationData
-    }
-    return {success: success, data: data, error: error}
-}
-
-//api function to delete reviews in reviews table with (review_id) by setting deleted to true
-export const deleteDonationPosts = async (donation_id) => {
-    let success = false
-    let data = null
-    const {data:donationData, error} = await supabase.from('donationposting').update({deleted: true}).eq('donation_id', donation_id).select()
-    if(error){
-        console.log(error)
-    }
-    else{
-        console.log("Delete Donation Posts: ", donationData)
-        success = true
-        data = donationData
-    }
     return {success: success, data: data, error: error}
 }
