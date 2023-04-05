@@ -71,6 +71,7 @@
                         <td>{swap.have}</td>
                         <td>{swap.want}</td>
                         <td><div class="status m-auto" style="background-color: {statusColors[swap.status]};">{swap.status}</div></td>
+                        
                     </tr>
                 {/each}
             </tbody>
