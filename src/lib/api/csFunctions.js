@@ -10,6 +10,44 @@ export const getUserData = async () => {
     return user;
 }
 
+export const resetPassword =  async (email) => {
+    let success = false
+    let data = null
+    let error = null
+
+    const {data:passResetData, error:passResetError} = await supabase.auth.resetPasswordForEmail(email, {redirectTo: 'http://localhost:5173/resetPassword',})
+    
+    if(passResetError){
+        console.log(passResetError)
+        error = passResetError
+    }
+    else{
+        console.log(passResetData)
+        success = true
+        data = passResetData
+    }
+    return {success: success, data: data, error: error}
+}
+
+export const updatePass = async (new_password)=>{
+    let success = false
+    let data = null
+    let error = null
+
+    const {data:passResetData,error:passResetError} = await supabase.auth.updateUser({password: new_password})
+    if(passResetError){
+        console.log(passResetError)
+        error = passResetError
+    }
+    else{
+        console.log(passResetData)
+        success = true
+        data = passResetData
+    }
+    return {success: success, data: data, error: error}
+}
+  
+
 export const signUp = async (email, password, accountType, username) => {
     let success = false
     let data = null
