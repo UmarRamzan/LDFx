@@ -78,24 +78,23 @@
           </table>
     </div>
 </div>
+
 <style>
 
-#content {
-    width: 60%;
-    margin: auto;
-    margin-top: 40px;
-    border: 2px solid #000000;
-    border-radius: 10px;
-    background-color: var(--primary);
-    padding: 40px;
-    box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
-  }
+    #content {
+        width: 60%;
+        margin: auto;
+        margin-top: 40px;
+        border: 2px solid #000000;
+        border-radius: 10px;
+        background-color: var(--primary);
+        padding: 40px;
+        box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
 
     th, td {
         padding: 20px;
     }
-
-
 
      #swap-table {
         text-align: center;

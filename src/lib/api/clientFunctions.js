@@ -234,3 +234,52 @@ export const deleteJobPost = async (job_posting_id) => {
 
     return {success: success, data: data, error: error}
 }
+
+// create a new swap request
+export const addSwapRequest = async (userID, haveList, wantList) => {
+    
+    // add a new entry into the swaps table
+    let success = false;
+    const { data, error } = await supabase
+    .from('swaps')
+    .insert({ user_id: userID })
+
+    // add each course in the haveList as a seperate row to the have table
+    haveList.forEach(async course => {
+        const { error } = await supabase
+        .from('have')
+        .insert({ swap_id: data[0].id, course_id: course.course_id })
+    });
+
+    // add each course in the wantList as a seperate row to the want table
+    wantList.forEach(async course => {
+        const {error} = await supabase
+        .from('want')
+        .insert({ swap_id: data[0].id, course_id: course.course_id})
+    })
+
+    if (!error) {success = true}
+
+    return {success: success, data: data, error: error}
+
+}
+
+export const getCourses = async () => {
+
+    let success = false
+    let data = null
+
+    const {data:courseData, error} = await supabase
+    .from('courses')
+    .select('*')
+
+    if(error){
+        console.log(error)
+    }
+    else{
+        success = true
+        data = courseData
+    }
+
+    return {success: success, data: data, error: error}
+}

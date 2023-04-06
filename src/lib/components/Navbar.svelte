@@ -109,6 +109,7 @@
 
 <Signup />
 <Login />
+
 {#if $backDropBool}
 <div class="modal-backdrop fade show"></div>
 {/if}
@@ -125,13 +126,17 @@
   
   #sidebar-links {
     height: 100%;
-    color: red;
     border-color: black;
+  }
+
+  #sidebar-links .list-group-item {
+    display: flex;
+    align-items: center;
   }
 
   .bi {
     font-size: 1.5rem;
-    margin: 10px 20px;
+    margin: 0px 20px;
   }
 
   #sidebar-links li {
