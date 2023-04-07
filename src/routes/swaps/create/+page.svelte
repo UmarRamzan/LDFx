@@ -2,6 +2,7 @@
 
   import { addSwapRequest, getCourses } from "$lib/api/clientFunctions";
 	import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
   import { user } from "../../UserStore";
 
 
@@ -10,6 +11,8 @@
   let courseList = [];
   let searchResults = [];
 
+  let pending = false;
+
   onMount(async () => {
     const {success, data, error} = await getCourses()
     if (error) {console.log(error)}
@@ -17,19 +20,19 @@
   })
 
   const addHaveCourse = () => {
-    haveList = [...haveList, {course_id: "", search_string: "", section: "", selected: false}]
+    haveList = [...haveList, {course_id: null, search_string: "", course_title: "", section: "", selected: false}]
   }
 
   const addWantCourse = () => {
-    wantList = [...wantList, {course_id: wantList.length, course_code: "", section: "", selected: false}]
+    wantList = [...wantList, {course_id: null, search_string: "", course_title: "", section: "", selected: false}]
   }
 
-  const removeHaveCourse = (course_id) => {
-    haveList = haveList.filter((course) => course.course_id != course_id)
+  const removeHaveCourse = (course_idx) => {
+    haveList = haveList.filter((course) => haveList.indexOf(course) != course_idx)
   }
 
-  const removeWantCourse = (course_id) => {
-    wantList = wantList.filter((course) => course.course_id != course_id)
+  const removeWantCourse = (course_idx) => {
+    wantList = wantList.filter((course) => wantList.indexOf(course) != course_idx)
   }
 
   const searchCourses = (searchString) => {
@@ -47,8 +50,11 @@
   }
 
   const submitRequest = async () => {
+    pending = true
     const {success, data, error} = await addSwapRequest($user.id, haveList, wantList)
     if (error) {console.log(error)}
+    else {goto('/swaps')}
+    pending = false
   }
 
 </script>
@@ -78,17 +84,23 @@
             <div class="card-body">
 
               <div class="row justify-content-end">
-                <button type="button" class="btn btn-outline-dark" id="remove-course-button" on:click={()=>removeHaveCourse(course.course_id)}><i class="bi bi-x-lg"></i></button>
+                <button type="button" class="btn btn-outline-dark" id="remove-course-button" on:click={()=>removeHaveCourse(haveList.indexOf(course))}><i class="bi bi-x-lg"></i></button>
               </div>
 
               <div class="row dropdown w-100">
                 <label for="courseSearch">Course</label>
-                <input type="text" class="form-control" id="courseSearch" placeholder="Search for course title, code, instructor" bind:value={course.search_string} on:keyup={()=>{searchCourses(course.search_string)}} on:focus={()=>{course.selected = true; searchCourses(course.search_string)}} on:focusout={()=>{setTimeout(()=>{course.selected = false}, 10)}}>
+                <input type="text" class="form-control" id="courseSearch" placeholder="Search for course title, code, instructor" bind:value={course.search_string} on:keyup={()=>{searchCourses(course.search_string)}} on:focus={()=>{course.selected = true; searchCourses(course.search_string)}} on:focusout={()=>{setTimeout(()=>{course.selected = false}, 50)}}>
 
                 {#if course.selected}
                 <ul class="list-group dropdown-content p-0">
                   {#each searchResults as searchResult (searchResults.indexOf(searchResult))}
-                  <li class="list-group-item" on:click={()=>{course.search_string = searchResult.course_title; course.selected=false}}>{searchResult.course_title + ' ' + searchResult.Section}</li>
+                  <li class="list-group-item" on:click={()=>{
+                    course.course_id = searchResult.course_id;
+                    course.search_string = searchResult.course_title + ' (' + searchResult.Section + ')';
+                    course.course_title = searchResult.course_title;
+                    course.selected=false
+                    }}>
+                    {searchResult.course_title + ' (' + searchResult.Section + ')'}</li>
                   {/each}
                 </ul>
                 {/if}
@@ -120,27 +132,36 @@
       </div>
       
       <div class="row gy-4">
-        {#each wantList as course (course.course_id)}
+        {#each wantList as course (wantList.indexOf(course))}
         <div class="col-md-6">
           
           <div class="card px-4 pb-4">
             <div class="card-body">
 
               <div class="row justify-content-end">
-                <button type="button" class="btn btn-outline-dark" id="remove-course-button" on:click={()=>removeWantCourse(course.course_id)}><i class="bi bi-x-lg"></i></button>
+                <button type="button" class="btn btn-outline-dark" id="remove-course-button" on:click={()=>removeWantCourse(wantList.indexOf(course))}><i class="bi bi-x-lg"></i></button>
               </div>
 
-              <div class="row">
+              <div class="row dropdown w-100">
                 <label for="courseSearch">Course</label>
-                <input type="text" class="form-control mb-2" id="courseSearch" placeholder="Search for course title, code, instructor" bind:value={course.course_code}>
+                <input type="text" class="form-control" id="courseSearch" placeholder="Search for course title, code, instructor" bind:value={course.search_string} on:keyup={()=>{searchCourses(course.search_string)}} on:focus={()=>{course.selected = true; searchCourses(course.search_string)}} on:focusout={()=>{setTimeout(()=>{course.selected = false}, 50)}}>
 
-                <label for="courseSearch">Section</label>
-                <select class="form-select" id="inputGroupSelect02" bind:value={course.section}>
-                    <option selected>{course.section}</option>
-                </select>
+                {#if course.selected}
+                <ul class="list-group dropdown-content p-0">
+                  {#each searchResults as searchResult (searchResults.indexOf(searchResult))}
+                  <li class="list-group-item" on:click={()=>{
+                    course.course_id = searchResult.course_id;
+                    course.search_string = searchResult.course_title + ' (' + searchResult.Section + ')';
+                    course.course_title = searchResult.course_title;
+                    course.selected=false
+                    }}>
+                    {searchResult.course_title + ' (' + searchResult.Section + ')'}
+                  </li>
+                  {/each}
+                </ul>
+                {/if}
+
               </div>
-              
-              
               
             </div>
           </div>
@@ -152,8 +173,14 @@
       </div>
 
     </div>
-    <div class="row mt-4 mb-4 justify-content-center">
+
+    <!-- Submit button -->
+    <div class="row mt-4 mb-4 justify-content-center align-items-center">
+      {#if !pending}
       <button type="button" class="btn btn-success" id="add-course-button" on:click={submitRequest}>Create</button>
+      {:else}
+      <button type="button" class="btn btn-outline-success d-flex align-items-center justify-content-center" id="pending-course-button"><div class="spinner-border text-success" role="status"></div></button>
+      {/if}
     </div>
   </div>
 </div>
@@ -195,7 +222,8 @@
 }
 
 
-  #add-course-button {
+  #add-course-button, #pending-course-button {
+    width: 100px;
     height: 40px;
   }
 
@@ -209,9 +237,6 @@
       margin-bottom: 40px;
   }
 
-  #add-course-button {
-      width: 100px;
-  }
 
   #remove-course-button {
       width: 40px;

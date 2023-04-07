@@ -1,30 +1,9 @@
 <script>
-    let swapsList = [
-        {
-            "swap_id": 1,
-            "have": "CS100",
-            "want": "CS500",
-            "status": "Found"
-        },
-        {
-            "swap_id": 2,
-            "have": "CS100",
-            "want": "CS500",
-            "status": "Pending"
-        },
-        {
-            "swap_id": 3,
-            "have": "CS100",
-            "want": "CS500",
-            "status": "Pending"
-        },
-        {
-            "swap_id": 4,
-            "have": "CS100",
-            "want": "CS500",
-            "status": "Not Found"
-        }
-    ]
+	import { deleteSwap, getSwapRequests } from "$lib/api/clientFunctions";
+	import { onMount } from "svelte";
+    import { user } from "../UserStore";
+
+    let pending = false;
 
     let statusColors = {
         "Found": "#69ff91",
@@ -32,15 +11,21 @@
         "Not Found": "#fa5741",
     }
 
-    // bootstrap button in pure html that redirects to ./swaps/create
+    let swapTableData = [];
 
+    onMount( async () => {
+        pending = true;
+        let {success, data, error} = await getSwapRequests($user.id);
+        if (success) {swapTableData = data;}
+        pending = false;
+    })
 
-
-
+    const handleDeleteSwap = async (swapID) => {
+        swapTableData = swapTableData.filter((swap) => swap.swap_id != swapID);
+        const { success, data, error } =  deleteSwap(swapID);
+    }
 
 </script>
-
-
 
 <div class="container  mt-5" id="content">
     
@@ -65,17 +50,45 @@
                 <th scope="col">Status</th>
               </tr>
             </thead>
+            
+            {#if !pending}
             <tbody>
-                {#each swapsList as swap (swap.swap_id)}
+                {#each swapTableData as swap (swap.swap_id)}
                     <tr>
-                        <td>{swap.have}</td>
-                        <td>{swap.want}</td>
-                        <td><div class="status m-auto" style="background-color: {statusColors[swap.status]};">{swap.status}</div></td>
-                        
+                        <td>
+                            {#each swap.haveList as course (course.course_id)}
+                                <p>{course.course_title}</p>
+                            {/each}
+                        </td>
+                        <td>
+                            {#each swap.wantList as course (course.course_id)}
+                                <p>{course.course_title}</p>
+                            {/each}
+                        </td>
+                        <td>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <div class="status m-auto" style="background-color: {statusColors[swap.status]};">{swap.status}</div>
+                                    </div>
+                                    <div class="col">
+                                        <i class="bi bi-trash" on:click={()=>{handleDeleteSwap(swap.swap_id)}}></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                 {/each}
             </tbody>
+            {/if}
           </table>
+
+            {#if pending}
+                <div class="d-flex w-100 justify-content-center mt-5">
+                    <div class="spinner-border text-success" role="status"></div>
+                </div>
+            {/if}
+
     </div>
 </div>
 
@@ -111,6 +124,15 @@
         text-align: center;
         border: 1px solid rgb(0, 0, 0, 0.5);
         border-radius: 10px;
+     }
+
+     .bi {
+        font-size: 2rem;
+     }
+
+     .bi:hover {
+        cursor: pointer;
+        color: red;
      }
 
 </style>
