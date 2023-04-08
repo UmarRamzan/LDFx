@@ -52,7 +52,7 @@
     <div class="row">
       <ul class="list-group list-group-flush" >
         <a href="/about"><li class="list-group-item"><i class="bi bi-info-square"></i>About Us</li></a>
-        <a href="/faq"><li class="list-group-item"><i class="bi bi-question-octagon"></i>FAQs</li></a>
+        <a href="/FAQ"><li class="list-group-item"><i class="bi bi-question-octagon"></i>FAQs</li></a>
       </ul>
     </div>
   </div>
