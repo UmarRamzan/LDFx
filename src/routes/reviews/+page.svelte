@@ -2,10 +2,17 @@
     import { supabase } from "$lib/supabaseClient";
     import { Col, Container, Row, Card, CardBody } from 'sveltestrap';
     import { onMount } from "svelte/internal";
+    let searchResults = []
+    let searchArray = []
+    let courseList = []
+    const handleSearch = async () => {
+      searchResults = courseList;
+      searchArray.forEach(searchString => {
+      searchResults = searchResults.filter((course) => (course.subject_code.toLowerCase().includes(searchString) || course.catalog.toLowerCase().includes(searchString) || course.course_title.toLowerCase().includes(searchString) || course.instructor.toLowerCase().includes(searchString)))
+    }
 
     let searchString = '';
     let searchResults = [];
-
     let tempResults = [];
 
     const getSearchResults = async () => {
@@ -13,9 +20,6 @@
         let { data: courses, error } = await supabase
         .from('courses')
         .select('course_id, subject_code, catalog, course_title')
-        
-
-        console.log(courses);
 
         searchResults = courses;
 
