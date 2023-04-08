@@ -8,7 +8,9 @@
   import { onMount } from "svelte";
   import { getDonationPosts,addDonationPosts,editDonationPosts,deleteDonationPosts,getUserData } from "$lib/api/csFunctions";
   import { user } from "../../routes/UserStore";
+	import Comments from "$lib/components/Comments.svelte";
   let donationPosts = [];
+  
 
 
 
@@ -207,6 +209,8 @@
           </div>
           {/if}
       </div>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#comments-modal-donations">View Comments</button>
+    <Comments id="comments-modal-donations" parentID={donationPost.donation_id}/>
   </div>
   </div>
   {/each}

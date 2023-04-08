@@ -400,3 +400,17 @@ export const deleteDonationPosts = async (donation_id) => {
     }
     return {success: success, data: data, error: error}
 }
+
+
+export const getDonationComments = async (donation_id) => {
+    let success = false
+    let data = null
+
+    const {data: donationData, error} = await supabase.from('commentsDonations').select('*').eq('donation_id', donation_id)
+
+    if (error) {console.log(error)}
+    else {success = true, data = donationData}
+    console.log("Get Donation Comments: ", data)
+
+    return {success: success, data: data, error: error}
+}
