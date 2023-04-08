@@ -90,6 +90,34 @@
     }
   };
 
+  let postLikes = []
+  let postDislikes = []
+
+  const likePost = (donation_id) => {
+    const postLikeIndex = postLikes.findIndex((like) => like.id === donation_id);
+
+    if (postLikeIndex !== -1) {
+      postLikes[postLikeIndex].likes += 1;
+    } else {
+      postLikes.push({ id: donation_id, likes: 1 });
+    }
+
+    console.log(postLikes);
+    console.log(postLikes.find((like) => like.id === donation_id).likes);
+  };
+
+  
+  const dislikePost = (donation_id) => {
+    const postDisLikeIndex = postDislikes.findIndex((dislikes) => dislikes.id === donation_id);
+
+    if (postDisLikeIndex !== -1) {
+      postDislikes[postDisLikeIndex].dislikes += 1;
+    } else {
+      postDislikes.push({ id: donation_id, dislikes: 1 });
+    }
+
+  };
+
 
   let count = 0
   let countdown = 0
@@ -277,7 +305,7 @@
 
                     <div class = "d-flex gap-3 mb-2">
                       <div class = "icon-1">
-                        <button class = "btn btn-light btn-block">
+                        <button class = "btn btn-light btn-block" data-bs-toggle="modal" data-bs-target="#comments-modal-donations" on:click={()=>{loadComments(donationPost.donation_id)}}>
                           <div class = "icon"> 
                             <i class="bi bi-chat-square"></i>
                           </div>
@@ -285,21 +313,21 @@
                         </button>
                       </div>
                       <div class = "icon-1">
-                          <button class = "btn btn-light btn-block" on:click={() => {count+=1} }>
+                          <button class = "btn btn-light btn-block" on:click={() => {likePost(donationPost.donation_id)} }>
                             <div class = "icon"> 
                               <i class="bi bi-hand-thumbs-up" ></i>
                             </div>
                               <p class = "col-2">Like</p>
-                              <p class = "col-2">{count}</p>
+                              <p class="col-2">{postLikes.find((like) => like.id === donationPost.donation_id)?.likes || 0}</p>
                           </button> 
                       </div>
                       <div class = "icon-1">
-                        <button class = "btn btn-light btn-block" on:click={() => {countdown+=1}}>
+                        <button class = "btn btn-light btn-block" on:click={() => {dislikePost(donationPost.donation_id)}}>
                           <div class = "icon"> 
                             <i class="bi bi-hand-thumbs-down" ></i>
                           </div>
                             <p class = "col-2">Dislike</p>
-                            <p class = "col-2">{countdown}</p>
+                            <p class = "col-2">{postDislikes.find((dislikes) => dislikes.id === donationPost.donation_id)?.dislikes || 0}</p>
                           </button> 
                       </div>
                     </div>
@@ -321,7 +349,6 @@
           </div>
           {/if}
       </div>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#comments-modal-donations" on:click={()=>{loadComments(donationPost.donation_id)}}>View Comments</button>
   </div>
   </div>
   {/each}

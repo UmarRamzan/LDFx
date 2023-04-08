@@ -79,8 +79,33 @@
         }
     }
 
-    let count = 0
-    let countdown = 0
+    let postLikes = []
+    let postDislikes = []
+
+    const likePost = (donation_id) => {
+        const postLikeIndex = postLikes.findIndex((like) => like.id === donation_id);
+
+        if (postLikeIndex !== -1) {
+        postLikes[postLikeIndex].likes += 1;
+        } else {
+        postLikes.push({ id: donation_id, likes: 1 });
+        }
+
+        console.log(postLikes);
+        console.log(postLikes.find((like) => like.id === donation_id).likes);
+    };
+
+    
+    const dislikePost = (donation_id) => {
+        const postDisLikeIndex = postDislikes.findIndex((dislikes) => dislikes.id === donation_id);
+
+        if (postDisLikeIndex !== -1) {
+        postDislikes[postDisLikeIndex].dislikes += 1;
+        } else {
+        postDislikes.push({ id: donation_id, dislikes: 1 });
+        }
+
+    };
 
 </script>
 
@@ -267,7 +292,7 @@
                             <input type="text" class="form-control" id="jobDescription" readonly value = {jobData.description}>
                             <div class = "d-flex gap-3 mb-2">
                               <div class = "icon-1">
-                                <button class = "btn btn-light btn-block">
+                                <button class = "btn btn-light btn-block" data-bs-toggle="modal" data-bs-target="#comments-modal-donations" on:click={()=>{loadComments(donationPost.donation_id)}}>
                                   <div class = "icon"> 
                                     <i class="bi bi-chat-square"></i>
                                   </div>
@@ -289,7 +314,7 @@
                                     <i class="bi bi-hand-thumbs-down" ></i>
                                   </div>
                                     <p class = "col-2">Dislike</p>
-                                    <p class = "col-2">{countdown}</p>
+                                    <p class = "col-2">{postDislikes.find((dislikes) => dislikes.id === donationPost.donation_id)?.dislikes || 0}</p>
                                   </button> 
                               </div>     
                         </div>
@@ -311,7 +336,6 @@
             </div>
             {/if}
         </div>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#comments-modal-jobs" on:click={()=>{loadComments(jobData.job_posting_id)}}>View Comments</button>
     </div>
     </div>
     {/each}
