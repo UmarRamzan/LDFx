@@ -23,7 +23,11 @@
 
   setContext('signupModalOpen', false)
 
-  const handleLogout = async () => {await logout();}
+  const handleLogout = async () => {
+    await logout();
+    user.set(null);
+    username.set(null);
+  }
 
 </script>
 
@@ -49,7 +53,7 @@
     <div class="row">
       <ul class="list-group list-group-flush" >
         <a href="/about"><li class="list-group-item"><i class="bi bi-info-square"></i>About Us</li></a>
-        <a href="/faq"><li class="list-group-item"><i class="bi bi-question-octagon"></i>FAQs</li></a>
+        <a href="/FAQ"><li class="list-group-item"><i class="bi bi-question-octagon"></i>FAQs</li></a>
       </ul>
     </div>
   </div>
@@ -97,7 +101,7 @@
         </div>
         <!-- Login modal trigger -->
         <div class="col">
-          <button type="button" class="btn btn-outline-success" id="login-button" data-bs-toggle="modal" data-bs-target="#login-modal">
+          <button type="button" class="btn btn-outline-success" id="login-button" data-bs-toggle="modal" data-bs-target="#login-modal" on:click={()=>{backDropBool.set(true)}}>
               Login
           </button>
         </div>
