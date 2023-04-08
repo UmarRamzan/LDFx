@@ -23,8 +23,6 @@
       reviewList = [...reviewList, {review_id: data[0].review_id, course_id: data[0].course_id, review_text: reviewText, rating: reviewRating, created_at: data[0].created_at }]
     }
 
-
-
     onMount(async () => {
         const { data, error } = await supabase
         .from('reviews')
@@ -40,14 +38,14 @@
 
 <ul class="list-group">
   <li class="list-group-item">
-    <div class="card">
-        <div class="card-body">
+    <div class="card" >
+        <div class="card-body ">
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addReviewModal">Add Review</button>
         </div>
     </div>
   {#each reviewList as review (review.review_id)}
-      <li class="list-group-item">
-          <div class="card">
+      <li class="list-group-item w-20">
+          <div class="card w-20">
               <div class="card-body">
                   <p class="card-text">{review.review_text}</p>
                   <div class="d-flex justify-content-between align-items-center">
@@ -92,23 +90,71 @@
 </div>
 
 
-
-
-
-
-
-
-  
-  
-
 <style>
     .search-results {
         margin: auto;
         width: 400px;
+        box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
     }
 
     .card{
-      background-color: var(--primary)
-
+      background-color: var(--primary);
+      padding: 10px;
+      width: 400px;
+      margin: auto;
     }
+
+    .card-body{
+      background-color: var(--primary);
+      padding: 10px;
+    }
+
+    .list-group-item{
+      background-color: var(--secondary);
+      padding: 10px;
+    }
+
+    .modal-header{
+      background-color: var(--lightpink);
+      padding: 10px;
+    }
+    
+    .modal-footer{
+      background-color: var(--lightpink);
+      padding: 10px;
+    }
+    .modal-fade{
+      background-color: var(--lightpink);
+      padding: 10px;
+    }
+
+    .modal-content{
+      background-color: var(--lightpink);
+      padding: 10px;
+    }
+
+    .mb3{
+      background-color: var(--lightpink);
+    }
+
+  .form-control{
+    background-color: var(--blugray);
+    box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    border: 2px solid var(--lightblue);
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease-in-out;
+
+  }
+
+  .form-control:hover {
+    border-color: var(--darkblue);
+  }
+  
+  .btn-primary{
+    width: 355px;
+    margin: auto;
+    padding: 0.5rem 1rem;
+  }
+  
 </style>

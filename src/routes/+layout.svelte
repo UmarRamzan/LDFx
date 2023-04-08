@@ -17,7 +17,12 @@
     --secondary: #ffe5d9;
     --tertiary: #fefae0;
     --quaternary: #fcf7d0;
-
+    
+    --pink: #FFC0CB;
+    --lightpink: #FFB6C1;
+    --hotpink: #FF69B4;
+    --deeppink:  #FF1493;
+    --blugray: #88c1f9;
     --links-primary: navy;
     --links-hover: blue;
     --links-hover-background: rgb(200, 200, 255);
@@ -25,7 +30,7 @@
     --button-primary: white;
     --button-background: blue;
 
-    /*
+/*     
     --primary: white;
     --secondary: black;
 
