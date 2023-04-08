@@ -411,6 +411,7 @@ export const getDonationComments = async (donation_id) => {
     if (error) {console.log(error)}
     else {success = true, data = donationData}
     console.log("Get Donation Comments: ", data)
+    console.log(donation_id)
 
     return {success: success, data: data, error: error}
 }

@@ -6,12 +6,23 @@
   // @ts-nocheck
 
   import { onMount } from "svelte";
-  import { getDonationPosts,addDonationPosts,editDonationPosts,deleteDonationPosts,getUserData } from "$lib/api/csFunctions";
+  import { getDonationPosts,addDonationPosts,editDonationPosts,deleteDonationPosts,getUserData,getDonationComments } from "$lib/api/csFunctions";
   import { user } from "../../routes/UserStore";
-	import Comments from "$lib/components/Comments.svelte";
   let donationPosts = [];
+  let comments = ["dummy1","dummy2"];
+  let commentsPending = true;
   
+  async function loadComments(donation_id) {
+    commentsPending = true;
+    let { success, data, error } = await getDonationComments(donation_id);
+    if (success) {
+      comments = data;
+      commentsPending = false;
+    } else {
+      console.log(error);
+    }
 
+  }
 
 
   onMount(async () => {
@@ -22,6 +33,7 @@
     } else {
       console.log(error);
     }
+
   });
 
   let fullName = "";
@@ -163,6 +175,34 @@
       </div>
   </div>
 </div>
+
+<!-- Comments Modal -->
+<div class="modal fade" id="comments-modal-donations" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Comments</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {#if commentsPending}
+        <p>Loading...</p>
+      {:else}
+        <div class="modal-body">
+          {#each comments as comment}
+            <div class="comment">
+              <p>{comment.username} : {comment.text}</p>
+            </div>
+          {/each}
+        </div>
+      {/if}
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
   
 
 <div class="container">
@@ -209,8 +249,7 @@
           </div>
           {/if}
       </div>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#comments-modal-donations">View Comments</button>
-    <Comments id="comments-modal-donations" parentID={donationPost.donation_id}/>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#comments-modal-donations" on:click={()=>{loadComments(donationPost.donation_id)}}>View Comments</button>
   </div>
   </div>
   {/each}
