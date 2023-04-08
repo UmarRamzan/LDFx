@@ -1,21 +1,29 @@
 <script>
 // @ts-nocheck
 
-
   import { logIn,getUsername,resetPassword } from "$lib/api/csFunctions";
-  import { user,username,backDropBool } from "../../routes/UserStore"
-
-  
+	import { onMount } from "svelte";
+  import { user,username} from "../../routes/UserStore"
 
   let email = '';
   let password = '';
 
   let pending = false;
+
   let errorMessage = '';
   let open = true;
   let successMessage = '';
 
+  onMount(() => {
+    pending = false;
+    email = '';
+    password = '';
+    errorMessage = '';
+    successMessage = '';
+  })
+
   const handleLogin = async () => {
+    pending = true;
     const { success, data, error } = await logIn(email, password)
     if (error) {console.log(error); errorMessage = error;}
     else {
@@ -27,6 +35,7 @@
         username.set(res.data[0].username)
       }
     }
+    pending = false;
   }
 
   const handleResetPassword = async () => {
@@ -40,10 +49,8 @@
 
 </script>
 
-
-{#if open}
 <!-- Login modal -->
-<div class="modal fade" id="login-modal" data-bs-backdrop="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="login-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" id="login-content">
 
@@ -67,11 +74,18 @@
         </div>
       {/if}
 
+      <a href="" data-bs-toggle="modal" data-bs-target="#forgot-password-modal">Forgot Password</a>
+
       <div class="modal-footer">
-          <button type="button" class="btn btn-outline-dark" id="forgor-pass" data-bs-toggle="modal" data-bs-target="#forgot-password-modal" on:click={()=>{!open}}>Forgor</button>
-          <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" on:click={()=>{backDropBool.set(false)}}>Cancel</button>
-          <button type="button" class="btn btn-outline-dark" id="submit-button" on:click={handleLogin}>Confirm</button>
-      </div>
+          <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
+          {#if !pending}
+          <button type="button" class="btn btn-outline-success" id="submit-button" on:click={handleLogin}>Confirm</button>
+          {:else}
+          <button class="btn btn-outline-success" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          </button>
+          {/if}
+        </div>
     </div>
 
 
@@ -80,11 +94,8 @@
 </div>
 
 
-
-{/if}
-
 <!--forgot password modal-->
-<div class="modal fade" id="forgot-password-modal" data-bs-backdrop="false" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="forgot-password-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" id="login-content">
 
@@ -114,7 +125,7 @@
 
         <div class="modal-footer">
             <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" on:click={()=>{backDropBool.set(false)}}>Cancel</button>
-            <button type="button" class="btn btn-outline-dark" id="submit-button" on:click={handleResetPassword}>Confirm</button>
+            <button type="button" class="btn btn-outline-success" id="submit-button" on:click={handleResetPassword}>Confirm</button>
         </div>
     </div>
   </div>
@@ -125,12 +136,11 @@
 
 
 <style>
+  .btn {
+    width: 100px;
+  }
   #login-content {
     background-color: #ffe5d9;
-  }
-  #submit-button:hover {
-    background-color: #fec5bb;
-    color: black;
   }
   .form-control {
     background-color: #fcfbf2;

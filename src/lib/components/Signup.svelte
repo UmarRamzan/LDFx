@@ -1,6 +1,7 @@
 <script>
 
   import { signUp } from "$lib/api/csFunctions";
+  import { getContext, onMount, setContext } from "svelte";
 
 	let email = '';
 	let password = '';
@@ -11,10 +12,24 @@
 	let linkSent = false;
   let errorMessage = '';
 
-  const handleSignup = async () => {await signUp(email, password, accountType, username)}
+  const handleSignup = async () => {
+    pending = true;
+    await signUp(email, password, accountType, username)
+    pending = false;
+    //setContext('signUpModalOpen', false);
+  }
+
+  let open = false;
+  onMount(() => {
+    open = getContext('signupModalOpen');
+    console.log(open)
+  })
+
+  
 
 </script>
 
+{#if !open}
 <!-- Signup modal -->
 <div class="modal fade" id="signup-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   
@@ -46,19 +61,25 @@
       </div>
       <div class="modal-footer">
           <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-outline-dark" id="submit-button" on:click={handleSignup}>Confirm</button>
-      </div>
+          {#if !pending}
+          <button type="button" class="btn btn-outline-success" id="submit-button" on:click={handleSignup}>Confirm</button>
+          {:else}
+          <button class="btn btn-outline-success" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          </button>
+          {/if}
+        </div>
     </div>
   </div>
 </div>
+{/if}
 
 <style>
+  .btn {
+    width: 100px;
+  }
   #signup-content {
     background-color: #ffe5d9;
-  }
-  #submit-button:hover {
-    background-color: #fec5bb;
-    color: black;
   }
   .form-control, #account-type {
     background-color: #fcfbf2;

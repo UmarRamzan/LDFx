@@ -15,8 +15,8 @@
   
     --primary: #fefae0;
     --secondary: #ffe5d9;
-    --tertiary: #fefae0;
-    --quaternary: #fcf7d0;
+    --tertiary: var(--primary);
+    --quaternary: #fbf4cc;
 
     --links-primary: navy;
     --links-hover: blue;
@@ -36,7 +36,7 @@
   }
 
     :global(body) {
-        background-color: var(--tertiary);
+        background-color: var(--primary);
         font-family: 'Roboto';
         color: black;
     }

@@ -14,15 +14,6 @@
           <div class="homepage bx--content">
               <div class="triangle-right"></div>
               <div class="circle"></div>
-              
-              <div class="title">
-                  <h1>Swap Courses <br> with Ease</h1>
-                  <button class="primary" on:click={handleSeeMore}>See More</button>
-              </div>
-              
-              <div class="image">
-                  <img src="src\routes\Homepage.png" alt="Homepage" class="responsive">
-              </div>
           </div>
       {/if}
 
@@ -42,7 +33,7 @@
   }
   
   body {
-      background-color: #fefae0;
+      background-color: var(--primary);
       overflow-x: hidden;
       padding-bottom: 2rem;
   }

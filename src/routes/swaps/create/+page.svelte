@@ -61,8 +61,17 @@
 
 <div class="container-fluid mt-5">
 
+  <div class="row m-auto mb-4">
+    <div class="col d-flex justify-content-center align-items-center">
+      <i class="bi bi-arrow-left-square mx-4" id="back-button" on:click={()=>{goto('/swaps')}}></i>
+      <h2>Create Swap Request</h2>
+    </div>
+  </div>
+
   <div class="row justify-content-center">
-    <div class="col-md-8" id="content">
+    
+    <div class="col-md-8 w-70" id="content">
+      
       <div id="have-section">
         <div class="row mb-4">
           <div class="col">
@@ -188,11 +197,19 @@
 <style>
 
 #content {
-  border: 2px solid #000000;
-  border-radius: 10px;
+  border: 0px solid #000000;
+  border-radius: 40px;
   background-color: var(--primary);
-  padding: 20px;
+  padding: 40px;
   box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+#back-button {
+  font-size: 2.5rem;
+}
+
+#back-button:hover {
+  cursor: pointer;
 }
 
 .card {
@@ -232,7 +249,7 @@
   }
 
   #separator {
-      border-bottom: 2px solid #000000;
+      border-bottom: 1px solid #000000;
       margin-top: 40px;
       margin-bottom: 40px;
   }
