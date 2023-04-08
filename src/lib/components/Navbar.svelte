@@ -7,11 +7,10 @@
 
   import { getUserData,getUsername } from '$lib/api/csFunctions';
   import { logout } from '$lib/api/csFunctions';
-  import { user,username,backDropBool } from '../../routes/UserStore';
+  import { user, username } from '../../routes/UserStore';
+  import { getContext, setContext } from 'svelte';
 
   import { onMount } from 'svelte';
-
-
 
   onMount( async () => {
     const userRes = await getUserData();
@@ -19,15 +18,17 @@
       user.set(userRes)
       const res = await getUsername(userRes.id);
       if (res.success){username.set(res.data[0].username)}
-    }
-    
+    }  
   })
+
+  setContext('signupModalOpen', false)
 
   const handleLogout = async () => {
     await logout();
     user.set(null);
     username.set(null);
   }
+
 </script>
 
 
@@ -94,7 +95,7 @@
       <form class="d-flex">
         <!-- Signup modal trigger -->
         <div class="col">
-          <button type="button" class="btn btn-outline-success" id="signup-button" data-bs-toggle="modal" data-bs-target="#signup-modal">
+          <button type="button" class="btn btn-outline-success" id="signup-button" data-bs-toggle="modal" data-bs-target="#signup-modal" on:click={()=>{setContext('signupModalOpen', true)}}>
               Signup
           </button>
         </div>
@@ -113,10 +114,6 @@
 
 <Signup />
 <Login />
-
-{#if $backDropBool}
-<div class="modal-backdrop fade show"></div>
-{/if}
 
 <style>
 

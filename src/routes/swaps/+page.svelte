@@ -2,6 +2,7 @@
 	import { deleteSwap, getSwapRequests } from "$lib/api/clientFunctions";
 	import { onMount } from "svelte";
     import { user } from "../UserStore";
+    import { goto } from "$app/navigation";
 
     let pending = false;
 
@@ -30,11 +31,16 @@
 <div class="container  mt-5" id="content">
     
     <div class="row align-items-center">
+        
         <div class="col">
+        
+            
             <h2>Swap Requests</h2>
         </div>
         <div class="col d-flex justify-content-end">
             <a href="/swaps/create" class="btn btn-outline-success">Create Swap Request</a>
+            <i class="bi bi-send-plus"></i>
+            <i class="bi bi-send"></i>
         </div>
         
     </div>
@@ -98,9 +104,10 @@
         width: 60%;
         margin: auto;
         margin-top: 40px;
-        border: 2px solid #000000;
-        border-radius: 10px;
+        border: 0px solid #000000;
+        border-radius: 40px;
         background-color: var(--primary);
+        background-color: var(--tertiary);
         padding: 40px;
         box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
     }
