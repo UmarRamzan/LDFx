@@ -33,6 +33,10 @@
     --links-hover: rgb(0, 200, 0);
     --links-hover-background: rgb(200, 255, 200);
     */
+    --quinary: #1B2E35;
+    --senary: #D9D9D9;
+    --septanry: #4C4DCD;
+    --octonary: #C62828; 
   }
 
     :global(body) {
