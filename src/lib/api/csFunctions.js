@@ -411,7 +411,52 @@ export const getDonationComments = async (donation_id) => {
     if (error) {console.log(error)}
     else {success = true, data = donationData}
     console.log("Get Donation Comments: ", data)
-    console.log(donation_id)
 
+    return {success: success, data: data, error: error}
+}
+
+export const addDonationComment = async (donation_id, user_id, username, comment) => {
+    let success = false
+    let data = null
+
+    const {data: donationData, error} = await supabase.from('commentsDonations').insert([{donation_id: donation_id,text: comment, username:username, user_id:user_id}]).select('*')
+    if(error){
+        console.log(error)
+    }
+    else{
+        console.log("Add Donation Comment: ", donationData)
+        success = true
+        data = donationData
+    }
+    return {success: success, data: data, error: error}
+}
+
+
+export const getJobComments = async (job_id) => {
+    let success = false
+    let data = null
+
+    const {data: donationData, error} = await supabase.from('commentsJobs').select('*').eq('job_id', job_id)
+
+    if (error) {console.log(error)}
+    else {success = true, data = donationData}
+    console.log("Get job Comments: ", data)
+
+    return {success: success, data: data, error: error}
+}
+
+export const addJobComment = async (job_id, user_id, username, comment) => {
+    let success = false
+    let data = null
+
+    const {data: donationData, error} = await supabase.from('commentsJobs').insert([{job_id: job_id,text: comment, username:username, user_id:user_id}]).select('*')
+    if(error){
+        console.log(error)
+    }
+    else{
+        console.log("Add Job Comment: ", donationData)
+        success = true
+        data = donationData
+    }
     return {success: success, data: data, error: error}
 }

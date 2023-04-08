@@ -7,14 +7,38 @@
         addJobPost,
         getJobPost,
         editJobPost,
-        deleteJobPost
+        deleteJobPost,
     } from "$lib/api/clientFunctions";
+
+    import { getJobComments,addJobComment } from "$lib/api/csFunctions";
 
 
     import { onMount } from "svelte";
+    import { user,username } from "../../routes/UserStore";
 
     let currentUser = null;
     let jobPostings = []
+    let comments = ["dummy1","dummy2"];
+    let commentsPending = true;
+    let commentText = ''
+    let tempJobID
+  
+    async function loadComments(job_id) {
+        tempJobID = job_id
+        commentsPending = true;
+        let { success, data, error } = await getJobComments(job_id);
+        if (success) {
+        comments = data;
+        commentsPending = false;
+        } else {
+        console.log(error);
+        }
+    }
+
+    const addComment = async () => {
+        let response = await addJobComment(tempJobID,$user.id,$username,commentText);
+        console.log(response);
+    };
 
     onMount( async () => {
         let user = await getUserData();
@@ -150,6 +174,57 @@
         </div>
     </div>
 </div>
+<!-- Comments modal -->
+<div class="modal fade" id="comments-modal-jobs" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Comments</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {#if commentsPending}
+          <p>Loading...</p>
+        {:else}
+          <div class="modal-body">
+            {#each comments as comment}
+              <div class="comment">
+                <p>{comment.username} : {comment.text}</p>
+              </div>
+            {/each}
+          </div>
+        {/if}
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#comment-posting-modal" data-bs-dismiss="modal">Add Comment</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add comment modal -->
+<div class="modal fade" id="comment-posting-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="create-posting-content">
+  
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Comment</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+        <div class="modal-body">
+            <div class="mb-3">
+                <input type="text" class="form-control" id="commentID" placeholder="comment text" bind:value={commentText}>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-outline-dark" id="submit-button" data-bs-dismiss="modal" on:click={addComment}>Create</button>
+        </div>
+        </div>
+    </div>
+  </div>
     
 
 <div class="container">
@@ -200,6 +275,7 @@
             </div>
             {/if}
         </div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#comments-modal-jobs" on:click={()=>{loadComments(jobData.job_posting_id)}}>View Comments</button>
     </div>
     </div>
     {/each}
