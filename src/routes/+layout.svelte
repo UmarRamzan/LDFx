@@ -30,14 +30,14 @@
     --button-primary: white;
     --button-background: blue;
 
-/*     
+    
     --primary: white;
     --secondary: black;
 
     --links-primary: green;
     --links-hover: rgb(0, 200, 0);
     --links-hover-background: rgb(200, 255, 200);
-    */
+   
   }
 
     :global(body) {
