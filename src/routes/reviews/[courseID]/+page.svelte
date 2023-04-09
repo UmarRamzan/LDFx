@@ -63,7 +63,6 @@
   
 
 <ul class="list-group">
-  <li class="list-group-item">
             
   {#each reviewList as review (review.review_id)}
       <li class="list-group-item">
@@ -79,7 +78,6 @@
       </li>
   {/each}
 
-</li>
 </ul>
 
 <!-- Add Review Modal -->
@@ -133,15 +131,16 @@
       padding: 10px;
       width: 500px;
       margin: auto;
+      box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
     }
 
     .card-body{
-      background-color: var(--primary);
       padding: 10px;
     }
 
     .list-group-item{
       background-color: var(--secondary);
+      border: 0px;
       padding: 10px;
     }
 
@@ -169,7 +168,6 @@
     }
 
   .form-control{
-    background-color: var(--blugray);
     box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
     border-radius: 0.5rem;
     border: 2px solid var(--lightblue);
@@ -179,7 +177,7 @@
   }
 
   
-  .btn-primary{
+  #add-review-btn{
     width: 150px;
     margin: auto;
     padding: 0.5rem 1rem;
