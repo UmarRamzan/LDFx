@@ -156,7 +156,7 @@
     height: 100%;
     position: fixed;
     background: rgba(0,0,0,0.5);
-    z-index: 1000;
+    z-index: 999;
   }
 
   .custom-modal {
@@ -166,6 +166,7 @@
     margin: 10% auto;;
     text-align: center;
     background: var(--secondary);
+    z-index: 1000;
   }
 
   .btn {

@@ -55,9 +55,10 @@
             <h2>Swap Requests</h2>
         </div>
         <div class="col d-flex justify-content-end">
-            <a href="/swaps/create" class="btn btn-outline-success">Create Swap Request</a>
-            <i class="bi bi-send-plus"></i>
-            <i class="bi bi-send"></i>
+            <a href="/swaps/create" class="btn btn-outline-success">
+                Create Swap Request
+            </a>
+            
         </div>
         
     </div>
@@ -95,7 +96,7 @@
                                         <div class="status m-auto" style="background-color: {statusColors[swap.status]};">{swap.status}</div>
                                     </div>
                                     <div class="col">
-                                        <i class="bi bi-trash" on:click={()=>{handleDeleteSwap(swap.swap_id)}}></i>
+                                        <i class="bi bi-x-circle" on:click={()=>{handleDeleteSwap(swap.swap_id)}}></i>
                                     </div>
                                 </div>
                             </div>
@@ -150,7 +151,7 @@
         background-color: var(--primary);
         background-color: var(--tertiary);
         padding: 40px;
-        box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
     }
 
     th, td {
@@ -164,6 +165,10 @@
         overflow: hidden;
         box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
         background-color: var(--quaternary);
+     }
+
+     #create-swap-icon {
+        width: 30px;
      }
 
      .status {

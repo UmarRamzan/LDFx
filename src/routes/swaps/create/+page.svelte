@@ -202,7 +202,7 @@
   border-radius: 40px;
   background-color: var(--primary);
   padding: 40px;
-  box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
 }
 
 #back-button {
@@ -216,6 +216,7 @@
 .card {
   box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
   background-color: var(--secondary);
+  background-color: #FEC5BB;
   width: 100%;
 }
 

@@ -27,7 +27,7 @@
     username.set(null);
   }
 
-  let showSignupModal = true;
+  let showSignupModal = false;
   let showLoginModal = false;
 
   const toggleSignupModal = () => {showSignupModal = !showSignupModal}
