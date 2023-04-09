@@ -47,8 +47,7 @@
         let { success, data, error } = await getJobPost();
 
         if (success) {
-            jobPostings = data;
-            console.log(data)
+            jobPostings = data
         } else {
             console.log(error)
         }
@@ -83,29 +82,27 @@
     let postLikes = []
     let postDislikes = []
 
-    const likePost = (donation_id) => {
-        const postLikeIndex = postLikes.findIndex((like) => like.id === donation_id);
+    const likePost = (job_id) => {
+        const postLikeIndex = postLikes.findIndex((like) => like.id === job_id);
 
         if (postLikeIndex !== -1) {
         postLikes[postLikeIndex].likes += 1;
         } else {
-        postLikes.push({ id: donation_id, likes: 1 });
+        postLikes.push({ id: job_id, likes: 1 });
         }
 
         console.log(postLikes);
-        console.log(postLikes.find((like) => like.id === donation_id).likes);
+        console.log(postLikes.find((like) => like.id === job_id).likes);
     };
 
     
-    const dislikePost = (donation_id) => {
-        const postDisLikeIndex = postDislikes.findIndex((dislikes) => dislikes.id === donation_id);
-
+    const dislikePost = (job_id) => {
+        const postDisLikeIndex = postDislikes.findIndex((dislikes) => dislikes.id === job_id);
         if (postDisLikeIndex !== -1) {
         postDislikes[postDisLikeIndex].dislikes += 1;
         } else {
-        postDislikes.push({ id: donation_id, dislikes: 1 });
+        postDislikes.push({ id: job_id, dislikes: 1 });
         }
-
     };
 
 </script>
@@ -129,7 +126,6 @@
     </div>
     <hr class = "hor">
 </div>
-
 
 <!-- Create posting modal -->
 <div class="modal fade" id="posting-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -205,12 +201,15 @@
         </div>
     </div>
 </div>
+
 <!-- Comments modal -->
 <div class="modal fade" id="comments-modal-jobs" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Comments</h5>
+            <div class="modal-title">
+                <p class = "col-4">Comments</p>
+              </div>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -220,15 +219,16 @@
         {:else}
           <div class="modal-body">
             {#each comments as comment}
-              <div class="comment">
-                <p>{comment.username} : {comment.text}</p>
-              </div>
+                <div>
+                    <p class="comment-user">{comment.username}</p>
+                    <p class = "form-control-user">{comment.text}</p>
+                </div>
             {/each}
           </div>
         {/if}
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#comment-posting-modal" data-bs-dismiss="modal">Add Comment</button>
+          <button type="button" class="close-button" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="comment-button" data-bs-toggle="modal" data-bs-target="#comment-posting-modal" data-bs-dismiss="modal">Add Comment</button>
         </div>
       </div>
     </div>
@@ -240,7 +240,9 @@
         <div class="modal-content" id="create-posting-content">
   
         <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Comment</h1>
+            <div class="modal-title fs-5" id="staticBackdropLabel">
+                <p class="col-4">Add Comment</p>
+              </div>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         
@@ -250,13 +252,12 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-outline-dark" id="submit-button" data-bs-dismiss="modal" on:click={addComment}>Create</button>
+            <button type="button" class="cancel-button" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={addComment}>Create</button>
         </div>
         </div>
     </div>
   </div>
-    
 
 <div class="container">
     {#each jobPostings as jobData (jobData.job_posting_id)}
@@ -293,29 +294,33 @@
                             <input type="text" class="form-control" id="jobDescription" readonly value = {jobData.description}>
                             <div class = "d-flex gap-3 mb-2">
                               <div class = "icon-1">
-                                <button class = "btn btn-light btn-block" data-bs-toggle="modal" data-bs-target="#comments-modal-donations" on:click={()=>{loadComments(donationPost.donation_id)}}>
+                                <button class = "btn btn-light btn-block" data-bs-toggle="modal" data-bs-target="#comments-modal-jobs" on:click={()=>{loadComments(jobData.job_posting_id)}}>
                                   <div class = "icon"> 
                                     <i class="bi bi-chat-square"></i>
                                   </div>
                                     <p class = "col-2">Comment</p>
                                 </button>
                               </div>
+
                               <div class = "icon-1">
-                                <button class = "btn btn-light btn-block" on:click={() => {count+=1} }>
+                                <button class = "btn btn-light btn-block" on:click={() => {likePost(jobData.job_posting_id)} }>
                                   <div class = "icon"> 
                                     <i class="bi bi-hand-thumbs-up" ></i>
                                   </div>
                                     <p class = "col-2">Like</p>
-                                    <p class = "col-2">{count}</p>
+                                    <p class = "col-2">{postLikes.find((like) => like.id === jobData.job_posting_id)?.likes || 0}</p>
                                 </button> 
                             </div>
+
+
+
                             <div class = "icon-1">
-                                <button class = "btn btn-light btn-block" on:click={() => {countdown+=1}}>
+                                <button class = "btn btn-light btn-block" on:click={() => {dislikePost(jobData.job_posting_id)}}>
                                   <div class = "icon"> 
                                     <i class="bi bi-hand-thumbs-down" ></i>
                                   </div>
                                     <p class = "col-2">Dislike</p>
-                                    <p class = "col-2">{postDislikes.find((dislikes) => dislikes.id === donationPost.donation_id)?.dislikes || 0}</p>
+                                    <p class = "col-2">{postDislikes.find((dislikes) => dislikes.id === jobData.job_posting_id)?.dislikes || 0}</p>
                                   </button> 
                               </div>     
                         </div>
@@ -351,7 +356,7 @@
      .hor
     {
         margin-bottom: 25px;
-        color: solid var(----senary);
+        color: solid var(--senary);
     }
     .col-1
     {
@@ -371,7 +376,7 @@
         margin-top: 40px;
         border: None;
         border-radius: 40px;
-        background-color: var(--primary);
+        background-color: var(--secondary);
         padding-top: 20px;
         padding-bottom: 20px;
         box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
@@ -379,7 +384,7 @@
     }
     .card 
     {
-        background-color: var(--secondary);
+        background-color: var(--other-primary);
         border-radius: 20px;
         border: None;     
         width: 98%;
@@ -387,7 +392,7 @@
     }
     #create-posting-content 
     {
-        background-color: #ffe5d9;
+        background-color: var(--secondary);
         font-family: 'Chakra Petch';
     }
     .form-control 
@@ -444,7 +449,6 @@
     {
         color: var(--quinary);
         font-family: 'Chau Philomene One';
-        /* font-weight: 400; */
         font-size: 30px;
         margin-bottom: -10px;
         margin-top: -2%;
@@ -490,13 +494,13 @@
     }
     .create-button:hover 
     {
-        background-color: var(--secondary);
+        background-color: var(--other-primary);
         color: var(--quinary);
         font-family: 'Chau Philomene One';
     }
     .cancel-button:hover
     {
-        background-color: var(--secondary);
+        background-color: var(--other-primary);
         color: var(--octonary);
         font-family: 'Chau Philomene One';
     }
@@ -563,8 +567,68 @@
     }
     .btn-block-1:hover 
     {
-        background-color: var(--secondary);
+        background-color: var(--other-primary);
         color: var(--quinary);
         font-family: 'Chau Philomene One';
     }
+    #comments-modal-donations
+    {
+      color: var(----quinary);
+    }
+    .modal-content
+    {
+      background-color: var(--secondary);
+    }
+    .comment-button
+    {
+      font-family: 'Chau Philomene One';
+      border: None;
+      color: #ffffff;
+      background-color: var(--septanry);
+      border-radius: 20px;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      width: 25%;
+    }
+    .comment-button:hover
+    {
+      background-color: var(--other-primary);
+      color: var(--quinary);
+      font-family: 'Chau Philomene One';
+    }
+    .close-button
+    {
+      font-family: 'Chau Philomene One';
+      border: None;
+      background-color: var(--octonary); 
+      color: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      width: 20%;
+    }
+    .close-button:hover
+    {
+      background-color: var(--other-primary);
+      color: var(--octonary);
+      font-family: 'Chau Philomene One';
+    }
+    .comment-user
+    {
+      font-family: 'Chau Philomene One';
+      font-size: 20px;
+      color: var(--quinary);
+    }
+    .form-control-user
+    {
+      background-color: var(--senary);
+      border-radius: 15px;
+      width: 100%;
+      color: var(--quinary);
+      font-family: 'Chakra Petch';
+      margin-left: 1%;
+      border: None;
+      margin-top: -1%;
+      margin-bottom: 1%;
+      font-size: 17px;
+      padding-left: 2%;
+   }
 </style>

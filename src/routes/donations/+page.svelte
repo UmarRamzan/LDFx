@@ -118,9 +118,6 @@
 
   };
 
-
-  let count = 0
-  let countdown = 0
 </script>
 
 <div class="content">
@@ -161,19 +158,19 @@
       
       <div class="modal-body">
           <div class="mb-3">
-              <input type="text" class="form-control" id="organization2" placeholder="fullname" bind:value={fullName}>
+              <input type="text" class="form-control-1" id="organization2" placeholder="fullname" bind:value={fullName}>
           </div>
           <div class="mb-3">
-              <input type="text" class="form-control" id="contact-number2" placeholder="contact number" bind:value={contactNumber}>
+              <input type="text" class="form-control-1" id="contact-number2" placeholder="contact number" bind:value={contactNumber}>
           </div>
           <div class="mb-3">
-              <input type="text" class="form-control" id="job-type2" placeholder="email" bind:value={emailAddress}>
+              <input type="text" class="form-control-1" id="job-type2" placeholder="email" bind:value={emailAddress}>
           </div>
           <div class="mb-3">
-            <textarea class="form-control" id="description2" rows="4" placeholder="relatedTags" bind:value={relatedTages}></textarea>
+            <textarea class="form-control-1" id="description2" rows="4" placeholder="relatedTags" bind:value={relatedTages}></textarea>
           </div>
           <div class="mb-3">
-              <textarea class="form-control" id="description3" rows="4" placeholder="description" bind:value={description}></textarea>
+              <textarea class="form-control-1" id="description3" rows="4" placeholder="description" bind:value={description}></textarea>
           </div>
       </div>
       <div class="modal-footer">
@@ -226,8 +223,10 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Comments</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        <div class="modal-title">
+          <p class = "col-4">Comments</p>
+        </div>
+        <button type="button" class = "btn-close" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -236,15 +235,16 @@
       {:else}
         <div class="modal-body">
           {#each comments as comment}
-            <div class="comment">
-              <p>{comment.username} : {comment.text}</p>
+            <div>
+              <p class="comment-user">{comment.username}</p>
+                <p class = "form-control-user">{comment.text}</p>
             </div>
           {/each}
         </div>
       {/if}
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#comment-posting-modal" data-bs-dismiss="modal">Add Comment</button>
+        <button type="button" class="close-button" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="comment-button" data-bs-toggle="modal" data-bs-target="#comment-posting-modal" data-bs-dismiss="modal">Add Comment</button>
       </div>
     </div>
   </div>
@@ -256,7 +256,9 @@
       <div class="modal-content" id="create-posting-content">
 
       <div class="modal-header">
-          <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Comment</h1>
+          <div class="modal-title fs-5" id="staticBackdropLabel">
+            <p class="col-4">Add Comment</p>
+          </div>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       
@@ -266,13 +268,13 @@
           </div>
       </div>
       <div class="modal-footer">
-          <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-outline-dark" id="submit-button" data-bs-dismiss="modal" on:click={addComment}>Create</button>
+          <button type="button" class="cancel-button" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={addComment}>Create</button>
       </div>
       </div>
   </div>
 </div>
-  
+
 
 <div class="container">
   {#each donationPosts as donationPost }
@@ -302,7 +304,6 @@
                   <div class = "form-control">
                     <label for="description" class = "col-3"><b>Description</b></label>
                     <input type="text" class="form-control" id="jobDescription" readonly value = {donationPost.description}>
-
                     <div class = "d-flex gap-3 mb-2">
                       <div class = "icon-1">
                         <button class = "btn btn-light btn-block" data-bs-toggle="modal" data-bs-target="#comments-modal-donations" on:click={()=>{loadComments(donationPost.donation_id)}}>
@@ -374,7 +375,7 @@
   .hor
   {
     margin-bottom: 25px;
-    color: solid var(----senary);
+    color: solid var(--senary);
   }
 
   .col
@@ -392,7 +393,7 @@
       margin-top: 40px;
       border: None;
       border-radius: 40px;
-      background-color: var(--primary);
+      background-color: var(--secondary);
       padding-top: 20px;
       padding-bottom: 20px;
       box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
@@ -400,7 +401,7 @@
     }
   .card 
   {
-    background-color: var(--secondary);
+    background-color: var(--other-primary);
     border-radius: 20px;
     border: None;     
     width: 98%;
@@ -408,7 +409,8 @@
   }
   #create-posting-content 
   {
-    background-color: #ffe5d9;
+    background-color: var(--secondary);
+    font-family: "Chakra Petch";
   }
   .form-control 
   {
@@ -430,15 +432,7 @@
     height: auto;
     margin-top : -1.5%;
   }
-  #create-posting-button 
-  {
-    background-color: #ffe5d9;
-  }
-  #create-posting-button:hover 
-  {
-    background-color: #fec5bb;
-    color: black;
-  }
+
   .col-2
   {
     font-family: 'Chau Philomene One';
@@ -509,13 +503,13 @@
   }
   .create-button:hover 
   {
-    background-color: var(--secondary);
+    background-color: var(--other-primary);
     color: var(--quinary);
     font-family: 'Chau Philomene One';
   }
   .cancel-button:hover
   {
-    background-color: var(--secondary);
+    background-color: var(--other-primary);
     color: var(--octonary);
     font-family: 'Chau Philomene One';
   }
@@ -588,8 +582,68 @@
     }
     .btn-block-1:hover 
     {
-        background-color: var(--secondary);
+        background-color: var(--other-primary);
         color: var(--quinary);
         font-family: 'Chau Philomene One';
     }
+    #comments-modal-donations
+    {
+      color: var(----quinary);
+    }
+    .modal-content
+    {
+      background-color: var(--secondary);
+    }
+    .comment-button
+    {
+      font-family: 'Chau Philomene One';
+      border: None;
+      color: #ffffff;
+      background-color: var(--septanry);
+      border-radius: 20px;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      width: 25%;
+    }
+    .comment-button:hover
+    {
+      background-color: var(--other-primary);
+      color: var(--quinary);
+      font-family: 'Chau Philomene One';
+    }
+    .close-button
+    {
+      font-family: 'Chau Philomene One';
+      border: None;
+      background-color: var(--octonary); 
+      color: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      width: 20%;
+    }
+    .close-button:hover
+    {
+      background-color: var(--other-primary);
+      color: var(--octonary);
+      font-family: 'Chau Philomene One';
+    }
+    .comment-user
+    {
+      font-family: 'Chau Philomene One';
+      font-size: 20px;
+      color: var(--quinary);
+    }
+    .form-control-user
+    {
+      background-color: var(--senary);
+      border-radius: 15px;
+      width: 100%;
+      color: var(--quinary);
+      font-family: 'Chakra Petch';
+      margin-left: 1%;
+      border: None;
+      margin-top: -1%;
+      margin-bottom: 1%;
+      font-size: 17px;
+      padding-left: 2%;
+   }
 </style>
