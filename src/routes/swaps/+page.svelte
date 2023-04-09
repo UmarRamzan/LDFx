@@ -2,6 +2,7 @@
 	import { deleteSwap, getSwapRequests } from "$lib/api/clientFunctions";
 	import { onMount } from "svelte";
     import { user } from "../UserStore";
+    import { goto } from "$app/navigation";
 
     let pending = false;
 
@@ -13,12 +14,21 @@
 
     let swapTableData = [];
 
+    const fetchData = async () => {
+        if ($user) {
+            pending = true;
+            let {success, data, error} = await getSwapRequests($user.id);
+            if (error) {console.log(error)}
+            else {swapTableData = data;}
+            pending = false;
+        }
+    }
+
     onMount( async () => {
-        pending = true;
-        let {success, data, error} = await getSwapRequests($user.id);
-        if (success) {swapTableData = data;}
-        pending = false;
+        await fetchData();
     })
+
+    $: $user, fetchData();
 
     const handleDeleteSwap = async (swapID) => {
         swapTableData = swapTableData.filter((swap) => swap.swap_id != swapID);
@@ -27,14 +37,28 @@
 
 </script>
 
+{#if !$user}
+
+<div id="login-error">
+    <i class="bi bi-exclamation-triangle" id="error-icon"></i>
+    <h3>You must be logged in to view swaps</h3>  
+</div>
+    
+{:else}
 <div class="container  mt-5" id="content">
     
     <div class="row align-items-center">
+        
         <div class="col">
+        
+            
             <h2>Swap Requests</h2>
         </div>
         <div class="col d-flex justify-content-end">
-            <a href="/swaps/create" class="btn btn-outline-success">Create Swap Request</a>
+            <a href="/swaps/create" class="btn btn-outline-success">
+                Create Swap Request
+            </a>
+            
         </div>
         
     </div>
@@ -72,7 +96,7 @@
                                         <div class="status m-auto" style="background-color: {statusColors[swap.status]};">{swap.status}</div>
                                     </div>
                                     <div class="col">
-                                        <i class="bi bi-trash" on:click={()=>{handleDeleteSwap(swap.swap_id)}}></i>
+                                        <i class="bi bi-x-circle" on:click={()=>{handleDeleteSwap(swap.swap_id)}}></i>
                                     </div>
                                 </div>
                             </div>
@@ -91,18 +115,43 @@
 
     </div>
 </div>
+{/if}
 
 <style>
+
+    #login-error {
+        width: 50%;
+        padding: 50px;
+        text-align: center;
+        border: 1px solid rgba(0,0,0,0.5);
+        box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: auto;
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    #error-icon {
+        font-size: 3rem;
+        margin-right: 40px;
+        color: red;
+    }
 
     #content {
         width: 60%;
         margin: auto;
         margin-top: 40px;
-        border: 2px solid #000000;
-        border-radius: 10px;
+        border: 0px solid #000000;
+        border-radius: 40px;
         background-color: var(--primary);
+        background-color: var(--tertiary);
         padding: 40px;
-        box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
     }
 
     th, td {
@@ -116,6 +165,10 @@
         overflow: hidden;
         box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
         background-color: var(--quaternary);
+     }
+
+     #create-swap-icon {
+        width: 30px;
      }
 
      .status {

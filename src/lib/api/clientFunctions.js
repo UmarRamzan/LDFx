@@ -69,7 +69,7 @@ export const logout = async () => {
     if (error) {console.log(error)}
 }
 
-//api function to get username from the usernames table
+// obtain the username for a given user id
 export const getUsername = async (userId) => {
 
     let success = false
@@ -106,6 +106,25 @@ export const updateUsername = async (username, userId) => {
         console.log("updateUsername: ",usernameData)
         success = true
         data = usernameData
+    }
+    return {success: success, data: data, error: error}
+}
+
+export const resetPassword =  async (email) => {
+    let success = false
+    let data = null
+    let error = null
+
+    const {data:passResetData, error:passResetError} = await supabase.auth.resetPasswordForEmail(email, {redirectTo: 'http://localhost:5173/resetPassword',})
+    
+    if(passResetError){
+        console.log(passResetError)
+        error = passResetError
+    }
+    else{
+        console.log(passResetData)
+        success = true
+        data = passResetData
     }
     return {success: success, data: data, error: error}
 }
@@ -267,8 +286,6 @@ export const getSwapRequests = async (userID) => {
 
     if (error) {console.log(error)}
     else {success = true}
-
-    console.log("data", swapTableData)
 
     return { success:success, data:swapTableData, error:error }
 }

@@ -1,30 +1,13 @@
-<script>
-  import { getContext } from "svelte";
-  import { goto } from "$app/navigation";
-  const user = getContext("user")
-  console.log($user)
-  //add handle function to route on 'see more'
-  const handleSeeMore = () => {goto('/about')}
-</script>
 
 
-      {#if user}
-          <p>{$user}</p>
-      {:else}
+
+
           <div class="homepage bx--content">
+            <!--
               <div class="triangle-right"></div>
               <div class="circle"></div>
-              
-              <div class="title">
-                  <h1>Swap Courses <br> with Ease</h1>
-                  <button class="primary" on:click={handleSeeMore}>See More</button>
-              </div>
-              
-              <div class="image">
-                  <img src="src\routes\Homepage.png" alt="Homepage" class="responsive">
-              </div>
+          -->
           </div>
-      {/if}
 
 
 <!-- <h1>MAIN PAGE</h1>
@@ -42,7 +25,7 @@
   }
   
   body {
-      background-color: #fefae0;
+      background-color: var(--primary);
       overflow-x: hidden;
       padding-bottom: 2rem;
   }

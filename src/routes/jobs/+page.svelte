@@ -79,6 +79,32 @@
         }
     }
 
+    let postLikes = []
+    let postDislikes = []
+
+    const likePost = (job_id) => {
+        const postLikeIndex = postLikes.findIndex((like) => like.id === job_id);
+
+        if (postLikeIndex !== -1) {
+        postLikes[postLikeIndex].likes += 1;
+        } else {
+        postLikes.push({ id: job_id, likes: 1 });
+        }
+
+        console.log(postLikes);
+        console.log(postLikes.find((like) => like.id === job_id).likes);
+    };
+
+    
+    const dislikePost = (job_id) => {
+        const postDisLikeIndex = postDislikes.findIndex((dislikes) => dislikes.id === job_id);
+        if (postDisLikeIndex !== -1) {
+        postDislikes[postDisLikeIndex].dislikes += 1;
+        } else {
+        postDislikes.push({ id: job_id, dislikes: 1 });
+        }
+    };
+
 </script>
 
 <div class="content">
@@ -87,23 +113,19 @@
     <div class="row align-items-center">
 
         <!-- Page title -->
-        <div class="col">
-            <h1>Job Postings</h1>
+        <div>
+            <p class = "col-1">Job Posts</p>
         </div>
-
         <!-- Button trigger create posting modal -->
         <div class="col-3">
-            <button type="button" class="btn btn-outline-dark" id="create-posting-button" data-bs-toggle="modal" data-bs-target="#posting-modal">
-                Create Posting
+            <button class="create-posting-button btn-block-1" data-bs-toggle="modal" data-bs-target="#posting-modal">
+                Create Post
             </button>
         </div>
-
+        
     </div>
-
-    <hr>
+    <hr class = "hor">
 </div>
-
-
 
 <!-- Create posting modal -->
 <div class="modal fade" id="posting-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -111,30 +133,33 @@
         <div class="modal-content" id="create-posting-content">
 
         <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Create Posting</h1>
+            <div class="modal-title fs-5" id="staticBackdropLabel">
+                <p class = "col-4">Create Post</p>
+            </div>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         
         <div class="modal-body">
             <div class="mb-3">
-                <input type="text" class="form-control" id="organization" placeholder="Organization" bind:value={organization}>
+                <input type="text" class="form-control-1" id="organization" placeholder="Organization" bind:value={organization}>
             </div>
             <div class="mb-3">
-                <input type="text" class="form-control" id="contact-number" placeholder="Contact Number" bind:value={contactNumber}>
+                <input type="text" class="form-control-1" id="contact-number" placeholder="Contact Number" bind:value={contactNumber}>
             </div>
             <div class="mb-3">
-                <input type="text" class="form-control" id="job-type" placeholder="Job Type" bind:value={jobType}>
+                <input type="text" class="form-control-1" id="job-type" placeholder="Job Type" bind:value={jobType}>
             </div>
             <div class="mb-3">
-                <input type="text" class="form-control" id="pay-range" placeholder="Pay Range" bind:value={payRange}>
+                <input type="text" class="form-control-1" id="pay-range" placeholder="Pay Range" bind:value={payRange}>
             </div>
             <div class="mb-3">
-                <textarea class="form-control" id="description" rows="4" placeholder="Job Description" bind:value={description}></textarea>
+                <textarea class="form-control-1" id="description" rows="4" placeholder="Job Description" bind:value={description}></textarea>
             </div>
         </div>
+
         <div class="modal-footer">
-            <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-outline-dark" id="submit-button" data-bs-dismiss="modal" on:click={createJobPosting}>Create</button>
+            <button type="button" class="cancel-button" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={createJobPosting}>Create</button>
         </div>
         </div>
     </div>
@@ -146,40 +171,45 @@
         <div class="modal-content" id="create-posting-content">
 
         <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Posting</h1>
+            <div class="modal-title fs-5" id="staticBackdropLabel">
+                <p class = "col-4">Edit Post</p>
+              </div>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         
         <div class="modal-body">
             <div class="mb-3">
-                <input type="text" class="form-control" id="organization" placeholder="Organization" bind:value={organization}>
+                <input type="text" class="form-control-1" id="organization" placeholder="Organization" bind:value={organization}>
             </div>
             <div class="mb-3">
-                <input type="text" class="form-control" id="contact-number" placeholder="Contact Number" bind:value={contactNumber}>
+                <input type="text" class="form-control-1" id="contact-number" placeholder="Contact Number" bind:value={contactNumber}>
             </div>
             <div class="mb-3">
-                <input type="text" class="form-control" id="job-type" placeholder="Job Type" bind:value={jobType}>
+                <input type="text" class="form-control-1" id="job-type" placeholder="Job Type" bind:value={jobType}>
             </div>
             <div class="mb-3">
-                <input type="text" class="form-control" id="pay-range" placeholder="Pay Range" bind:value={payRange}>
+                <input type="text" class="form-control-1" id="pay-range" placeholder="Pay Range" bind:value={payRange}>
             </div>
             <div class="mb-3">
-                <textarea class="form-control" id="description" rows="4" placeholder="Job Description" bind:value={description}></textarea>
+                <textarea class="form-control-1" id="description" rows="4" placeholder="Job Description" bind:value={description}></textarea>
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-outline-dark" id="submit-button" data-bs-dismiss="modal" on:click={createJobPosting}>Create</button>
+            <button type="button" class="cancel-button" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={createJobPosting}>Create</button>
         </div>
         </div>
     </div>
 </div>
+
 <!-- Comments modal -->
 <div class="modal fade" id="comments-modal-jobs" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Comments</h5>
+            <div class="modal-title">
+                <p class = "col-4">Comments</p>
+              </div>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -189,15 +219,16 @@
         {:else}
           <div class="modal-body">
             {#each comments as comment}
-              <div class="comment">
-                <p>{comment.username} : {comment.text}</p>
-              </div>
+                <div>
+                    <p class="comment-user">{comment.username}</p>
+                    <p class = "form-control-user">{comment.text}</p>
+                </div>
             {/each}
           </div>
         {/if}
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#comment-posting-modal" data-bs-dismiss="modal">Add Comment</button>
+          <button type="button" class="close-button" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="comment-button" data-bs-toggle="modal" data-bs-target="#comment-posting-modal" data-bs-dismiss="modal">Add Comment</button>
         </div>
       </div>
     </div>
@@ -209,7 +240,9 @@
         <div class="modal-content" id="create-posting-content">
   
         <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Comment</h1>
+            <div class="modal-title fs-5" id="staticBackdropLabel">
+                <p class="col-4">Add Comment</p>
+              </div>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         
@@ -219,18 +252,14 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-outline-dark" id="submit-button" data-bs-dismiss="modal" on:click={addComment}>Create</button>
+            <button type="button" class="cancel-button" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={addComment}>Create</button>
         </div>
         </div>
     </div>
   </div>
-    
 
 <div class="container">
-
-    
-
     {#each jobPostings as jobData (jobData.job_posting_id)}
     <!-- Code for each card -->
     <div class="job-posting">
@@ -257,63 +286,349 @@
                         </div>
                     </form>
                 </div>
-                <div class="col">
-                    <label for="desciption"><b>Description:</b></label>
-                    {jobData.description}
+                    
+                    <div class="col">
+                        <div class = "row gx-5">
+                          <div class = "form-control">
+                            <label for="description" class = "col-3"><b>Description</b></label>
+                            <input type="text" class="form-control" id="jobDescription" readonly value = {jobData.description}>
+                            <div class = "d-flex gap-3 mb-2">
+                              <div class = "icon-1">
+                                <button class = "btn btn-light btn-block" data-bs-toggle="modal" data-bs-target="#comments-modal-jobs" on:click={()=>{loadComments(jobData.job_posting_id)}}>
+                                  <div class = "icon"> 
+                                    <i class="bi bi-chat-square"></i>
+                                  </div>
+                                    <p class = "col-2">Comment</p>
+                                </button>
+                              </div>
+
+                              <div class = "icon-1">
+                                <button class = "btn btn-light btn-block" on:click={() => {likePost(jobData.job_posting_id)} }>
+                                  <div class = "icon"> 
+                                    <i class="bi bi-hand-thumbs-up" ></i>
+                                  </div>
+                                    <p class = "col-2">Like</p>
+                                    <p class = "col-2">{postLikes.find((like) => like.id === jobData.job_posting_id)?.likes || 0}</p>
+                                </button> 
+                            </div>
+
+
+
+                            <div class = "icon-1">
+                                <button class = "btn btn-light btn-block" on:click={() => {dislikePost(jobData.job_posting_id)}}>
+                                  <div class = "icon"> 
+                                    <i class="bi bi-hand-thumbs-down" ></i>
+                                  </div>
+                                    <p class = "col-2">Dislike</p>
+                                    <p class = "col-2">{postDislikes.find((dislikes) => dislikes.id === jobData.job_posting_id)?.dislikes || 0}</p>
+                                  </button> 
+                              </div>     
+                        </div>
+                    </div>
                 </div>
+            </div>     
             </div>
+
             {#if currentUser && currentUser.id == jobData.user_id}
             <div class="row mt-3">
                 <div class="col w-10">
-                    <button type="button" class="btn btn-outline-dark" id="edit-posting-button" data-bs-toggle="modal" data-bs-target="#edit-posting-modal">
+                    <button type="button" class="edit-button" id="edit-posting-button" data-bs-toggle="modal" data-bs-target="#edit-posting-modal">
                         Edit
                     </button>
                 </div>
                 <div class="col w-10">
-                    <button type="button" class="btn btn-outline-danger" id="submit-button" on:click={()=>deleteJobPosting(jobData.job_posting_id)}>Delete</button>
+                    <button type="button" class="ecancel-button" id="submit-button" on:click={()=>deleteJobPosting(jobData.job_posting_id)}>Delete</button>
                 </div>
             </div>
             {/if}
         </div>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#comments-modal-jobs" on:click={()=>{loadComments(jobData.job_posting_id)}}>View Comments</button>
     </div>
     </div>
     {/each}
-
 </div>
-
 </div>
 
 <style>
-    .content {
-    width: 60%;
-    margin: auto;
-    margin-top: 40px;
-    border: 2px solid #000000;
-    border-radius: 10px;
-    background-color: var(--primary);
-    padding: 20px;
-    box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
-  }
-    .card {
+    @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;1,300&family=Chau+Philomene+One&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;1,300&display=swap');
+    @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css');
+
+     .hor
+    {
+        margin-bottom: 25px;
+        color: solid var(--senary);
+    }
+    .col-1
+    {
+        color: var(--quinary);
+        font-family: 'Chau Philomene One';
+        font-size: 40px;
+        margin-bottom: -15px;
+        margin-top: -2%;
+        margin-left: 1%;
+        width: 100%;
+
+    }
+    .content 
+    {
+        width: 80%;
+        margin: auto;
+        margin-top: 40px;
+        border: None;
+        border-radius: 40px;
         background-color: var(--secondary);
-        border: 1px solid black;
+        padding-top: 20px;
+        padding-bottom: 20px;
         box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        font-family: 'Chau Philomene One';
     }
-    .form-group {
-        margin-top: 10px;
+    .card 
+    {
+        background-color: var(--other-primary);
+        border-radius: 20px;
+        border: None;     
+        width: 98%;
+        margin-left: 1%;
     }
-    #create-posting-content {
-        background-color: #ffe5d9;
+    #create-posting-content 
+    {
+        background-color: var(--secondary);
+        font-family: 'Chakra Petch';
     }
-    .form-control {
-        background-color: #fcfbf2;
+    .form-control 
+    {
+        margin-top: 15px;
+        background-color: var(--senary);
+        border-radius: 20px;
+        margin-bottom: 20px;
+        width: 60%;
+        color: var(--quinary);
+        font-family: 'Chakra Petch';
+        padding-left: 2%;
+        border: None;
     }
-    #create-posting-button {
-        background-color: #ffe5d9;
+    .gx-5
+    {
+        margin-left: -18%;
+        position: absolute;
+        width: 108%;
+        height: auto;
+        margin-top : -1.5%;
     }
-    #create-posting-button:hover, #submit-button:hover {
-        background-color: #fec5bb;
-        color: black;
+    .icon
+    {
+        margin-left: 15%;
+        color: var(--quinary);
     }
+    .mb-2
+    {
+        padding-top: 29%;
+        padding-left: 2%;
+        display: flex;
+        margin-right: 20px;
+    }
+    .btn-light
+    {
+        background-color: var(--senary);
+        border: None;
+        display: block;
+    }
+    .col-3
+    {
+        width: 50%;
+        font-family: 'Chau Philomene One';
+    }
+    .col-2
+    {
+        font-family: 'Chau Philomene One';
+        display: inline;
+        font-size: 12px;
+        color: var(--quinary);
+    }
+    .col-4
+    {
+        color: var(--quinary);
+        font-family: 'Chau Philomene One';
+        font-size: 30px;
+        margin-bottom: -10px;
+        margin-top: -2%;
+        margin-left: 1%;
+        width: 100%;
+    }
+    .form-control-1
+    { 
+        background-color: var(--senary);
+        border-radius: 20px;
+        width: 100%;
+        color: var(--quinary);
+        font-family: 'Chakra Petch';
+        padding-left: 2%;
+        border: None;
+        margin-top: 1%;
+        margin-bottom: -5%;
+    }
+    .modal-footer
+    {
+        border: None;
+        margin-bottom: 2%;
+    }
+    .create-button
+    {
+        font-family: 'Chau Philomene One';
+        border: None;
+        color: #ffffff;
+        background-color: var(--septanry);
+        border-radius: 20px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        width: 20%;
+    }
+    .cancel-button
+    {
+        font-family: 'Chau Philomene One';
+        border: None;
+        background-color: var(--octonary); 
+        color: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        width: 20%;
+    }
+    .create-button:hover 
+    {
+        background-color: var(--other-primary);
+        color: var(--quinary);
+        font-family: 'Chau Philomene One';
+    }
+    .cancel-button:hover
+    {
+        background-color: var(--other-primary);
+        color: var(--octonary);
+        font-family: 'Chau Philomene One';
+    }
+    ::placeholder 
+    { 
+        font-family: 'Chau Philomene One';
+    }
+    .modal-content
+    {
+        border-radius: 25px;
+        border: None;
+    }
+    .edit-button
+    {
+        font-family: 'Chau Philomene One';
+        border: None;
+        color: #ffffff;
+        background-color: var(--septanry);
+        border-radius: 20px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        width: 20%;
+        margin-left: 8%;
+    }
+    .edit-button:hover 
+    {
+        background-color: var(--primary);
+        color: var(--quinary);
+        font-family: 'Chau Philomene One';
+    }
+    .ecancel-button
+    {
+        font-family: 'Chau Philomene One';
+        border: None;
+        background-color: var(--octonary); 
+        color: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        width: 20%;
+        margin-left: 70%;
+    }
+    .ecancel-button:hover
+    {
+        background-color: var(--primary);
+        color: var(--octonary);
+        font-family: 'Chau Philomene One';
+    }
+    .btn-block-1
+    {
+        margin-left: 170%;
+        width: 20%;
+        padding-bottom: -100%;
+        font-family: 'Chau Philomene One';
+        border: None;
+        color: #ffffff;
+        background-color: var(--septanry);
+        border-radius: 20px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        justify-content: top;
+        padding-top: 2%;
+        padding-bottom: 2%;
+        font-size: 18px;
+        margin-top: -8%;
+        display: block;
+    }
+    .btn-block-1:hover 
+    {
+        background-color: var(--other-primary);
+        color: var(--quinary);
+        font-family: 'Chau Philomene One';
+    }
+    #comments-modal-donations
+    {
+      color: var(----quinary);
+    }
+    .modal-content
+    {
+      background-color: var(--secondary);
+    }
+    .comment-button
+    {
+      font-family: 'Chau Philomene One';
+      border: None;
+      color: #ffffff;
+      background-color: var(--septanry);
+      border-radius: 20px;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      width: 25%;
+    }
+    .comment-button:hover
+    {
+      background-color: var(--other-primary);
+      color: var(--quinary);
+      font-family: 'Chau Philomene One';
+    }
+    .close-button
+    {
+      font-family: 'Chau Philomene One';
+      border: None;
+      background-color: var(--octonary); 
+      color: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      width: 20%;
+    }
+    .close-button:hover
+    {
+      background-color: var(--other-primary);
+      color: var(--octonary);
+      font-family: 'Chau Philomene One';
+    }
+    .comment-user
+    {
+      font-family: 'Chau Philomene One';
+      font-size: 20px;
+      color: var(--quinary);
+    }
+    .form-control-user
+    {
+      background-color: var(--senary);
+      border-radius: 15px;
+      width: 100%;
+      color: var(--quinary);
+      font-family: 'Chakra Petch';
+      margin-left: 1%;
+      border: None;
+      margin-top: -1%;
+      margin-bottom: 1%;
+      font-size: 17px;
+      padding-left: 2%;
+   }
 </style>
