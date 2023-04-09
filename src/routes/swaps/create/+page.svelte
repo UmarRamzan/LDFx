@@ -99,7 +99,7 @@
 
               <div class="row dropdown w-100">
                 <label for="courseSearch">Course</label>
-                <input type="text" class="form-control" id="courseSearch" placeholder="Search for course title, code, instructor" bind:value={course.search_string} on:keyup={()=>{searchCourses(course.search_string)}} on:focus={()=>{course.selected = true; searchCourses(course.search_string)}} on:focusout={()=>{setTimeout(()=>{course.selected = false}, 50)}}>
+                <input type="text" class="form-control" id="courseSearch" placeholder="Search for course title, code, instructor" bind:value={course.search_string} on:keyup={()=>{searchCourses(course.search_string)}} on:focus={()=>{course.selected = true; searchCourses(course.search_string)}} on:focusout={()=>{setTimeout(()=>{course.selected = false}, 100)}}>
 
                 {#if course.selected}
                 <ul class="list-group dropdown-content p-0">
