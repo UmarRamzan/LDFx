@@ -47,7 +47,8 @@
         let { success, data, error } = await getJobPost();
 
         if (success) {
-            jobPostings = data
+            jobPostings = data;
+            console.log(data)
         } else {
             console.log(error)
         }

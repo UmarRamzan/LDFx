@@ -20,10 +20,12 @@
 
     --links-primary: navy;
     --links-hover: blue;
-    --links-hover-background: rgb(200, 200, 255);
+    --links-hover-background: #d9d9d9;
 
     --button-primary: white;
     --button-background: blue;
+
+    --font-primary: "Chau Philomene One";
 
     /*
     --primary: white;
@@ -33,6 +35,7 @@
     --links-hover: rgb(0, 200, 0);
     --links-hover-background: rgb(200, 255, 200);
     */
+    
     --quinary: #1B2E35;
     --senary: #D9D9D9;
     --septanry: #4C4DCD;

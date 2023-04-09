@@ -1,21 +1,13 @@
-<script>
-  import { getContext } from "svelte";
-  import { goto } from "$app/navigation";
-  const user = getContext("user")
-  console.log($user)
-  //add handle function to route on 'see more'
-  const handleSeeMore = () => {goto('/about')}
-</script>
 
 
-      {#if user}
-          <p>{$user}</p>
-      {:else}
+
+
           <div class="homepage bx--content">
+            <!--
               <div class="triangle-right"></div>
               <div class="circle"></div>
+          -->
           </div>
-      {/if}
 
 
 <!-- <h1>MAIN PAGE</h1>

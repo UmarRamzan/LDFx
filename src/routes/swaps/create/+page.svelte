@@ -4,6 +4,7 @@
 	import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { user } from "../../UserStore";
+  import { fade, scale, slide } from "svelte/transition";
 
 
   let haveList = [];
@@ -59,8 +60,7 @@
 
 </script>
 
-<div class="container-fluid mt-5">
-
+<div class="container-fluid mt-5" in:fade>
   <div class="row m-auto mb-4">
     <div class="col d-flex justify-content-center align-items-center">
       <i class="bi bi-arrow-left-square mx-4" id="back-button" on:click={()=>{goto('/swaps')}}></i>
@@ -87,7 +87,8 @@
       
       <div class="row gy-4">
         {#each haveList as course (haveList.indexOf(course))}
-        <div class="col-md-6">
+        
+        <div class="col-md-6" in:scale>
           
           <div class="card px-4 pb-4">
             <div class="card-body">
@@ -142,7 +143,7 @@
       
       <div class="row gy-4">
         {#each wantList as course (wantList.indexOf(course))}
-        <div class="col-md-6">
+        <div class="col-md-6" in:scale>
           
           <div class="card px-4 pb-4">
             <div class="card-body">
