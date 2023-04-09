@@ -145,12 +145,12 @@
     }
 
     .modal-header{
-      background-color: var(--lightpink);
+      background-color: var(--secondary);
       padding: 10px;
     }
     
     .modal-footer{
-      background-color: var(--lightpink);
+      background-color: var(--secondary);
       padding: 10px;
     }
     .modal-fade{
@@ -159,7 +159,7 @@
     }
 
     .modal-content{
-      background-color: var(--lightpink);
+      background-color: var(--secondary);
       padding: 10px;
     }
 

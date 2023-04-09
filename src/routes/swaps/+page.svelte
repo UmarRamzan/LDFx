@@ -40,7 +40,7 @@
 {#if !$user}
 
 <div id="login-error">
-    <i class="bi bi-exclamation-triangle" id="error-icon"></i>
+    <i class="bi bi-arrow-left-right" id="error-icon"></i>
     <h3>You must be logged in to view swaps</h3>  
 </div>
     
@@ -139,7 +139,6 @@
     #error-icon {
         font-size: 3rem;
         margin-right: 40px;
-        color: red;
     }
 
     #content {
