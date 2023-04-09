@@ -189,7 +189,7 @@
       {#if !pending}
       <button type="button" class="btn btn-success" id="add-course-button" on:click={submitRequest}>Create</button>
       {:else}
-      <button type="button" class="btn btn-outline-success d-flex align-items-center justify-content-center" id="pending-course-button"><div class="spinner-border text-success" role="status"></div></button>
+      <button type="button" class="btn btn-outline-success d-flex align-items-center justify-content-center" id="pending-course-button"><div class="spinner-border spinner-border-sm text-success" role="status"></div></button>
       {/if}
     </div>
   </div>

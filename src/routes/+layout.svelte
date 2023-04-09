@@ -35,13 +35,6 @@
     --links-primary: navy;
     --links-hover: blue;
     --links-hover-background: rgb(200, 200, 255);
-    
-    --primary: white;
-    --secondary: black;
-
-    --links-primary: green;
-    --links-hover: rgb(0, 200, 0);
-    --links-hover-background: rgb(200, 255, 200);
    
 
   /*

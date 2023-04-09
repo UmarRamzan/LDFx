@@ -9,6 +9,7 @@
     let reviewList = [];
     let reviewText = '';
     let reviewRating = 0;
+    let courseTitle = '';
     
 
     const handleReview = async () => {
@@ -29,23 +30,44 @@
         .select()
         .eq('course_id', courseID)
 
-      if (error) {console.log(error)}
-      else {reviewList = data}
+        if (error) {console.log(error)}
+        else {reviewList = data}
+
+        const { data:courseData, error:courseError } = await supabase
+        .from('courses')
+        .select('course_title')
+        .eq('course_id', courseID)
+
+        if (error) {console.log(error)}
+        else {courseTitle = courseData[0].course_title};
 
       console.log(data)
     })
 </script>
 
+<div class="container" id="content">
+
+  <div class="container d-flex">
+    <div class="col">
+      <h2>{courseTitle}</h2>
+    </div>
+    <div class="col-2">
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addReviewModal">Add Review</button>
+    </div>
+    
+    
+  </div>
+
+  <hr>
+
+  
+
 <ul class="list-group">
   <li class="list-group-item">
-    <div class="card" >
-        <div class="card-body ">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addReviewModal">Add Review</button>
-        </div>
-    </div>
+            
   {#each reviewList as review (review.review_id)}
-      <li class="list-group-item w-20">
-          <div class="card w-20">
+      <li class="list-group-item">
+          <div class="card">
               <div class="card-body">
                   <p class="card-text">{review.review_text}</p>
                   <div class="d-flex justify-content-between align-items-center">
@@ -89,18 +111,27 @@
   </div>
 </div>
 
+</div>
+
 
 <style>
-    .search-results {
+
+  #content {
+        width: 60%;
         margin: auto;
-        width: 400px;
-        box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        margin-top: 40px;
+        border: 0px solid #000000;
+        border-radius: 40px;
+        background-color: var(--primary);
+        background-color: var(--tertiary);
+        padding: 40px;
+        box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
     }
 
     .card{
       background-color: var(--primary);
       padding: 10px;
-      width: 400px;
+      width: 500px;
       margin: auto;
     }
 
@@ -149,7 +180,7 @@
 
   
   .btn-primary{
-    width: 355px;
+    width: 150px;
     margin: auto;
     padding: 0.5rem 1rem;
   }

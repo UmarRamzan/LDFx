@@ -3,62 +3,66 @@
     import { Col, Container, Row, Card, CardBody } from 'sveltestrap';
     import { onMount } from "svelte/internal";
 
+
+    let courseList = [];
+
     let searchString = '';
     let searchResults = [];
-
-    let tempResults = [];
 
     const getSearchResults = async () => {
         
         let { data: courses, error } = await supabase
         .from('courses')
-        .select('course_id, subject_code, catalog, course_title')
-        
+        .select('course_id, subject_code, catalog, course_title, instructor')
 
-        console.log(courses);
-
+        courseList = courses;
         searchResults = courses;
 
     }
 
+    const searchCourses = () => {
+
+        if (searchString == '') {searchResults = courseList; return}
+
+        searchString = searchString.toLowerCase();
+        let searchArray = searchString.split(' ')
+
+        searchResults = courseList;
+        searchArray.forEach(searchString => {
+        searchResults = searchResults.filter((course) => (course.subject_code.toLowerCase().includes(searchString) || course.catalog.toLowerCase().includes(searchString) || course.course_title.toLowerCase().includes(searchString) || course.instructor.toLowerCase().includes(searchString)))
+        });
+
+    }
+
     onMount(()=>getSearchResults())
-    $: tempResults = searchResults.filter(result => result.course_title.toUpperCase().match(searchString.toUpperCase()) || result.catalog.match(searchString))
     
 </script>
 
 <div class="content">
 <Row>
     <Col>
-        <h1>Reviews</h1>
+        <h2>Reviews</h2>
     </Col>
 </Row>
 
-<!-- <div class="search-input">
-<input type="text" bind:value={searchString} class="search-bar" placeholder="Search">
-</div> -->
+<hr class="seperator">
 
 <div class ="container">
-    <form class= "d-flex">
-        <input class = "form-control me-1" type = "search" placeholder="Search">
-        <button class="btn btn-outline-info" type="send">Search</button>
+    <form class= "d-flex justify-content-center">
+        <input class = "form-control" id="search-bar" type = "search" placeholder="Search for course title, code, instructor" bind:value={searchString} on:keyup={searchCourses}>
     </form>
 </div>
 
-<!-- <div class="input-group rounded">
-    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-    <span class="input-group-text border-0" id="search-addon">
-        <i class="fas fa-search"></i>
-    </span>
-</div> -->
-
-{#if tempResults}
+{#if searchResults}
 <ul class="search-results">
-    {#each tempResults as result (result.course_id)}
-    <div class="shadow-sm p-4 mb-2 bg-white rounded">
-        <a href="/reviews/{result.course_id}">
+    {#each searchResults as result (result.course_id)}
+    <a href="/reviews/{result.course_id}">
+    <div class="p-4 mb-2 bg-white rounded" id="search-card">
+        
             {result.subject_code} {result.catalog} {result.course_title}
-        </a>
+        
         </div> 
+    </a>
     {/each}
 </ul>
 {/if}
@@ -70,14 +74,14 @@
     width: 60%;
     margin: auto;
     margin-top: 40px;
-    border: 2px solid #000000;
-    border-radius: 10px;
+    border: 0px solid #000000;
+    border-radius: 40px;
     background-color: var(--primary);
     padding: 20px;
-    box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
   }
 
-    h1 {
+    h2 {
         text-align: center;
     }
 
@@ -86,17 +90,24 @@
         
     }
 
-    .search-bar {
-        margin-left: 500px;
-        width: 400px;
+    .hr {
+        width: 80%;
+    }
+
+    #search-bar {
+        margin: auto 30px;
+        width: 70%;
     }
 
     .search-results {
-        width: 100%;
-        max-width: 400px;
+        width: 70%;
         color: black;
         margin: auto;
         padding: 10px;
+    }
+
+    #search-card {
+        box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
     }
 
     a {
