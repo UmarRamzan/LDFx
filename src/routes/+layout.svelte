@@ -24,7 +24,6 @@
 
     --button-primary: white;
     --button-background: blue;
-
     /*
     --primary: white;
     --secondary: black;
@@ -37,6 +36,8 @@
     --senary: #D9D9D9;
     --septanry: #4C4DCD;
     --octonary: #C62828; 
+    --other-primary: #FEC5BB;
+    --other-secondary: #FFE5D5;
   }
 
     :global(body) {
