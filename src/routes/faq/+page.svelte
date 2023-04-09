@@ -41,7 +41,7 @@
 					<div class="accordion-item" class:open={item.isOpen} on:click={() => toggleAccordion(i)}>
 						<div class="accordion-header">
 							<span>{item.title}</span>
-							<img src = "imagesfaqimg.png" alt = "Question Mark" class = "qs-1">
+							<img src = "images/faqimg.png" alt = "Question Mark" class = "qs-1">
 							<i class="material-icons">{item.isOpen ? '⌃' : '⌄'}</i>
 						</div>
 						<div class="accordion-content">
