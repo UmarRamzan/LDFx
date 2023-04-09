@@ -9,7 +9,7 @@
     <div class = "bg">
             <div class="container">
                     <div>
-                        <img src= "src/routes/about/AboutUs.png" alt="About Us" class = "responsive">
+                        <img src= "images/AboutUs.png" alt="About Us" class = "responsive">
                     </div>
                     <div>
                         <div>
