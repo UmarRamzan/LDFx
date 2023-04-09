@@ -147,9 +147,6 @@
 
   }
 
-  .form-control:hover {
-    border-color: var(--darkblue);
-  }
   
   .btn-primary{
     width: 355px;
