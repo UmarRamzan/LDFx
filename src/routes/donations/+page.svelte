@@ -6,13 +6,14 @@
   // @ts-nocheck
 
   import { onMount } from "svelte";
-  import { getDonationPosts,addDonationPosts,editDonationPosts,deleteDonationPosts,getUserData,getDonationComments,addDonationComment } from "$lib/api/csFunctions";
+  import { getDonationPosts,addDonationPosts,editDonationPosts,deleteDonationPosts,getUserData,getDonationComments,addDonationComment,getDonationLikes,addDonationLike,editDonationLike } from "$lib/api/csFunctions";
   import { user,username } from "../../routes/UserStore";
   let donationPosts = [];
   let comments = ["dummy1","dummy2"];
   let commentsPending = true;
   let commentText = ''
   let tempDonationID
+  let currentUser
 
   
   async function loadComments(donation_id) {
@@ -39,10 +40,33 @@
 
 
   onMount(async () => {
+    let user = await getUserData();
+    if (user) { currentUser = user }
+
     let { success, data, error } = await getDonationPosts();
     if (success) {
       donationPosts = data;
-      console.log(data)
+      //get donation likes
+      let res = await getDonationLikes();
+      if (res.success) {
+        //get local storage for disabled state
+        let temp = JSON.parse(localStorage.getItem("donationDisableState"))
+        if (temp && temp.userid == currentUser.id) {
+          disableLike = temp.states.disableLike
+          disableDislike = temp.states.disableDislike
+        }
+        for (let i = 0; i < res.data.length; i++) {
+          const { donation_id } = res.data[i];
+          disableLike[donation_id] = disableLike[donation_id] ?? false;
+          disableDislike[donation_id] = disableDislike[donation_id] ?? false;
+          postLikes[donation_id] = res.data[i];
+        
+        }
+
+      } else {
+        console.log(res.error);
+      }
+      
     } else {
       console.log(error);
     }
@@ -90,32 +114,78 @@
     }
   };
 
-  let postLikes = []
-  let postDislikes = []
+  const saveDisabledState = () => {
+        const temp = {userid:currentUser.id, states:{disableLike,disableDislike}}
+        localStorage.setItem("donationDisableState",JSON.stringify(temp))
+    }
 
-  const likePost = (donation_id) => {
-    const postLikeIndex = postLikes.findIndex((like) => like.id === donation_id);
+  let postLikes = {}
+  let disableLike = {}
+  let disableDislike = {}
 
-    if (postLikeIndex !== -1) {
-      postLikes[postLikeIndex].likes += 1;
+  const likePost = async (donation_id) => {
+    if (disableLike[donation_id]) {
+      return
+    }
+    disableLike[donation_id] = true;
+    saveDisabledState();
+    
+    if (postLikes[donation_id]) {
+      postLikes[donation_id].likes += 1;
+      
+      //update database
+      let res = await editDonationLike(donation_id,postLikes[donation_id].likes,postLikes[donation_id].dislikes)
+      if (res.success) {
+        console.log(res.data)
+      } else {
+        console.log(res.error);
+      }
+
     } else {
-      postLikes.push({ id: donation_id, likes: 1 });
+      //add row to database then update postLikes
+      let res = await addDonationLike(donation_id,1,0)
+      if (res.success) {
+        console.log(res.data)
+        postLikes[donation_id] = res.data;
+      } else {
+        console.log(res.error);
+      }
     }
 
     console.log(postLikes);
-    console.log(postLikes.find((like) => like.id === donation_id).likes);
   };
 
   
-  const dislikePost = (donation_id) => {
-    const postDisLikeIndex = postDislikes.findIndex((dislikes) => dislikes.id === donation_id);
+  const dislikePost = async (donation_id) => {
+    if (disableDislike[donation_id]) {
+      return
+    }
+    disableDislike[donation_id] = true;
+    saveDisabledState();
+    
+    if (postLikes[donation_id]) {
+      postLikes[donation_id].dislikes += 1;
+      
+      //update database
+      let res = await editDonationLike(donation_id,postLikes[donation_id].likes,postLikes[donation_id].dislikes)
+      if (res.success) {
+        console.log(res.data)
+      } else {
+        console.log(res.error);
+      }
 
-    if (postDisLikeIndex !== -1) {
-      postDislikes[postDisLikeIndex].dislikes += 1;
     } else {
-      postDislikes.push({ id: donation_id, dislikes: 1 });
+      //add row to database then update postLikes
+      let res = await addDonationLike(donation_id,0,1)
+      if (res.success) {
+        console.log(res.data)
+        postLikes[donation_id] = res.data;
+      } else {
+        console.log(res.error);
+      }
     }
 
+    console.log(postLikes);
   };
 
 </script>
@@ -314,21 +384,41 @@
                         </button>
                       </div>
                       <div class = "icon-1">
-                          <button class = "btn btn-light btn-block" on:click={() => {likePost(donationPost.donation_id)} }>
+                          <button class = "btn btn-light btn-block" on:click={() => {likePost(donationPost.donation_id)} } disabled={disableLike[donationPost.donation_id]}>
                             <div class = "icon"> 
                               <i class="bi bi-hand-thumbs-up" ></i>
                             </div>
+                            {#if disableLike[donationPost.donation_id]}
+                              <p class = "col-2">Liked</p>
+                            {:else}
                               <p class = "col-2">Like</p>
-                              <p class="col-2">{postLikes.find((like) => like.id === donationPost.donation_id)?.likes || 0}</p>
+                            {/if}
+                            
+                            {#if postLikes[donationPost.donation_id]}
+                              <p class = "col-2">{postLikes[donationPost.donation_id].likes}</p>
+                            {:else}
+                              <p class = "col-2">0</p>
+                            {/if}
+
                           </button> 
                       </div>
                       <div class = "icon-1">
-                        <button class = "btn btn-light btn-block" on:click={() => {dislikePost(donationPost.donation_id)}}>
+                        <button class = "btn btn-light btn-block" on:click={() => {dislikePost(donationPost.donation_id)}} disabled={disableDislike[donationPost.donation_id]}>
                           <div class = "icon"> 
                             <i class="bi bi-hand-thumbs-down" ></i>
                           </div>
-                            <p class = "col-2">Dislike</p>
-                            <p class = "col-2">{postDislikes.find((dislikes) => dislikes.id === donationPost.donation_id)?.dislikes || 0}</p>
+                            {#if disableDislike[donationPost.donation_id]}
+                              <p class = "col-2">Disliked</p>
+                            {:else}
+                              <p class = "col-2">Dislike</p>
+                            {/if}
+                            
+                            {#if postLikes[donationPost.donation_id]}
+                              <p class = "col-2">{postLikes[donationPost.donation_id].dislikes}</p>
+                            {:else}
+                              <p class = "col-2">0</p>
+                            {/if}
+
                           </button> 
                       </div>
                     </div>

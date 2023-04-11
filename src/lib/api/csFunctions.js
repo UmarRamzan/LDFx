@@ -460,3 +460,104 @@ export const addJobComment = async (job_id, user_id, username, comment) => {
     }
     return {success: success, data: data, error: error}
 }
+
+//get all likes for donation posts
+
+export const getDonationLikes = async () => {
+    let success = false
+    let data = null
+
+    const {data: donationData, error} = await supabase.from('likesDonations').select('*')
+
+    if (error) {console.log(error)}
+    else {success = true, data = donationData}
+    console.log("Get Donation Likes: ", data)
+
+    return {success: success, data: data, error: error}
+}
+
+//insert a like for a donation post
+export const addDonationLike = async (donation_id,likes,dislikes) => {
+    let success = false
+    let data = null
+
+    const {data: donationData, error} = await supabase.from('likesDonations').insert([{donation_id: donation_id,likes: likes,dislikes:dislikes}]).select('*')
+    if(error){
+        console.log(error)
+    }
+    else{
+        console.log("Add Donation Like: ", donationData)
+        success = true
+        data = donationData
+    }
+    return {success: success, data: data, error: error}
+
+}
+
+//update a like for a donation post
+export const editDonationLike = async (donation_id,likes,dislikes) => {
+    let success = false
+    let data = null
+
+    const {data: donationData, error} = await supabase.from('likesDonations').update({likes: likes,dislikes:dislikes}).eq('donation_id', donation_id).select('*')
+    if(error){
+        console.log(error)
+    }
+    else{
+        console.log("Edit Donation Like: ", donationData)
+        success = true
+        data = donationData
+    }
+    return {success: success, data: data, error: error}
+
+}
+
+//get all likes for job posts
+export const getJobLikes = async () => {
+    let success = false
+    let data = null
+
+    const {data: donationData, error} = await supabase.from('likesJobs').select('*')
+
+    if (error) {console.log(error)}
+    else {success = true, data = donationData}
+    console.log("Get Job Likes: ", data)
+
+    return {success: success, data: data, error: error}
+}
+
+//insert a like for a job post
+export const addJobLike = async (job_id,likes,dislikes) => {
+    let success = false
+    let data = null
+
+    const {data: donationData, error} = await supabase.from('likesJobs').insert([{job_id: job_id,likes: likes,dislikes:dislikes}]).select('*')
+    if(error){
+        console.log(error)
+    }
+    else{
+        console.log("Add Job Like: ", donationData)
+        success = true
+        data = donationData
+    }
+    return {success: success, data: data, error: error}
+
+}
+
+//update a like for a job post
+export const editJobLike = async (job_id,likes,dislikes) => {
+    let success = false
+    let data = null
+
+    const {data: donationData, error} = await supabase.from('likesJobs').update({likes: likes,dislikes:dislikes}).eq('job_id', job_id).select('*')
+    if(error){
+        console.log(error)
+    }
+    else{
+        console.log("Edit Job Like: ", donationData)
+        success = true
+        data = donationData
+    }
+    return {success: success, data: data, error: error}
+
+}

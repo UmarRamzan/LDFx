@@ -94,6 +94,7 @@
       </div>
     {/if}
 
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="password-links" on:click={()=>{resetingPassword=true; resetError(); email=''; password=''}}>Forgot Password</div>
 
     <hr>

@@ -1,4 +1,6 @@
-<script> 
+<script>
+// @ts-nocheck
+ 
 
   
   import { supabase } from "$lib/supabaseClient";
@@ -6,8 +8,10 @@
   import { createEventDispatcher } from "svelte";
   import { user, username} from "../../routes/UserStore";
   import { updateUsername } from "$lib/api/csFunctions";
+  import { goto } from "$app/navigation";
     
   const dispatch = createEventDispatcher();
+
     
   let email = "";
   let password = "";
@@ -28,38 +32,46 @@
         }
   };
 
-  const saveChanges = async () => {
-      console.log("Saving changes...")
-      const { data, error } = await supabase.auth.updateUser({
-          attributes: {
-              email,
-              password,
-              data: { accountType }
-          },
-          options: { redirectTo: "http://localhost:5000" }
-      });
-        if (error) {
-          console.log(error);
-        } else {
-          dispatch("success", "Account updated successfully!");
-        }
+const saveChanges = async () => {
+  console.log("Saving changes...");
+  let attributes = {
+    email,
+    data: { accountType }
+  };
+  if (password) {
+    attributes.password = password;
   }
+  const { data, error } = await supabase.auth.updateUser({
+    attributes,
+    options: { redirectTo: "http://localhost:5000" }
+  });
+  //update username too
+  let updatedUsername = await _updateUsername();
+  if (error || !updatedUsername) {
+    console.log(error);
+    console.log("username :", updatedUsername);
+  } else {
+    dispatch("success", "Account updated successfully!");
+    alert("Account updated successfully!");
+    goto("/");
+  }
+};
+
   
   //this works but it should be in the updateData function
   const _updateUsername = async()=>{
-      _username = await updateUsername(_username,$user.user.id)
-      _username = _username.data[0].username
-      username.set(_username)
+      let res = await updateUsername(usernameInput,$user.id)
+      username.set(res.data[0].username)
+      return res.success
   }
     
-  onMount(() => {getData()});
+  onMount(() => {getData();usernameInput = $username;});
   
   let activeTab = 0;
   
     function setActiveTab(index) {
       activeTab = index;
     }
-  
   
   </script>
 
@@ -105,16 +117,17 @@
           </div>
         </div>
         <div class="row">
-          <button type="button" class="btn btn-secondary">Change Password</button>
+          <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#password-popup">Change Password</button>
         </div>
-        <div class="row">
+
+        <!-- <div class="row">
           <button type="button" class="btn btn-danger">Delete Account</button>
-        </div>
+        </div> -->
       </div>
 
         <div class="d-flex">
-          <button type="button" class="btn btn-dark" style="margin-right: 10px;">Cancel</button>
-          <button type="button" class="btn btn-success">Save Changes</button>
+          <button type="button" class="btn btn-danger" style="margin-right: 200px;">Cancel</button>
+          <button type="button" class="btn btn-primary" style="background-color: light-blue; border-color: light-blue;" on:click={saveChanges}>Save Changes</button>
         </div>
 
         
@@ -136,18 +149,24 @@
       <button onclick="document.getElementById('account-popup').style.display='none'"> Submit </button>
   </div>
   
-  <div class="popup" id="password-popup">
-    <label class="popup-data" for="password"><b>Enter New Password</b></label>
-    <br>
-    <input type="text" placeholder="new password" name="password" required>
-    <br><br>
-  
-    <label class="popup-data" for="password"><b>Confirm New Password</b></label>
-    <br>
-    <input type="text" placeholder="confirm password" name="password" required>
-    <br><br>
-    <button onclick="document.getElementById('password-popup').style.display='none'">Submit</button>
+  <div class="modal fade" id="password-popup" tabindex="-1" aria-labelledby="password-popup-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="password-popup-label">Enter New Password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <label class="popup-data" for="password"><b>New Password</b></label>
+          <br>
+          <input type="password" class="form-control" placeholder="New Password" name="password" required bind:value={password}>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal" on:click={()=>{if(password.length < 6){alert("password must be greater than 6 characters")}}}>Save</button>
+        </div>
+      </div>
     </div>
+  </div>
   
     {:else if activeTab === 1}
     
