@@ -35,6 +35,9 @@
 
 </script>
 
+<Signup showModal={showSignupModal} toggle={toggleSignupModal}/>
+<Login showModal={showLoginModal} toggle={toggleLoginModal}/>
+
 <!-- Sidebar -->
 <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="staticBackdropLabel">
 <div class="offcanvas-header">
@@ -115,8 +118,7 @@
   </div>
 </nav>
 
-<Signup showModal={showSignupModal} toggle={toggleSignupModal}/>
-<Login showModal={showLoginModal} toggle={toggleLoginModal}/>
+
 
 <style>
 

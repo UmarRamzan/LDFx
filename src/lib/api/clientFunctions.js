@@ -32,7 +32,7 @@ export const signup = async (email, password, accountType, username) => {
 
         //set username and userid in username table
         const { data: usernameData, error: usernameError} = await supabase.from('usernames').insert([
-            {user_id: signupData.user.id, username: username}])
+            {user_id: signupData.user.id, username: username, email: email}])
         if (usernameError) {
             console.log(usernameError)
             error = usernameError
@@ -84,6 +84,16 @@ export const getUsername = async (userId) => {
         data = usernameData
     }
     return {success: success, data: data, error: error}
+}
+
+// obtain the email for a given user id
+export const getEmail = async (userId) => {
+
+    let success = false
+
+    const {data:emailData, error} = await supabase.from('usernames').select('email').eq('user_id', userId)
+
+    return { success:success, data:emailData, error:error}
 }
 
 // get the current user session, if one exists
@@ -318,14 +328,14 @@ export const addSwapRequest = async (userID, haveList, wantList) => {
     })
 
     // check if a valid swap currently exists
-    const {success: swapSuccess, data: swapData, error: swapError} = await checkSwap(data[0].swap_id)
+    const {success: swapSuccess, data: swapData, error: swapError} = await checkSwap(data[0].swap_id, userID)
 
     return {success: success, data: data, error: error}
 
 }
 
 // check if a valid swap exists for a given swap request
-export const checkSwap = async (swapID) => {
+export const checkSwap = async (swapID, userID) => {
 
     let success = false;
 
@@ -347,13 +357,30 @@ export const checkSwap = async (swapID) => {
     .select()
     .in('course_id', wantList.map(course => course.course_id))
 
+    console.log("Matches", matchList)
+
     // for all matches, obtain their want list
     matchList.forEach(async match => {
+
+        // obtain the user id of the match
+        const { data:matchData, error:matchError } = await supabase
+        .from('swaps')
+        .select('user_id')
+        .eq('swap_id', match.swap_id)
+
+        let match_user_id = matchData[0].user_id
+        console.log(match_user_id)
+        console.log(userID)
+
+        // if the match is our own swap request, skip it
+        if (match_user_id == userID) {return}
 
         const { data:matchWantList, error:matchWantError } = await supabase
         .from('want')
         .select()
         .eq('swap_id', match.swap_id)
+
+        console.log("Want List: ", matchWantList)
 
         // check if any of the courses in the match's want list are in our have list
         matchWantList.forEach(wantCourse => {
@@ -372,7 +399,12 @@ export const checkSwap = async (swapID) => {
                     if (swapError) {console.log(swapError)}
                     else {console.log(swapData)}
 
-                    console.log(swapID, match.swap_id)
+                    // store the match in the swap_matches table
+                    const { data:matchData, error:matchError } = await supabase
+                    .from('swap_matches')
+                    .insert({ user_id_one: userID, user_id_two: match_user_id, swap_id_one: swapID, swap_id_two: match.swap_id, course_id_one: haveCourse.course_id, course_id_two: match.course_id })
+
+                    if (matchError) {console.log(matchError)}
 
                     return;
                 }
@@ -393,11 +425,51 @@ export const deleteSwap = async (swapID) => {
         .update({ deleted: true })
         .eq('swap_id', swapID)
         .select()
+
+        // delete all rows in the have table for this swap request
+        const { data:haveData, error:haveError } = await supabase
+        .from('have')
+        .delete()
+        .eq('swap_id', swapID)
+
+        // delete all rows in the want table for this swap request
+        const { data:wantData, error:wantError } = await supabase
+        .from('want')
+        .delete()
+        .eq('swap_id', swapID)
+
+        if (haveError) {console.log(haveError)}
     
         if (error) {console.log(error)}
         else {success = true}
     
         return {success: success, data: data, error: error}
+}
+
+export const getSwapMatch = async (swapID) => {
+
+    let success = false;
+    let data = null;
+
+    // get swap match data where either swap_id_one or swap_id_two is equal to the given swapID
+    const { data:matchDataOne, error:matchErrorOne } = await supabase
+    .from('swap_matches')
+    .select()
+    .eq('swap_id_one', swapID)
+
+    const { data:matchDataTwo, error:matchErrorTwo } = await supabase
+    .from('swap_matches')
+    .select()
+    .eq('swap_id_two', swapID)
+
+    data = matchDataOne.concat(matchDataTwo)
+
+    if (matchErrorOne) {console.log(matchErrorOne)}
+    if (matchErrorTwo) {console.log(matchErrorTwo)}
+    else {success = true}
+
+    return {success: success, data: data, error: matchErrorOne}
+
 }
 
 // fetch a list containing all information present within the courses table
@@ -409,6 +481,28 @@ export const getCourses = async () => {
     const {data:courseData, error} = await supabase
     .from('courses')
     .select('*')
+
+    if(error){
+        console.log(error)
+    }
+    else{
+        success = true
+        data = courseData
+    }
+
+    return {success: success, data: data, error: error}
+}
+
+// fetch a list container course title for a given course id
+export const getCourseTitle = async (courseID) => {
+
+    let success = false
+    let data = null
+
+    const {data:courseData, error} = await supabase
+    .from('courses')
+    .select('course_title')
+    .eq('course_id', courseID)
 
     if(error){
         console.log(error)

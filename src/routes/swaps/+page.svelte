@@ -1,8 +1,9 @@
 <script>
-	import { deleteSwap, getSwapRequests } from "$lib/api/clientFunctions";
+	import { deleteSwap, getSwapRequests, getSwapMatch, getEmail, getCourseTitle } from "$lib/api/clientFunctions";
 	import { onMount } from "svelte";
     import { user } from "../UserStore";
     import { goto } from "$app/navigation";
+    import { fade } from "svelte/transition";
 
     let pending = false;
 
@@ -13,6 +14,9 @@
     }
 
     let swapTableData = [];
+    let swapMatchData = {};
+
+    let showMatchModal = false;
 
     const fetchData = async () => {
         if ($user) {
@@ -33,6 +37,29 @@
     const handleDeleteSwap = async (swapID) => {
         swapTableData = swapTableData.filter((swap) => swap.swap_id != swapID);
         const { success, data, error } =  deleteSwap(swapID);
+        
+    }
+
+    const showSwapMatch = async (swapID) => {
+        let {success, data, error} = await getSwapMatch(swapID);
+        if (error) {console.log(error)}
+        else {swapMatchData = data[0]}
+
+        let {success: success2, data: data2, error: error2} = await getEmail(swapMatchData.user_id_one);
+        swapMatchData.email_one = data2[0].email;
+
+        let {success: success3, data: data3, error: error3} = await getEmail(swapMatchData.user_id_two);
+        swapMatchData.email_two = data3[0].email;
+
+        // get course titles
+        let {success: success4, data: data4, error: error4} = await getCourseTitle(swapMatchData.course_id_one);
+        swapMatchData.course_title_one = data4[0].course_title;
+
+        let {success: success5, data: data5, error: error5} = await getCourseTitle(swapMatchData.course_id_two);
+        swapMatchData.course_title_two = data5[0].course_title;
+
+        showMatchModal = true;
+        console.log(data)
     }
 
 </script>
@@ -45,7 +72,44 @@
 </div>
     
 {:else}
+
+{#if showMatchModal}
+<div class="custom-backdrop" on:click|self={()=>showMatchModal=false} transition:fade>
+  <div class="custom-modal">
+    <h2>Swap Found!</h2>
+    <hr>
+
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-1">
+                <i class="bi bi-arrow-left-right"></i>
+            </div>
+            <div class="col d-flex justify-content-start mx-2">
+                <p>{swapMatchData.course_title_one} - {swapMatchData.course_title_two}</p>
+            </div>
+            
+            
+        </div>
+        <div class="row">
+            <div class="col-1">
+                <i class="bi bi-envelope"></i>
+            </div>
+            <div class="col d-flex justify-content-start mx-2">
+            {#if swapMatchData.user_id_one == $user.id}
+                <p>{swapMatchData.email_two}</p>
+            {:else}
+                <p>{swapMatchData.email_one}</p>
+            {/if}
+            </div>
+        </div>
+    </div>
+
+  </div>
+</div>
+{/if}
+
 <div class="container  mt-5" id="content">
+    
     
     <div class="row align-items-center">
         
@@ -93,10 +157,14 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col-8">
-                                        <div class="status m-auto" style="background-color: {statusColors[swap.status]};">{swap.status}</div>
+                                        {#if swap.status=="Found"}
+                                            <div class="status m-auto" style="background-color: {statusColors[swap.status]}; cursor: pointer" on:click={showSwapMatch(swap.swap_id)}>{swap.status}</div>
+                                        {:else}
+                                            <div class="status m-auto" style="background-color: {statusColors[swap.status]};">{swap.status}</div>
+                                        {/if}
                                     </div>
                                     <div class="col">
-                                        <i class="bi bi-x-circle" on:click={()=>{handleDeleteSwap(swap.swap_id)}}></i>
+                                        <i class="bi bi-x-circle" id="remove-swap" on:click={()=>{handleDeleteSwap(swap.swap_id)}}></i>
                                     </div>
                                 </div>
                             </div>
@@ -113,11 +181,34 @@
                 </div>
             {/if}
 
+            
+
     </div>
+    
 </div>
+
 {/if}
 
+
+
 <style>
+
+.custom-backdrop {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+  }
+
+  .custom-modal {
+    padding: 25px;
+    border-radius: 10px;
+    max-width: 500px;
+    margin: 10% auto;;
+    text-align: center;
+    background: var(--secondary);
+  }
 
     #login-error {
         width: 50%;
@@ -182,7 +273,7 @@
         font-size: 2rem;
      }
 
-     .bi:hover {
+     #remove-swap:hover {
         cursor: pointer;
         color: red;
      }
