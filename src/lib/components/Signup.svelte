@@ -33,6 +33,13 @@
 
   const handleSignup = async () => {
     pending = true;
+
+    if (username.length < 3) {
+      errorMessage = 'Username must be at least 3 characters long';
+      pending = false;
+      return;
+    }
+    
     const {success, data, error} = await signup(email, password, accountType, username)
     
     if (error) { errorMessage = error.message}
@@ -77,7 +84,7 @@
 
     {#if linkSent}
     <div class="alert alert-success" role="alert">
-      A confirmation link has been sent to your email
+      Email Verification Link Sent
     </div>
     {/if}
 

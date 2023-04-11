@@ -59,7 +59,7 @@
 
     if (error) {errorMessage = error.message;}
     else {
-      successMessage = "Password reset email sent!"
+      successMessage = "Password Reset Email Sent!"
     }
   }
 
@@ -81,7 +81,7 @@
     <hr>
 
     <div class="mb-3">
-      <input type="email" class="form-control" id="email" placeholder="Email" bind:value={email}>
+      <input type="email" class="form-control" id="email" placeholder="Email" bind:value={email}><i class="bi bi-envelope-at"></i>
     </div>
     <div class="mb-3">
       <input type="password" class="form-control" id="password" placeholder="Password" bind:value={password}>
@@ -94,7 +94,7 @@
       </div>
     {/if}
 
-    <div class="password-links" on:click={()=>{resetingPassword=true}}>Forgot Password</div>
+    <div class="password-links" on:click={()=>{resetingPassword=true; resetError(); email=''; password=''}}>Forgot Password</div>
 
     <hr>
 
