@@ -200,7 +200,7 @@
 #content {
   border: 0px solid #000000;
   border-radius: 40px;
-  background-color: var(--primary);
+  background-color: var(--secondary);
   padding: 40px;
   box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
 }

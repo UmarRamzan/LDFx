@@ -57,7 +57,7 @@
 <ul class="search-results">
     {#each searchResults as result (result.course_id)}
     <a href="/reviews/{result.course_id}">
-    <div class="p-4 mb-2 bg-white rounded" id="search-card">
+    <div class="p-4 mb-2 rounded" id="search-card">
         
             {result.subject_code} {result.catalog} {result.course_title}
         
@@ -76,7 +76,7 @@
     margin-top: 40px;
     border: 0px solid #000000;
     border-radius: 40px;
-    background-color: var(--primary);
+    background-color: var(--secondary);
     padding: 20px;
     box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
   }
@@ -107,6 +107,7 @@
     }
 
     #search-card {
+        background-color: var(--primary);
         box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
     }
 
