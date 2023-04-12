@@ -189,7 +189,7 @@
         <!-- Button trigger create posting modal -->
         <div class="col-3">
             <button class="create-posting-button btn-block-1" data-bs-toggle="modal" data-bs-target="#posting-modal">
-                Create Post
+                <p class = "col-5">Create Post</p>
             </button>
         </div>
         
@@ -228,8 +228,8 @@
         </div>
 
         <div class="modal-footer">
-            <button type="button" class="cancel-button" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={createJobPosting}>Create</button>
+            <button type="button" class="cancel-button" data-bs-dismiss="modal"><h6>Cancel</h6></button>
+            <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={createJobPosting}><h6>Create</h6></button>
         </div>
         </div>
     </div>
@@ -265,8 +265,8 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="cancel-button" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={createJobPosting}>Create</button>
+            <button type="button" class="cancel-button" data-bs-dismiss="modal"><h6>Cancel</h6></button>
+            <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={createJobPosting}><h6>Create</h6></button>
         </div>
         </div>
     </div>
@@ -297,8 +297,8 @@
           </div>
         {/if}
         <div class="modal-footer">
-          <button type="button" class="close-button" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="comment-button" data-bs-toggle="modal" data-bs-target="#comment-posting-modal" data-bs-dismiss="modal">Add Comment</button>
+          <button type="button" class="close-button" data-bs-dismiss="modal"><h6>Close</h6></button>
+          <button type="button" class="comment-button" data-bs-toggle="modal" data-bs-target="#comment-posting-modal" data-bs-dismiss="modal"><h6>Add Comment</h6></button>
         </div>
       </div>
     </div>
@@ -322,8 +322,8 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="cancel-button" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={addComment}>Create</button>
+            <button type="button" class="cancel-button" data-bs-dismiss="modal"><h6>Cancel</h6></button>
+            <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={addComment}><h6>Create</h6></button>
         </div>
         </div>
     </div>
@@ -339,19 +339,19 @@
                 <div class="col">
                     <form>
                         <div class="form-group">
-                            <label for="organizationName"><b>Organization Name</b></label>
+                            <label for="organizationName"><h5>Organization Name</h5></label>
                             <input type="text" class="form-control" id="organizationName" readonly value={jobData.organization}>
                         </div>
                         <div class="form-group">
-                            <label for="contactNumber"><b>Contact Number</b></label>
+                            <label for="contactNumber"><h5>Contact Number</h5></label>
                             <input type="text" class="form-control" id="contactNumber" readonly value={jobData.contact_number}>
                         </div>
                         <div class="form-group">
-                            <label for="jobType"><b>Job Type</b></label>
+                            <label for="jobType"><h5>Job Type</h5></label>
                             <input type="text" class="form-control" id="jobType" readonly value={jobData.job_type}>
                         </div>
                         <div class="form-group">
-                            <label for="payRange"><b>Pay Range</b></label>
+                            <label for="payRange"><h5>Pay Range</h5></label>
                             <input type="text" class="form-control" id="payRange" readonly value={jobData.pay_range}>
                         </div>
                     </form>
@@ -421,11 +421,11 @@
             <div class="row mt-3">
                 <div class="col w-10">
                     <button type="button" class="edit-button" id="edit-posting-button" data-bs-toggle="modal" data-bs-target="#edit-posting-modal">
-                        Edit
+                        <h6>Edit</h6>
                     </button>
                 </div>
                 <div class="col w-10">
-                    <button type="button" class="ecancel-button" id="submit-button" on:click={()=>deleteJobPosting(jobData.job_posting_id)}>Delete</button>
+                    <button type="button" class="ecancel-button" id="submit-button" on:click={()=>deleteJobPosting(jobData.job_posting_id)}><h6>Delete</h6></button>
                 </div>
             </div>
             {/if}
@@ -441,6 +441,25 @@
     @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;1,300&display=swap');
     @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css');
 
+
+
+    .col-5
+  {
+    font-family: 'Chau Philomene One';
+    /* display: inline; */
+    font-size: 15px;
+    /* color: #ffffff; */
+    width: auto;
+    margin: 2%;
+    margin-top: -1%;
+    /* margin: 0 auto; */
+    /* padding: 3%; */
+    /* padding-right: 200px; */
+  }
+  .col-5:hover
+  {
+    color: var(--quinary);
+  }
      .hor
     {
         margin-bottom: 25px;
@@ -569,6 +588,7 @@
         border-radius: 20px;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         width: 20%;
+        padding-top: 2%;
     }
     .cancel-button
     {
@@ -579,6 +599,7 @@
         border-radius: 20px;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         width: 20%;
+        padding-top: 2%;
     }
     .create-button:hover 
     {
@@ -609,8 +630,11 @@
         background-color: var(--septanry);
         border-radius: 20px;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        width: 20%;
+        width: 30%;
+        margin-top: 3%;
+        font-size: 16px;
         margin-left: 8%;
+        padding-top: 2%;
     }
     .edit-button:hover 
     {
@@ -626,8 +650,11 @@
         color: #ffffff;
         border-radius: 20px;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        width: 20%;
-        margin-left: 70%;
+        width: 32%;
+        font-size: 15px;
+        margin-left: 50%;
+        margin-top: 3%;
+        padding-top: 2%;
     }
     .ecancel-button:hover
     {
@@ -638,7 +665,7 @@
     .btn-block-1
     {
         margin-left: 170%;
-        width: 20%;
+        width: 30%;
         padding-bottom: -100%;
         font-family: 'Chau Philomene One';
         border: None;
@@ -647,8 +674,8 @@
         border-radius: 20px;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         justify-content: top;
-        padding-top: 2%;
-        padding-bottom: 2%;
+        padding-top: 1%;
+        /* padding-bottom: 2%; */
         font-size: 18px;
         margin-top: -8%;
         display: block;
@@ -675,7 +702,8 @@
       background-color: var(--septanry);
       border-radius: 20px;
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-      width: 25%;
+      width: 35%;
+      padding-top: 10px;
     }
     .comment-button:hover
     {
@@ -692,6 +720,8 @@
       border-radius: 20px;
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
       width: 20%;
+      width: 35%;
+      padding-top: 10px;
     }
     .close-button:hover
     {
@@ -719,4 +749,8 @@
       font-size: 17px;
       padding-left: 2%;
    }
+   .icon-1
+  {
+    margin-left: -3%;
+  }
 </style>

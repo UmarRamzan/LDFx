@@ -63,7 +63,7 @@
 <div class="container-fluid mt-5" in:fade>
   <div class="row m-auto mb-4">
     <div class="col d-flex justify-content-center align-items-center">
-      <i class="bi bi-arrow-left-square mx-4" id="back-button" on:click={()=>{goto('/swaps')}}></i>
+      <i class="bi bi-arrow-left mx-4" id="back-button" on:click={()=>{goto('/swaps')}}></i>
       <h2>Create Swap Request</h2>
     </div>
   </div>
@@ -98,7 +98,7 @@
               </div>
 
               <div class="row dropdown w-100">
-                <label for="courseSearch">Course</label>
+                <label for="courseSearch" class="coursehead">Course</label>
                 <input type="text" class="form-control" id="courseSearch" placeholder="Search for course title, code, instructor" bind:value={course.search_string} on:keyup={()=>{searchCourses(course.search_string)}} on:focus={()=>{course.selected = true; searchCourses(course.search_string)}} >
 
                 {#if course.selected}
@@ -153,8 +153,8 @@
               </div>
 
               <div class="row dropdown w-100">
-                <label for="courseSearch">Course</label>
-                <input type="text" class="form-control" id="courseSearch" placeholder="Search for course title, code, instructor" bind:value={course.search_string} on:keyup={()=>{searchCourses(course.search_string)}} on:focus={()=>{course.selected = true; searchCourses(course.search_string)}} on:focusout={()=>{setTimeout(()=>{course.selected = false}, 50)}}>
+                <label for="courseSearch" class = "coursehead">Course</label>
+                <input type="text" class="form-control"  id = "courseSearch" placeholder="Search for course title, code, instructor" bind:value={course.search_string} on:keyup={()=>{searchCourses(course.search_string)}} on:focus={()=>{course.selected = true; searchCourses(course.search_string)}} on:focusout={()=>{setTimeout(()=>{course.selected = false}, 50)}}>
 
                 {#if course.selected}
                 <ul class="list-group dropdown-content p-0">
@@ -196,17 +196,35 @@
 </div>
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;1,300&family=Chau+Philomene+One&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;1,300&display=swap');
+
+    h2
+    {
+        font-family: 'Chau Philomene One';
+    }
 
 #content {
-  border: 0px solid #000000;
+  border: None;
   border-radius: 40px;
   background-color: var(--secondary);
   padding: 40px;
   box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
 }
+.coursehead
+{
+  padding-bottom: 20px;
+  font-family: 'Chau Philomene One';
+  color: var(--quinary);
+}
+::placeholder
+{
+  font-family: 'Chau Philomene One';
+}
 
 #back-button {
   font-size: 2.5rem;
+  color: var(--quniary);
 }
 
 #back-button:hover {
@@ -215,14 +233,22 @@
 
 .card {
   box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
-  background-color: var(--secondary);
+  background-color: red;
   background-color: #FEC5BB;
   width: 100%;
+  font-family: 'Chakra Petch';
+  padding-top: -5%;
+  padding-bottom: 5%;
+  border: None;
+  border-radius: 20px;
+
 }
 
 .dropdown {
   position: relative;
   display: inline-block;
+  /* padding-top: 200px; */
+  padding-bottom: 10px;
 }
 
 .dropdown-content {
@@ -241,9 +267,19 @@
 }
 
 
-  #add-course-button, #pending-course-button {
+  #add-course-button, #pending-course-button{
     width: 100px;
     height: 40px;
+    color: #ffffff;
+    background-color: var(--septanry);
+    font-family: 'Chau Philomene One';
+    border: None;
+    }
+  #add-course-button:hover, #pending-course-button:hover
+  {
+    background-color: var(--other-primary);
+        color: var(--quinary);
+        font-family: 'Chau Philomene One';
   }
 
   .bi-plus {
@@ -251,7 +287,7 @@
   }
 
   #separator {
-      border-bottom: 1px solid #000000;
+      border-bottom:  Solid rgba(0, 0, 0, 0.11);
       margin-top: 40px;
       margin-bottom: 40px;
   }
@@ -260,7 +296,22 @@
   #remove-course-button {
       width: 40px;
       height: 40px;
-      border: 0px;
+      border: 100px;
+      color: var(--quniary);
   }
+
+  #remove-course-button:hover {
+      background-color: var(--primary);
+      color: var(--septanry);
+  }
+  #courseSearch
+  {
+    background-color: var(--senary);
+    border-radius: 20px;
+  }
+ 
+
+  
+ 
 
 </style>

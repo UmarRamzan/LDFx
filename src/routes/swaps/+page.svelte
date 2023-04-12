@@ -8,9 +8,9 @@
     let pending = false;
 
     let statusColors = {
-        "Found": "#69ff91",
-        "Pending": "#fffc69",
-        "Not Found": "#fa5741",
+        "Found": "#9798CF",
+        "Pending": "#F1C29A",
+        "Not Found": "#D98888",
     }
 
     let swapTableData = [];
@@ -63,6 +63,9 @@
     }
 
 </script>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
 
 {#if !$user}
 
@@ -121,6 +124,8 @@
         <div class="col d-flex justify-content-end">
             <a href="/swaps/create" class="btn btn-outline-success">
                 Create Swap Request
+                <i class="far fa-sync fa-spin"></i>
+
             </a>
             
         </div>
@@ -158,13 +163,13 @@
                                 <div class="row">
                                     <div class="col-8">
                                         {#if swap.status=="Found"}
-                                            <div class="status m-auto" style="background-color: {statusColors[swap.status]}; cursor: pointer" on:click={showSwapMatch(swap.swap_id)}>{swap.status}</div>
+                                            <div class="status m-auto" style="background-color: {statusColors[swap.status]}; cursor: pointer; color: #4D4DD0" on:click={showSwapMatch(swap.swap_id)}>{swap.status}</div>
                                         {:else}
-                                            <div class="status m-auto" style="background-color: {statusColors[swap.status]};">{swap.status}</div>
+                                            <div class="status m-auto" style="background-color: {statusColors[swap.status]}; color: #E67B21">{swap.status}</div>
                                         {/if}
                                     </div>
                                     <div class="col">
-                                        <i class="bi bi-x-circle" id="remove-swap" on:click={()=>{handleDeleteSwap(swap.swap_id)}}></i>
+                                        <i class="bi bi-trash" id="remove-swap" on:click={()=>{handleDeleteSwap(swap.swap_id)}}></i>
                                     </div>
                                 </div>
                             </div>
@@ -192,6 +197,15 @@
 
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;1,300&family=Chau+Philomene+One&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;1,300&display=swap');
+
+    h2, th
+    {
+        font-family: 'Chau Philomene One';
+    }
+   
+
 
 .custom-backdrop {
     width: 100%;
@@ -203,7 +217,7 @@
 
   .custom-modal {
     padding: 25px;
-    border-radius: 10px;
+    border-radius: 20px;
     max-width: 500px;
     margin: 10% auto;;
     text-align: center;
@@ -241,6 +255,7 @@
         background-color: var(--secondary);
         padding: 40px;
         box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
+        font-family: 'Chau Philomene One';
     }
 
     th, td {
@@ -249,11 +264,15 @@
 
      #swap-table {
         text-align: center;
-        border: 1px solid rgba(0,0,0,0.5);
-        border-radius: 1rem;
+        border:  Solid rgba(0, 0, 0, 0.11);
+        border-radius: 20px;
         overflow: hidden;
         box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
         background-color: var(--quaternary);
+     }
+     #remove-swap
+     {
+        color: var(--quniary);
      }
 
      #create-swap-icon {
@@ -274,7 +293,29 @@
 
      #remove-swap:hover {
         cursor: pointer;
-        color: red;
+        color: var(--septanry);
      }
-
+     .btn-outline-success
+     {
+         color: #ffffff;
+         border-radius: 20px;
+         background-color: var(--septanry);
+         font-family: 'Chau Philomene One';
+         border: None;
+     }
+     .btn-outline-success:hover
+     {
+        background-color: var(--other-primary);
+        color: var(--quinary);
+        font-family: 'Chau Philomene One';
+     }
+     .fa-sync
+     {
+        font-size: 20px;
+        padding-left: 10px;
+     }
+     .m-auto
+     {
+         border: None;
+     }
 </style>

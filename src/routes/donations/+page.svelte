@@ -204,7 +204,7 @@
 
       <div class="col-3">
           <button class="create-posting-button btn-block-1" data-bs-toggle="modal" data-bs-target="#posting-modal">
-              Create Post
+              <h6 class = "col-5">Create Post</h6>
           </button>
       </div>
 
@@ -244,8 +244,8 @@
           </div>
       </div>
       <div class="modal-footer">
-          <button type="button" class="cancel-button" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={createDonationPost}>Create</button>
+          <button type="button" class="cancel-button" data-bs-dismiss="modal"><h6>Cancel</h6></button>
+          <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={createDonationPost}><h6>Create</h6></button>
       </div>
       </div>
   </div>
@@ -281,8 +281,8 @@
         </div>
       </div>
       <div class="modal-footer">
-          <button type="button" class="cancel-button" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={createDonationPost}>Create</button>
+          <button type="button" class="cancel-button" data-bs-dismiss="modal"><h6>Cancel</h6></button>
+          <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={createDonationPost}><h6>Create</h6></button>
       </div>
       </div>
   </div>
@@ -313,8 +313,8 @@
         </div>
       {/if}
       <div class="modal-footer">
-        <button type="button" class="close-button" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="comment-button" data-bs-toggle="modal" data-bs-target="#comment-posting-modal" data-bs-dismiss="modal">Add Comment</button>
+        <button type="button" class="close-button" data-bs-dismiss="modal"><h6>Close</h6></button>
+        <button type="button" class="comment-button" data-bs-toggle="modal" data-bs-target="#comment-posting-modal" data-bs-dismiss="modal"><h6>Add Comment</h6></button>
       </div>
     </div>
   </div>
@@ -338,8 +338,8 @@
           </div>
       </div>
       <div class="modal-footer">
-          <button type="button" class="cancel-button" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={addComment}>Create</button>
+          <button type="button" class="cancel-button" data-bs-dismiss="modal"><h6>Cancel</h6></button>
+          <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={addComment}><h6>Create</h6></button>
       </div>
       </div>
   </div>
@@ -356,15 +356,15 @@
               <div class="col">
                   <form>
                       <div class="form-group">
-                          <label for="emailAddress"><b>Email Address</b></label>
+                          <label for="emailAddress"><h5>Email Address</h5></label>
                           <input type="text" class="form-control" id="organizationName" readonly value={donationPost.email_address}>
                       </div>
                       <div class="form-group">
-                          <label for="contactNumber"><b>Contact Number</b></label>
+                          <label for="contactNumber"><h5>Contact Number</h5></label>
                           <input type="text" class="form-control" id="contactNumber" readonly value={donationPost.contact_number}>
                       </div>
                       <div class="form-group">
-                          <label for="relatedTags"><b>Related tags</b></label>
+                          <label for="relatedTags"><h5>Related tags</h5></label>
                           <input type="text" class="form-control" id="jobType" readonly value={donationPost.related_tags}>
                       </div>
                   </form>
@@ -431,11 +431,11 @@
           <div class="row mt-3">
               <div class="col w-10">
                   <button type="button" class="edit-button" id="edit-posting-button" data-bs-toggle="modal" data-bs-target="#edit-posting-modal" on:click={()=>{fullName = donationPost.full_name;contactNumber=donationPost.contact_number;emailAddress=donationPost.email_address;relatedTages=donationPost.related_tags;description=donationPost.description} }>
-                      Edit
+                      <h6>Edit</h6>
                   </button>
               </div>
               <div class="col w-10">
-                  <button type="button" class="ecancel-button" id = "submit-button" on:click={()=>deleteDonationPost(donationPost.donation_id)}>Delete</button>
+                  <button type="button" class="ecancel-button" id = "submit-button" on:click={()=>deleteDonationPost(donationPost.donation_id)}><h6>Delete</h6></button>
               </div>
           </div>
           {/if}
@@ -516,9 +516,9 @@
   }
   .gx-5
   {
-    margin-left: -18%;
+    margin-left: -16%;
     position: absolute;
-    width: 108%;
+    width: 107%;
     height: auto;
     margin-top : -1.5%;
   }
@@ -580,6 +580,7 @@
     border-radius: 20px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     width: 20%;
+    padding-top: 2%;
   }
   .cancel-button
   {
@@ -590,6 +591,7 @@
     border-radius: 20px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     width: 20%;
+    padding-top: 2%;
   }
   .create-button:hover 
   {
@@ -620,8 +622,11 @@
     background-color: var(--septanry);
     border-radius: 20px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    width: 20%;
+    width: 30%;
+    margin-top: 3%;
+    font-size: 16px;
     margin-left: 8%;
+    padding-top: 2%;
   }
   .edit-button:hover 
   {
@@ -637,8 +642,11 @@
     color: #ffffff;
     border-radius: 20px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    width: 20%;
-    margin-left: 70%;
+    width: 32%;
+    font-size: 15px;
+    margin-left: 50%;
+    margin-top: 3%;
+    padding-top: 2%;
   }
   .ecancel-button:hover
   {
@@ -662,7 +670,7 @@
         width: 12%;
         font-family: 'Chau Philomene One';
         border: None;
-        color: #ffffff;
+        /* color: red; */
         background-color: var(--septanry);
         border-radius: 20px;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -692,7 +700,8 @@
       background-color: var(--septanry);
       border-radius: 20px;
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-      width: 25%;
+      width: 35%;
+      padding-top: 10px;
     }
     .comment-button:hover
     {
@@ -708,7 +717,8 @@
       color: #ffffff;
       border-radius: 20px;
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-      width: 20%;
+      width: 35%;
+      padding-top: 10px;
     }
     .close-button:hover
     {
@@ -736,4 +746,25 @@
       font-size: 17px;
       padding-left: 2%;
    }
+  .col-5
+  {
+    font-family: 'Chau Philomene One';
+    display: inline;
+    font-size: 15px;
+    color: #ffffff;
+    /* width: 100%; */
+    /* margin: 0 auto; */
+    /* padding: 3%; */
+    margin-bottom: 2px;
+    /* padding-right: 200px; */
+  }
+  .col-5:hover
+  {
+    color: var(--quinary);
+  }
+  .icon-1
+  {
+    margin-left: -3%;
+  }
+  
 </style>
