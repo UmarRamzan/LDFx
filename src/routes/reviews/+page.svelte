@@ -38,7 +38,7 @@
     
 </script>
 
-<div class="content">
+<div class="container-md content">
 <Row>
     <Col>
         <h2>Reviews</h2>
@@ -49,7 +49,7 @@
 
 <div class ="container">
     <form class= "d-flex justify-content-center">
-        <input class = "form-control" id="search-bar" type = "search" placeholder="Search for course title, code, instructor" bind:value={searchString} on:keyup={searchCourses}>
+        <input class = "form-control" id="search-bar" type = "search" autocomplete="off" placeholder="Search for course title, code, instructor" bind:value={searchString} on:keyup={searchCourses}>
     </form>
 </div>
 
@@ -71,7 +71,7 @@
 
 <style>
     .content {
-    width: 60%;
+    max-width: 800px;
     margin: auto;
     margin-top: 40px;
     border: 0px solid #000000;

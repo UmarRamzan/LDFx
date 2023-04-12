@@ -23,7 +23,7 @@
 
             <div class="title">
                 <h1>Swap Courses <br> with Ease</h1>
-                <button class="primary">See More</button>
+                <button class="primary" on:click={()=>{goto('/swaps')}}>See More</button>
             </div>
             
             

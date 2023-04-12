@@ -3,6 +3,7 @@
     import { supabase } from "$lib/supabaseClient";
     import { onMount } from "svelte/internal";
     import { page } from "$app/stores";
+    import { user } from "../../UserStore";
     import { Card, CardBody } from 'sveltestrap';
     import { addReview } from "$lib/api/clientFunctions";
     let courseID = $page.params.courseID
@@ -41,19 +42,21 @@
         if (error) {console.log(error)}
         else {courseTitle = courseData[0].course_title};
 
-      console.log(data)
     })
 </script>
 
-<div class="container" id="content">
+{#if courseTitle}
+<div class="container-md" id="content">
 
   <div class="container d-flex">
     <div class="col">
       <h2>{courseTitle}</h2>
     </div>
+    {#if $user}
     <div class="col-2">
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addReviewModal">Add Review</button>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addReviewModal" id="add-review-button">Add Review</button>
     </div>
+    {/if}
     
     
   </div>
@@ -66,6 +69,7 @@
             
   {#each reviewList as review (review.review_id)}
       <li class="list-group-item">
+
           <div class="card">
               <div class="card-body">
                   <p class="card-text">{review.review_text}</p>
@@ -75,6 +79,7 @@
                   </div>
               </div>
           </div>
+          
       </li>
   {/each}
 
@@ -102,7 +107,7 @@
               </form>
           </div>
           <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary" id="closeButton" data-bs-dismiss="modal">Close</button>
               <button type="button" class="btn btn-primary" id="submitReviewButton" data-bs-dismiss="modal" on:click={handleReview}>Submit Review</button>
           </div>
       </div>
@@ -110,12 +115,13 @@
 </div>
 
 </div>
+{/if}
 
 
 <style>
 
   #content {
-        width: 60%;
+        max-width: 800px;
         margin: auto;
         margin-top: 40px;
         border: 0px solid #000000;
@@ -126,11 +132,22 @@
         box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
     }
 
+    #add-review-button, #submitReviewButton {
+      border: var(--button-background);
+      background-color: var(--button-background);
+    }
+
+    #closeButton {
+      border: var(--button-cancel);
+      background-color: var(--button-cancel);
+    }
+
     .card{
-      background-color: var(--primary);
+      background-color: var(--secondary);
       padding: 10px;
-      width: 500px;
+      border-radius: 20px;
       margin: auto;
+      margin-bottom: 20px;
       box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
     }
 
@@ -139,9 +156,8 @@
     }
 
     .list-group-item{
-      background-color: var(--secondary);
+      background-color: var(--primary);
       border: 0px;
-      padding: 10px;
     }
 
     .modal-header{
@@ -153,18 +169,10 @@
       background-color: var(--secondary);
       padding: 10px;
     }
-    .modal-fade{
-      background-color: var(--lightpink);
-      padding: 10px;
-    }
 
     .modal-content{
       background-color: var(--secondary);
       padding: 10px;
-    }
-
-    .mb3{
-      background-color: var(--lightpink);
     }
 
   .form-control{
@@ -174,13 +182,6 @@
     padding: 0.5rem 1rem;
     transition: all 0.2s ease-in-out;
 
-  }
-
-  
-  #add-review-btn{
-    width: 150px;
-    margin: auto;
-    padding: 0.5rem 1rem;
   }
   
 </style>
