@@ -8,7 +8,7 @@
   import { getUserData,getUsername } from '$lib/api/csFunctions';
   import { logout } from '$lib/api/csFunctions';
   import { user, username } from '../../routes/UserStore';
-  import { signupModalOpen, loginModalOpen } from '../../routes/ModalStore';
+  import { goto } from '$app/navigation';
 
   import { onMount } from 'svelte';
 
@@ -25,6 +25,7 @@
     await logout();
     user.set(null);
     username.set(null);
+    goto('/')
   }
 
   let showSignupModal = false;
@@ -33,7 +34,14 @@
   const toggleSignupModal = () => {showSignupModal = !showSignupModal}
   const toggleLoginModal = () => {showLoginModal = !showLoginModal}
 
+  let innerWidth=0;
+  let innerHeight=0;
+
+  $: smallScreen = innerHeight < 500;
+
 </script>
+
+<svelte:window bind:innerWidth bind:innerHeight />
 
 <Signup showModal={showSignupModal} toggle={toggleSignupModal}/>
 <Login showModal={showLoginModal} toggle={toggleLoginModal}/>
@@ -80,40 +88,36 @@
     </div>
 
     <div class="row justify-content-center">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      {#if $username}
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item dropdown mx-5">
-          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {$username}
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="/settings">Settings</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><button class="dropdown-item" on:click={handleLogout}>Logout</button></li>
-          </ul>
-        </li>
+
+    {#if $username}
+    <ul style="list-style: none">
+    <li class="nav-item dropdown mx-5">
+      <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+         {$username}
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <li><a class="dropdown-item" href="/settings">Settings</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><button class="dropdown-item" on:click={handleLogout}>Logout</button></li>
       </ul>
-      {:else}
-      <form class="d-flex">
-        <!-- Signup modal trigger -->
-        <div class="col">
-          <button type="button" class="btn btn-outline-success" id="signup-button" on:click={toggleSignupModal}>
-              Signup
-          </button>
-        </div>
-        <!-- Login modal trigger -->
-        <div class="col">
-          <button type="button" class="btn btn-outline-success" id="login-button" on:click={toggleLoginModal}>
-              Login
-          </button>
-        </div>
-      </form>
-      {/if}
-    </div>
+    </li>
+    </ul>
+    {:else}
+    <form class="d-flex">
+      <!-- Signup modal trigger -->
+      <div class="col">
+        <button type="button" class="btn btn-outline-success" id="signup-button" on:click={toggleSignupModal}>
+            Signup
+        </button>
+      </div>
+      <!-- Login modal trigger -->
+      <div class="col">
+        <button type="button" class="btn btn-outline-success" id="login-button" on:click={toggleLoginModal}>
+            Login
+        </button>
+      </div>
+    </form>
+    {/if}
     </div>
   </div>
 </nav>
@@ -179,6 +183,19 @@
 
   #signup-button, #login-button {
     margin-right: 10px;
+    background-color: var(--button-background);
+    border-color: var(--button-background);
+    color: white;
+    padding: 8px;
+    width: 80px;
+  }
+
+  #navbarDropdown {
+    margin: 0px;
+    padding-top: 10px;
+  }
+  #signup-button:hover, #login-button:hover {
+    background-color: var(--button-hover-primary)
   }
 
 </style>

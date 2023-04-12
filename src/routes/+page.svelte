@@ -5,17 +5,31 @@
     console.log($user)
     //add handle function to route on 'see more'
     const handleSeeMore = () => {goto('/about')}
-  </script>
+
+    let innerWidth=0;
+    let innerHeight=0;
+
+    $: smallScreen = innerWidth < 1000;
+</script>
+
+<svelte:window bind:innerWidth bind:innerHeight />
   
-  
-        {#if user}
-            <p>{$user}</p>
-        {:else}
+
+
             <div class="homepage bx--content">
                 <div class="triangle-right"></div>
                 <div class="circle"></div>
             </div>
-        {/if}
+
+            <div class="title">
+                <h1>Swap Courses <br> with Ease</h1>
+                <button class="primary">See More</button>
+            </div>
+            
+            
+            <div class="image">
+                <img src="src\routes\Homepage.png" alt="Homepage" class="responsive">
+            </div>
   
   
   <!-- <h1>MAIN PAGE</h1>
@@ -125,6 +139,7 @@
         top: 0;
         bottom: 150px;
         z-index: 2;
+        overflow: hidden;
       /* border-top: 25px solid transparent; */
       /* border-left: 50px solid;
       border-bottom: 25px solid transparent; */
@@ -142,6 +157,7 @@
         rotate: 10deg;
         overflow: hidden;
         z-index: 1;
+        overflow: hidden;
         /* clip-path: polygon(0 100%, 50% 100%, 50% 50%, 0% 50%); */
     }
   

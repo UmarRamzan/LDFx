@@ -22,8 +22,13 @@
   --links-hover: blue;
   --links-hover-background: rgb(200, 200, 255);
 
+  --font-main: navy;
+
   --button-primary: white;
-  --button-background: blue;
+  --button-background: #4c4dcd;
+  --button-cancel: #c62828;
+  --button-hover-primary: rgb(58, 58, 175);
+  --button-hover-cancel: #ba0202;
 
   --font-primary: "Chau Philomene One";
   
@@ -55,7 +60,7 @@
 
   :global(body) {
       background-color: var(--primary);
-      font-family: 'Roboto';
+      font-family: var(--font-primary);
       color: black;
 
   }

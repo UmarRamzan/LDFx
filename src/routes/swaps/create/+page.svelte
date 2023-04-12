@@ -51,6 +51,13 @@
   }
 
   const submitRequest = async () => {
+    // remove empty courses from list
+    haveList = haveList.filter((course) => course.course_id != null)
+    wantList = wantList.filter((course) => course.course_id != null)
+
+    // check if lists are empty
+    if (haveList.length == 0 || wantList.length == 0) {goto('/swaps'); return}
+
     pending = true
     const {success, data, error} = await addSwapRequest($user.id, haveList, wantList)
     if (error) {console.log(error)}
@@ -60,8 +67,9 @@
 
 </script>
 
-<div class="container-fluid mt-5" in:fade>
-  <div class="row m-auto mb-4">
+<div class="container-md mt-4" id="content" in:fade>
+
+  <div class="row m-auto mb-5">
     <div class="col d-flex justify-content-center align-items-center">
       <i class="bi bi-arrow-left-square mx-4" id="back-button" on:click={()=>{goto('/swaps')}}></i>
       <h2>Create Swap Request</h2>
@@ -70,7 +78,7 @@
 
   <div class="row justify-content-center">
     
-    <div class="col-md-8 w-70" id="content">
+    <div class="col">
       
       <div id="have-section">
         <div class="row mb-4">
@@ -99,7 +107,7 @@
 
               <div class="row dropdown w-100">
                 <label for="courseSearch">Course</label>
-                <input type="text" class="form-control" id="courseSearch" placeholder="Search for course title, code, instructor" bind:value={course.search_string} on:keyup={()=>{searchCourses(course.search_string)}} on:focus={()=>{course.selected = true; searchCourses(course.search_string)}} >
+                <input type="text" class="form-control" id="courseSearch" autocomplete="off" placeholder="Search for course title, code, instructor" bind:value={course.search_string} on:keyup={()=>{searchCourses(course.search_string)}} on:focus={()=>{course.selected = true; searchCourses(course.search_string)}} >
 
                 {#if course.selected}
                 <ul class="list-group dropdown-content p-0">
@@ -154,7 +162,7 @@
 
               <div class="row dropdown w-100">
                 <label for="courseSearch">Course</label>
-                <input type="text" class="form-control" id="courseSearch" placeholder="Search for course title, code, instructor" bind:value={course.search_string} on:keyup={()=>{searchCourses(course.search_string)}} on:focus={()=>{course.selected = true; searchCourses(course.search_string)}} on:focusout={()=>{setTimeout(()=>{course.selected = false}, 50)}}>
+                <input type="text" class="form-control" id="courseSearch" autocomplete="off" placeholder="Search for course title, code, instructor" bind:value={course.search_string} on:keyup={()=>{searchCourses(course.search_string)}} on:focus={()=>{course.selected = true; searchCourses(course.search_string)}} on:focusout={()=>{setTimeout(()=>{course.selected = false}, 50)}}>
 
                 {#if course.selected}
                 <ul class="list-group dropdown-content p-0">
@@ -185,11 +193,11 @@
     </div>
 
     <!-- Submit button -->
-    <div class="row mt-4 mb-4 justify-content-center align-items-center">
+    <div class="row mt-5 mb-4 justify-content-center align-items-center">
       {#if !pending}
-      <button type="button" class="btn btn-success" id="add-course-button" on:click={submitRequest}>Create</button>
+      <button type="button" class="btn btn-success submit-button" id="add-course-button" on:click={submitRequest}>Create</button>
       {:else}
-      <button type="button" class="btn btn-outline-success d-flex align-items-center justify-content-center" id="pending-course-button"><div class="spinner-border spinner-border-sm text-success" role="status"></div></button>
+      <button type="button" class="btn btn-outline-success d-flex align-items-center justify-content-center submit-button" id="pending-course-button"><div class="spinner-border spinner-border-sm text-success" role="status"></div></button>
       {/if}
     </div>
   </div>
@@ -203,6 +211,7 @@
   background-color: var(--secondary);
   padding: 40px;
   box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
+  max-width: 900px;
 }
 
 #back-button {
@@ -244,6 +253,7 @@
   #add-course-button, #pending-course-button {
     width: 100px;
     height: 40px;
+    background-color: var(--button-hover-primary);
   }
 
   .bi-plus {
@@ -261,6 +271,15 @@
       width: 40px;
       height: 40px;
       border: 0px;
+  }
+
+  .submit-button {
+    color: var(--button-primary);
+    background-color: var(--button-background);
+  }
+
+  .submit-button:hover {
+    background-color: var(--button-hover-primary);
   }
 
 </style>

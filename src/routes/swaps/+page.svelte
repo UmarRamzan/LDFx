@@ -8,8 +8,8 @@
     let pending = false;
 
     let statusColors = {
-        "Found": "#69ff91",
-        "Pending": "#fffc69",
+        "Found": "#7272cb",
+        "Pending": "#e67b21",
         "Not Found": "#fa5741",
     }
 
@@ -108,7 +108,7 @@
 </div>
 {/if}
 
-<div class="container  mt-5" id="content">
+<div class="container-md" id="content">
     
     
     <div class="row align-items-center">
@@ -119,7 +119,7 @@
             <h2>Swap Requests</h2>
         </div>
         <div class="col d-flex justify-content-end">
-            <a href="/swaps/create" class="btn btn-outline-success">
+            <a href="/swaps/create" class="btn btn-outline-success" id="create-swap-button">
                 Create Swap Request
             </a>
             
@@ -158,9 +158,9 @@
                                 <div class="row">
                                     <div class="col-8">
                                         {#if swap.status=="Found"}
-                                            <div class="status m-auto" style="background-color: {statusColors[swap.status]}; cursor: pointer" on:click={showSwapMatch(swap.swap_id)}>{swap.status}</div>
+                                            <div class="status m-auto" style="background-color: {statusColors[swap.status]}; cursor: pointer" on:click={showSwapMatch(swap.swap_id)}><p style="margin: 0px; padding: 0px; color: white;">{swap.status}</p></div>
                                         {:else}
-                                            <div class="status m-auto" style="background-color: {statusColors[swap.status]};">{swap.status}</div>
+                                            <div class="status m-auto" style="background-color: {statusColors[swap.status]};"><p style="margin: 0px; padding: 0px; color: white;">{swap.status}</p></div>
                                         {/if}
                                     </div>
                                     <div class="col">
@@ -227,20 +227,33 @@
         transform: translate(-50%, -50%);
     }
 
+    #create-swap-button {
+        color: var(--button-primary);
+        background-color: var(--button-background);
+    }
+
+    #create-swap-button:hover {
+        background-color: var(--button-hover-primary);
+    }
+
     #error-icon {
         font-size: 3rem;
         margin-right: 40px;
     }
 
     #content {
-        width: 60%;
+        max-width: 800px;
         margin: auto;
         margin-top: 40px;
         border: 0px solid #000000;
         border-radius: 40px;
-        background-color: var(--secondary);
+        background-color: var(--primary);
         padding: 40px;
         box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+        color: var(--font-main);
     }
 
     th, td {

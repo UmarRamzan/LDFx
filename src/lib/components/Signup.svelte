@@ -97,11 +97,11 @@
     <hr>
 
       <div class="d-flex justify-content-end">
-        <button type="button" class="btn btn-outline-dark mx-2" on:click={handleClose}>Cancel</button>
+        <button type="button" class="btn btn-outline-dark mx-2 cancel-button" on:click={handleClose}>Cancel</button>
         {#if !pending}
-        <button type="button" class="btn btn-outline-success" id="submit-button" on:click={handleSignup}>Confirm</button>
+        <button type="button" class="btn btn-outline-success submit-button" on:click={handleSignup}>Confirm</button>
         {:else}
-        <button class="btn btn-outline-success" type="button" disabled>
+        <button class="btn btn-outline-success submit-button" type="button" disabled>
           <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
         </button>
         {/if}
@@ -121,22 +121,41 @@
   }
 
   .custom-modal {
-    padding: 25px;
+    padding: 50px 25px;
     border-radius: 10px;
-    max-width: 400px;
+    max-width: 450px;
     margin: 10% auto;;
     text-align: center;
     background: var(--secondary);
+    border-radius: 40px;
+    color: navy;
   }
 
-  
   .btn {
     width: 100px;
   }
+
+  .submit-button {
+    background-color: var(--button-background);
+    color: white;
+  }
+
+  .cancel-button {
+    border-color: var(--button-cancel);
+    background-color: var(--button-cancel);
+    color: white;
+  }
+
   #signup-content {
     background-color: #ffe5d9;
   }
+
   .form-control, #account-type {
     background-color: #fcfbf2;
+    color: navy;
+  }
+
+  .form-control::placeholder {
+    color: navy;
   }
 </style>

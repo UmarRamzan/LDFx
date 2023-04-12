@@ -81,7 +81,7 @@
     <hr>
 
     <div class="mb-3">
-      <input type="email" class="form-control" id="email" placeholder="Email" bind:value={email}><i class="bi bi-envelope-at"></i>
+      <input type="email" class="form-control" id="email" placeholder="Email" bind:value={email}>
     </div>
     <div class="mb-3">
       <input type="password" class="form-control" id="password" placeholder="Password" bind:value={password}>
@@ -100,11 +100,11 @@
     <hr>
 
     <div class="d-flex justify-content-end">
-      <button type="button" class="btn btn-outline-dark mx-2" on:click={handleClose}>Cancel</button>
+      <button type="button" class="btn btn-outline-dark mx-2 cancel-button" on:click={handleClose}>Cancel</button>
       {#if !pending}
-      <button type="button" class="btn btn-outline-success" id="submit-button" on:click={handleLogin}>Confirm</button>
+      <button type="button" class="btn btn-outline-success submit-button" id="submit-button" on:click={handleLogin}>Confirm</button>
       {:else}
-      <button class="btn btn-outline-success" type="button" disabled>
+      <button class="btn btn-outline-success submit-button" type="button" disabled>
         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
       </button>
       {/if}
@@ -136,11 +136,11 @@
     <hr>
 
     <div class="d-flex justify-content-end">
-    <button type="button" class="btn btn-outline-dark mx-2" on:click={handleClose}>Cancel</button>
+    <button type="button" class="btn btn-outline-dark mx-2 cancel-button" on:click={handleClose}>Cancel</button>
     {#if !pending}
-    <button type="button" class="btn btn-outline-success" id="submit-button" on:click={handleResetPassword}>Confirm</button>
+    <button type="button" class="btn btn-outline-success submit-button" on:click={handleResetPassword}>Confirm</button>
     {:else}
-    <button class="btn btn-outline-success" type="button" disabled>
+    <button class="btn btn-outline-success submit-button" type="button" disabled>
       <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
     </button>
     {/if}
@@ -161,13 +161,14 @@
   }
 
   .custom-modal {
-    padding: 25px;
+    padding: 50px 25px;
     border-radius: 10px;
-    max-width: 400px;
+    max-width: 450px;
     margin: 10% auto;;
     text-align: center;
     background: var(--secondary);
-    z-index: 1000;
+    border-radius: 40px;
+  color: navy;
   }
 
   .btn {
@@ -178,10 +179,34 @@
   }
   .form-control {
     background-color: #fcfbf2;
+    color: navy;
+  }
+
+  .form-control::placeholder {
+    color: navy;
   }
 
   .password-links {
     text-decoration: underline;
     cursor: pointer;
+  }
+
+  .submit-button {
+    background-color: var(--button-background);
+    color: white;
+  }
+
+  .submit-button:hover {
+    background-color: var(--button-hover-primary);
+  }
+
+  .cancel-button {
+    border-color: var(--button-cancel);
+    background-color: var(--button-cancel);
+    color: white;
+  }
+
+  .cancel-button:hover {
+    background-color: var(--button-hover-cancel);
   }
 </style>
