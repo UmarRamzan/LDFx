@@ -8,7 +8,7 @@
   import { getUserData,getUsername } from '$lib/api/csFunctions';
   import { logout } from '$lib/api/csFunctions';
   import { user, username } from '../../routes/UserStore';
-  import { getContext, setContext } from 'svelte';
+  import { signupModalOpen, loginModalOpen } from '../../routes/ModalStore';
 
   import { onMount } from 'svelte';
 
@@ -21,16 +21,22 @@
     }  
   })
 
-  setContext('signupModalOpen', false)
-
   const handleLogout = async () => {
     await logout();
     user.set(null);
     username.set(null);
   }
 
+  let showSignupModal = false;
+  let showLoginModal = false;
+
+  const toggleSignupModal = () => {showSignupModal = !showSignupModal}
+  const toggleLoginModal = () => {showLoginModal = !showLoginModal}
+
 </script>
 
+<Signup showModal={showSignupModal} toggle={toggleSignupModal}/>
+<Login showModal={showLoginModal} toggle={toggleLoginModal}/>
 
 <!-- Sidebar -->
 <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="staticBackdropLabel">
@@ -53,7 +59,7 @@
     <div class="row">
       <ul class="list-group list-group-flush" >
         <a href="/about"><li class="list-group-item"><i class="bi bi-info-square"></i>About Us</li></a>
-        <a href="/FAQ"><li class="list-group-item"><i class="bi bi-question-octagon"></i>FAQs</li></a>
+        <a href="/faq"><li class="list-group-item"><i class="bi bi-question-octagon"></i>FAQs</li></a>
       </ul>
     </div>
   </div>
@@ -66,10 +72,10 @@
     <div class="row g-2 justify-content-start align-items-center">
       <!-- Sidebar button -->
       <div class="col">
-        <i class="bi bi-list" id="sidebar-icon" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="staticBackdrop" ></i>
       </div>
       <div class="col">
-        <a class="navbar-brand" href="/">LDFx</a>
+        <div class="navbar-brand" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="staticBackdrop"><img src = "images/logo.svg" id="logo" alt="Logo"/></div>
+        
       </div>
     </div>
 
@@ -80,7 +86,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       {#if $username}
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown mx-5">
           <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             {$username}
           </a>
@@ -95,13 +101,13 @@
       <form class="d-flex">
         <!-- Signup modal trigger -->
         <div class="col">
-          <button type="button" class="btn btn-outline-success" id="signup-button" data-bs-toggle="modal" data-bs-target="#signup-modal" on:click={()=>{setContext('signupModalOpen', true)}}>
+          <button type="button" class="btn btn-outline-success" id="signup-button" on:click={toggleSignupModal}>
               Signup
           </button>
         </div>
         <!-- Login modal trigger -->
         <div class="col">
-          <button type="button" class="btn btn-outline-success" id="login-button" data-bs-toggle="modal" data-bs-target="#login-modal" on:click={()=>{backDropBool.set(true)}}>
+          <button type="button" class="btn btn-outline-success" id="login-button" on:click={toggleLoginModal}>
               Login
           </button>
         </div>
@@ -112,10 +118,14 @@
   </div>
 </nav>
 
-<Signup />
-<Login />
+
 
 <style>
+
+  #logo{
+    width: 100px;
+    cursor: pointer;
+  }
 
   #navbar, #sidebar, .list-group-item, .dropdown-menu {
     background-color: var(--secondary);
@@ -123,6 +133,12 @@
 
   #navbar {
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+  }
+
+  #sidebar {
+    width: 350px;
+    font-family: var(--font-primary);
+    font-size: 20px;
   }
   
   #sidebar-links {

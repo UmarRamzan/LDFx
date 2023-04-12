@@ -10,7 +10,7 @@
         deleteJobPost,
     } from "$lib/api/clientFunctions";
 
-    import { getJobComments,addJobComment } from "$lib/api/csFunctions";
+    import { getJobComments,addJobComment,getJobLikes,addJobLike,editJobLike } from "$lib/api/csFunctions";
 
 
     import { onMount } from "svelte";
@@ -46,8 +46,29 @@
 
         let { success, data, error } = await getJobPost();
 
+
         if (success) {
             jobPostings = data
+            //get job likes
+            let res = await getJobLikes();
+            if (res.success) {
+                //get the disabled likes and dislikes dictionary from local storage
+                let temp = JSON.parse(localStorage.getItem("jobDisableState"));
+
+                if (temp && temp.userid === currentUser.id) {
+                    disableLikes = temp.states.disableLikes;
+                    disableDislikes = temp.states.disableDislikes;
+                }
+
+                for (let i = 0; i < res.data.length; i++) {
+                    const { job_id } = res.data[i];
+                    disableLikes[job_id] = disableLikes[job_id] ?? false;
+                    disableDislikes[job_id] = disableDislikes[job_id] ?? false;
+                    postLikes[job_id] = res.data[i];
+                }
+            } else {
+                console.log(res.error.message)
+            }
         } else {
             console.log(error)
         }
@@ -71,6 +92,12 @@
 
     }
 
+    //save the disabled likes and dislikes dictionary to local storage with user id as key
+    const saveDisabledState = () => {
+        const temp = {userid:currentUser.id, states:{disableLikes,disableDislikes}}
+        localStorage.setItem("jobDisableState",JSON.stringify(temp))
+    }
+
     const deleteJobPosting = async (jobPostingID) => {
         let { success, data, error } = deleteJobPost(jobPostingID)
         if (error) {console.log(error)}
@@ -79,30 +106,73 @@
         }
     }
 
-    let postLikes = []
-    let postDislikes = []
+    let postLikes = {}
+    let disableLikes = {}
+    let disableDislikes = {}
 
-    const likePost = (job_id) => {
-        const postLikeIndex = postLikes.findIndex((like) => like.id === job_id);
-
-        if (postLikeIndex !== -1) {
-        postLikes[postLikeIndex].likes += 1;
-        } else {
-        postLikes.push({ id: job_id, likes: 1 });
+    const likePost = async (job_id) => {
+        if (disableLikes[job_id]) {
+        return
         }
+        disableLikes[job_id] = true;
+        saveDisabledState();
 
+        
+        if (postLikes[job_id]) {
+            postLikes[job_id].likes += 1;
+        
+        //update database
+            let res = await editJobLike(job_id,postLikes[job_id].likes,postLikes[job_id].dislikes)
+            if (res.success) {
+                console.log(res.data)
+            } else {
+                console.log(res.error);
+            }
+
+        } else {
+            //add row to database then update postLikes
+            let res = await addJobLike(job_id,1,0)
+            if (res.success) {
+                console.log(res.data)
+                postLikes[job_id] = res.data;
+            } else {
+                console.log(res.error);
+            }
+        }
         console.log(postLikes);
-        console.log(postLikes.find((like) => like.id === job_id).likes);
     };
 
+
     
-    const dislikePost = (job_id) => {
-        const postDisLikeIndex = postDislikes.findIndex((dislikes) => dislikes.id === job_id);
-        if (postDisLikeIndex !== -1) {
-        postDislikes[postDisLikeIndex].dislikes += 1;
-        } else {
-        postDislikes.push({ id: job_id, dislikes: 1 });
+    const dislikePost = async (job_id) => {
+        if (disableDislikes[job_id]) {
+        return
         }
+        disableDislikes[job_id] = true;
+        saveDisabledState();
+        
+        if (postLikes[job_id]) {
+            postLikes[job_id].dislikes += 1;
+        
+        //update database
+            let res = await editJobLike(job_id,postLikes[job_id].likes,postLikes[job_id].dislikes)
+            if (res.success) {
+                console.log(res.data)
+            } else {
+                console.log(res.error);
+            }
+
+        } else {
+            //add row to database then update postLikes
+            let res = await addJobLike(job_id,0,1)
+            if (res.success) {
+                console.log(res.data)
+                postLikes[job_id] = res.data;
+            } else {
+                console.log(res.error);
+            }
+        }
+        console.log(postLikes);
     };
 
 </script>
@@ -303,24 +373,42 @@
                               </div>
 
                               <div class = "icon-1">
-                                <button class = "btn btn-light btn-block" on:click={() => {likePost(jobData.job_posting_id)} }>
+                                <button class = "btn btn-light btn-block" on:click={() => {likePost(jobData.job_posting_id)}} disabled={disableLikes[jobData.job_posting_id]}>
                                   <div class = "icon"> 
                                     <i class="bi bi-hand-thumbs-up" ></i>
                                   </div>
-                                    <p class = "col-2">Like</p>
-                                    <p class = "col-2">{postLikes.find((like) => like.id === jobData.job_posting_id)?.likes || 0}</p>
+                                    {#if disableLikes[jobData.job_posting_id]}
+                                      <p class = "col-2">Liked</p>
+                                    {:else}
+                                      <p class = "col-2">Like</p>
+                                    {/if}
+                                    
+                                    {#if postLikes[jobData.job_posting_id]}
+                                        <p class = "col-2">{postLikes[jobData.job_posting_id].likes}</p>
+                                    {:else}
+                                        <p class = "col-2">0</p>
+                                    {/if}
                                 </button> 
                             </div>
 
 
 
                             <div class = "icon-1">
-                                <button class = "btn btn-light btn-block" on:click={() => {dislikePost(jobData.job_posting_id)}}>
+                                <button class = "btn btn-light btn-block" on:click={() => {dislikePost(jobData.job_posting_id)}} disabled={disableDislikes[jobData.job_posting_id]}>
                                   <div class = "icon"> 
                                     <i class="bi bi-hand-thumbs-down" ></i>
                                   </div>
-                                    <p class = "col-2">Dislike</p>
-                                    <p class = "col-2">{postDislikes.find((dislikes) => dislikes.id === jobData.job_posting_id)?.dislikes || 0}</p>
+                                    {#if disableDislikes[jobData.job_posting_id]}
+                                        <p class = "col-2">Disliked</p>
+                                    {:else}
+                                        <p class = "col-2">Dislike</p>
+                                    {/if}
+                                    
+                                    {#if postLikes[jobData.job_posting_id]}
+                                        <p class = "col-2">{postLikes[jobData.job_posting_id].dislikes}</p>
+                                    {:else}
+                                        <p class = "col-2">0</p>
+                                    {/if}
                                   </button> 
                               </div>     
                         </div>

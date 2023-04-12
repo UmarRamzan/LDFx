@@ -4,6 +4,7 @@
 	import { onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { user } from "../../UserStore";
+  import { fade, scale, slide } from "svelte/transition";
 
 
   let haveList = [];
@@ -59,8 +60,7 @@
 
 </script>
 
-<div class="container-fluid mt-5">
-
+<div class="container-fluid mt-5" in:fade>
   <div class="row m-auto mb-4">
     <div class="col d-flex justify-content-center align-items-center">
       <i class="bi bi-arrow-left-square mx-4" id="back-button" on:click={()=>{goto('/swaps')}}></i>
@@ -87,7 +87,8 @@
       
       <div class="row gy-4">
         {#each haveList as course (haveList.indexOf(course))}
-        <div class="col-md-6">
+        
+        <div class="col-md-6" in:scale>
           
           <div class="card px-4 pb-4">
             <div class="card-body">
@@ -98,7 +99,7 @@
 
               <div class="row dropdown w-100">
                 <label for="courseSearch">Course</label>
-                <input type="text" class="form-control" id="courseSearch" placeholder="Search for course title, code, instructor" bind:value={course.search_string} on:keyup={()=>{searchCourses(course.search_string)}} on:focus={()=>{course.selected = true; searchCourses(course.search_string)}} on:focusout={()=>{setTimeout(()=>{course.selected = false}, 50)}}>
+                <input type="text" class="form-control" id="courseSearch" placeholder="Search for course title, code, instructor" bind:value={course.search_string} on:keyup={()=>{searchCourses(course.search_string)}} on:focus={()=>{course.selected = true; searchCourses(course.search_string)}} >
 
                 {#if course.selected}
                 <ul class="list-group dropdown-content p-0">
@@ -142,7 +143,7 @@
       
       <div class="row gy-4">
         {#each wantList as course (wantList.indexOf(course))}
-        <div class="col-md-6">
+        <div class="col-md-6" in:scale>
           
           <div class="card px-4 pb-4">
             <div class="card-body">
@@ -188,7 +189,7 @@
       {#if !pending}
       <button type="button" class="btn btn-success" id="add-course-button" on:click={submitRequest}>Create</button>
       {:else}
-      <button type="button" class="btn btn-outline-success d-flex align-items-center justify-content-center" id="pending-course-button"><div class="spinner-border text-success" role="status"></div></button>
+      <button type="button" class="btn btn-outline-success d-flex align-items-center justify-content-center" id="pending-course-button"><div class="spinner-border spinner-border-sm text-success" role="status"></div></button>
       {/if}
     </div>
   </div>
@@ -199,9 +200,9 @@
 #content {
   border: 0px solid #000000;
   border-radius: 40px;
-  background-color: var(--primary);
+  background-color: var(--secondary);
   padding: 40px;
-  box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
 }
 
 #back-button {
@@ -215,6 +216,7 @@
 .card {
   box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
   background-color: var(--secondary);
+  background-color: #FEC5BB;
   width: 100%;
 }
 
