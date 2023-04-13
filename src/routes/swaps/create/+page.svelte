@@ -217,6 +217,12 @@
 
 #back-button {
   font-size: 2.5rem;
+  color: black;
+}
+
+#back-button:hover {
+  cursor: pointer;
+  color: var(--other-primary);
 }
 
 #back-button:hover {

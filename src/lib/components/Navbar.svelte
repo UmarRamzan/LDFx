@@ -21,8 +21,6 @@
       user.set(userRes)
       const res = await getUsername(userRes.id);
       if (res.success){username.set(res.data[0].username)}
-
-      notifications = await getNotificationList(userRes.id)
     }  
   })
 
@@ -33,10 +31,10 @@
     goto('/')
   }
 
-  const getNotificationList = async (userId) => {
-    const res = await getNotifications(userId);
+  const getNotificationList = async () => {
+    const res = await getNotifications($user.id);
     if (res.success) {
-      return res.data
+      notifications = res.data
     } else {
       console.log(res.error)
     }
@@ -103,14 +101,15 @@
       </div>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="row">
 
     {#if $username}
+    <div class="row d-flex">
     <div class="col-2 mx-1">
       
       <ul style="list-style: none">
-        <li class="nav-item dropdown mx-5">
-            <button class="nav-link" id="notification-button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-bell"></i></button>
+        <li class="nav-item dropdown">
+            <button class="nav-link" id="notification-button" data-bs-toggle="dropdown" aria-expanded="false" on:click={getNotificationList}><i class="bi bi-bell"></i></button>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <div class="container" id="notifications-container">
             {#each notifications as notification (notification.id)}
@@ -155,13 +154,13 @@
         </ul>
     </div>
     
-    <div class="col-9 m-0 px-2">
-      <ul style="list-style: none;">
-        <li class="nav-item dropdown mx-5">
-          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <div class="col-9" id="username-dropdown">
+      <ul style="list-style: none; padding: 0px; margin: 0px">
+        <li class="nav-item dropdown" style="padding: 6px; margin: 0px">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding: 0px; margin: 0px; text-align: center">
              {$username}
           </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="settings-container">
             <li><a class="dropdown-item" href="/settings">Settings</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><button class="dropdown-item" on:click={handleLogout}>Logout</button></li>
@@ -169,6 +168,8 @@
         </li>
         </ul>
     </div>
+
+  </div>
     
     
     {:else}
@@ -230,6 +231,19 @@
     width: 80px;
     color: var(--button-background);
     border-radius: 20px;
+    height: 40px;
+  }
+
+  #username-dropdown {
+    background-color: var(--secondary);
+    border-color: var(--button-background);
+    color: var(--button-background);
+    border: 2px solid;
+    border-radius: 20px;
+    width: 200px;
+    align-items: center;
+    margin-left: 70px;
+    height: 40px;
   }
 
   #notifications-container {
@@ -238,7 +252,15 @@
     width: 300px;
   }
 
-  #notification-button:hover {
+  #settings-container {
+    width: 200px;
+  }
+
+  #settings-container li a:hover, button:hover {
+    background-color: var(--other-primary);
+  }
+
+  #notification-button:hover, #username-dropdown:hover {
     background-color: var(--button-hover-primary);
     color: white;
   }
