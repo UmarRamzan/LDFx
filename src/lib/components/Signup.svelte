@@ -65,22 +65,60 @@
 
     <hr>
 
-    <div class="mb-3">
-        <input type="email" class="form-control" id="email" placeholder="Email" bind:value={email}>
-    </div>
-    <div class="mb-3">
-        <input type="password" class="form-control" id="password" placeholder="Password" bind:value={password}>
-    </div>   
-    <div class="mb-3">
-      <input type="text" class="form-control" id="username" placeholder="Username" bind:value={username}>
-    </div>  
-    <div class="input-group mb-3">
-      <label class="input-group-text" for="account-type">Account Type</label>
-      <select class="form-select" id="account-type">
-        <option value="student" selected>Student</option>
-        <option value="alumni">Alumnus</option>
-      </select>
-    </div>
+    <div class="container">
+      <div class="mb-3">
+        <div class="row mb-3 gx-0">
+          <div class="col-2">
+            <span class="input-group-text input-icon justify-content-center" id="basic-addon1"><i class="bi bi-envelope"></i></span>
+          </div>
+          <div class="col-10">
+            <input type="email" class="form-control input-text" id="email" placeholder="Email" bind:value={email}>
+          </div>
+        </div>
+  
+        <div class="mb-3">
+          <div class="row gx-0">
+            <div class="col-2">
+              <span class="input-group-text input-icon justify-content-center" id="basic-addon1"><i class="bi bi-key"></i></span>
+            </div>
+            <div class="col-10">
+              <input type="password" class="form-control input-text" id="password" placeholder="Password" bind:value={password}>
+            </div>
+          </div>
+  
+        </div>
+
+        <div class="mb-3">
+          <div class="row gx-0">
+            <div class="col-2">
+              <span class="input-group-text input-icon justify-content-center" id="basic-addon1"><i class="bi bi-hash"></i></span>
+            </div>
+            <div class="col-10">
+              <input type="password" class="form-control input-text" id="password" placeholder="Username" bind:value={username}>
+            </div>
+          </div>
+  
+        </div>
+
+        <div class="mb-3">
+          <div class="row gx-0">
+            <div class="col-2">
+              <span class="input-group-text input-icon justify-content-center" id="basic-addon1"><i class="bi bi-person"></i></span>
+            </div>
+            <div class="col-10">
+              <select class="form-select input-text" id="account-type">
+                <option value="student" selected>Student</option>
+                <option value="alumni">Alumnus</option>
+              </select>
+            </div>
+          </div>
+  
+        </div>
+        
+        
+        
+      </div>
+      </div>
 
     {#if linkSent}
     <div class="alert alert-success" role="alert">
@@ -129,6 +167,7 @@
     background: var(--secondary);
     border-radius: 40px;
     color: navy;
+    border: 5px solid var(--other-primary);
   }
 
   .btn {
@@ -144,6 +183,17 @@
     border-color: var(--button-cancel);
     background-color: var(--button-cancel);
     color: white;
+  }
+
+  .input-icon {
+    background-color: #faf8eb;
+    font-size: 20px;
+    border-radius: 10px 0px 0px 10px;
+  }
+
+  .input-text {
+    height: 100%;
+    border-radius: 0px 10px 10px 0px;
   }
 
   #signup-content {

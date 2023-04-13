@@ -6,11 +6,14 @@
   import Login from './Login.svelte';
 
   import { getUserData,getUsername } from '$lib/api/csFunctions';
+  import { getNotifications } from '$lib/api/clientFunctions';
   import { logout } from '$lib/api/csFunctions';
   import { user, username } from '../../routes/UserStore';
   import { goto } from '$app/navigation';
 
   import { onMount } from 'svelte';
+
+  let notifications = [];
 
   onMount( async () => {
     const userRes = await getUserData();
@@ -18,7 +21,11 @@
       user.set(userRes)
       const res = await getUsername(userRes.id);
       if (res.success){username.set(res.data[0].username)}
+      console.log(userRes.id)
+      notifications = await getNotificationList(userRes.id)
     }  
+
+    
   })
 
   const handleLogout = async () => {
@@ -27,6 +34,17 @@
     username.set(null);
     goto('/')
   }
+
+  const getNotificationList = async (userId) => {
+    const res = await getNotifications(userId);
+    if (res.success) {
+      return res.data
+    } else {
+      console.log(res.error)
+    }
+  }
+
+  
 
   let showSignupModal = false;
   let showLoginModal = false;
@@ -90,18 +108,38 @@
     <div class="row justify-content-center">
 
     {#if $username}
-    <ul style="list-style: none">
-    <li class="nav-item dropdown mx-5">
-      <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-         {$username}
-      </a>
-      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <li><a class="dropdown-item" href="/settings">Settings</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><button class="dropdown-item" on:click={handleLogout}>Logout</button></li>
-      </ul>
-    </li>
-    </ul>
+    <div class="col-2 mx-1">
+      
+      <ul style="list-style: none">
+        <li class="nav-item dropdown mx-5">
+            <button class="nav-link" id="notification-button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-bell"></i></button>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {#each notifications as notification (notification.id)}
+              {#if notification.type == "swap"}
+              <li on:click={()=>goto('/swaps')}><p class="dropdown-item">{notification.text}</p></li>
+              {/if}
+            {/each}
+          </ul>
+        </li>
+        </ul>
+    </div>
+    
+    <div class="col-9 m-0 px-2">
+      <ul style="list-style: none;">
+        <li class="nav-item dropdown mx-5">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+             {$username}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/settings">Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><button class="dropdown-item" on:click={handleLogout}>Logout</button></li>
+          </ul>
+        </li>
+        </ul>
+    </div>
+    
+    
     {:else}
     <form class="d-flex">
       <!-- Signup modal trigger -->
@@ -153,6 +191,18 @@
   #sidebar-links .list-group-item {
     display: flex;
     align-items: center;
+  }
+
+  #notification-button {
+    background-color: var(--button-background);
+    border-color: var(--button-background);
+    width: 80px;
+    color: white;
+    border-radius: 20px;
+  }
+
+  #notification-button:hover {
+    background-color: var(--button-hover-primary)
   }
 
   .bi {

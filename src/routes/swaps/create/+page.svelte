@@ -72,7 +72,7 @@
   <div class="row m-auto mb-5">
     <div class="col d-flex justify-content-center align-items-center">
       <i class="bi bi-arrow-left-square mx-4" id="back-button" on:click={()=>{goto('/swaps')}}></i>
-      <h2>Create Swap Request</h2>
+      <h2 style="padding-top: 8px;">Create Swap Request</h2>
     </div>
   </div>
 

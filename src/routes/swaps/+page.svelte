@@ -80,27 +80,18 @@
     <hr>
 
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-1">
-                <i class="bi bi-arrow-left-right"></i>
-            </div>
-            <div class="col d-flex justify-content-start mx-2">
-                <p>{swapMatchData.course_title_one} - {swapMatchData.course_title_two}</p>
-            </div>
-            
-            
+        <div class="row mb-4">
+            <i class="bi bi-arrow-left-right"></i>
+            <p>{swapMatchData.course_title_one} - {swapMatchData.course_title_two}</p>
         </div>
         <div class="row">
-            <div class="col-1">
                 <i class="bi bi-envelope"></i>
-            </div>
-            <div class="col d-flex justify-content-start mx-2">
             {#if swapMatchData.user_id_one == $user.id}
                 <p>{swapMatchData.email_two}</p>
             {:else}
                 <p>{swapMatchData.email_one}</p>
             {/if}
-            </div>
+
         </div>
     </div>
 

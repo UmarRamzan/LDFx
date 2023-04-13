@@ -6,6 +6,8 @@
     import { user } from "../../UserStore";
     import { Card, CardBody } from 'sveltestrap';
     import { addReview } from "$lib/api/clientFunctions";
+    import { fade } from "svelte/transition";
+
     let courseID = $page.params.courseID
     let reviewList = [];
     let reviewText = '';
@@ -46,7 +48,7 @@
 </script>
 
 {#if courseTitle}
-<div class="container-md" id="content">
+<div class="container-md" id="content" in:fade>
 
   <div class="container d-flex">
     <div class="col">

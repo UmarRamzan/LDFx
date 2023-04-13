@@ -2,6 +2,7 @@
     import { supabase } from "$lib/supabaseClient";
     import { Col, Container, Row, Card, CardBody } from 'sveltestrap';
     import { onMount } from "svelte/internal";
+    import { fade } from "svelte/transition";
 
 
     let courseList = [];
@@ -38,7 +39,7 @@
     
 </script>
 
-<div class="container-md content">
+<div class="container-md content" in:fade>
 <Row>
     <Col>
         <h2>Reviews</h2>

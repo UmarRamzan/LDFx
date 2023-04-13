@@ -76,17 +76,36 @@
 <div class="custom-backdrop" on:click|self={handleClose} transition:fade>
   <div class="custom-modal">
     {#if !resetingPassword}
+
     <h2>Login</h2>
 
     <hr>
 
+    <div class="container">
     <div class="mb-3">
-      <input type="email" class="form-control" id="email" placeholder="Email" bind:value={email}>
-    </div>
-    <div class="mb-3">
-      <input type="password" class="form-control" id="password" placeholder="Password" bind:value={password}>
-    </div>
+      <div class="row mb-3 gx-0">
+        <div class="col-2">
+          <span class="input-group-text input-icon justify-content-center" id="basic-addon1"><i class="bi bi-envelope"></i></span>
+        </div>
+        <div class="col-10">
+          <input type="email" class="form-control input-text" id="email" placeholder="Email" bind:value={email}>
+        </div>
+      </div>
 
+      <div class="mb-3">
+        <div class="row gx-0">
+          <div class="col-2">
+            <span class="input-group-text input-icon justify-content-center" id="basic-addon1"><i class="bi bi-key"></i></span>
+          </div>
+          <div class="col-10">
+            <input type="password" class="form-control input-text" id="password" placeholder="Password" bind:value={password}>
+          </div>
+        </div>
+
+      </div>
+      
+      
+    </div>
 
     {#if errorMessage}
       <div class="alert alert-danger" role="alert" in:fade>
@@ -111,13 +130,23 @@
     </div>
 
     
-
+    </div>
     {:else}
     <h2>Reset Password</h2>
     <hr>
+
     <div class="mb-3">
-        <input type="email" class="form-control" id="email" placeholder="Email" bind:value={email}>
+      <div class="row mb-3 gx-0">
+        <div class="col-2">
+          <span class="input-group-text input-icon justify-content-center" id="basic-addon1"><i class="bi bi-envelope"></i></span>
+        </div>
+        <div class="col-10">
+          <input type="email" class="form-control input-text" id="email" placeholder="Email" bind:value={email}>
+        </div>
+      </div>
     </div>
+
+    
 
     {#if errorMessage}
       <div class="alert alert-danger" role="alert" in:fade>
@@ -131,7 +160,7 @@
       </div>
     {/if}
 
-    <div class="password-links" on:click={()=>{resetingPassword=false}}>Back to Login</div>
+    <div class="password-links" on:click={()=>{resetingPassword=false; resetError()}}>Back to Login</div>
 
     <hr>
 
@@ -168,7 +197,8 @@
     text-align: center;
     background: var(--secondary);
     border-radius: 40px;
-  color: navy;
+    border: 5px solid var(--other-primary);
+    color: navy;
   }
 
   .btn {
@@ -184,6 +214,17 @@
 
   .form-control::placeholder {
     color: navy;
+  }
+
+  .input-icon {
+    background-color: #faf8eb;
+    font-size: 20px;
+    border-radius: 10px 0px 0px 10px;
+  }
+
+  .input-text {
+    height: 100%;
+    border-radius: 0px 10px 10px 0px;
   }
 
   .password-links {

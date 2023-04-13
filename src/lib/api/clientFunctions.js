@@ -404,6 +404,12 @@ export const checkSwap = async (swapID, userID) => {
                     .from('swap_matches')
                     .insert({ user_id_one: userID, user_id_two: match_user_id, swap_id_one: swapID, swap_id_two: match.swap_id, course_id_one: haveCourse.course_id, course_id_two: match.course_id })
 
+                    // add notifications to both users
+                    const { data:notificationData, error:notificationError } = await supabase
+                    .from('notifications')
+                    .insert([{ user_id: userID, text: "A swap has been found", type: "swap" }, { user_id: match_user_id, text: "A swap has been found", type: "swap" }])
+
+                    if (notificationError) {console.log(notificationError)}
                     if (matchError) {console.log(matchError)}
 
                     return;
@@ -513,4 +519,26 @@ export const getCourseTitle = async (courseID) => {
     }
 
     return {success: success, data: data, error: error}
+}
+
+// get all notifications for a given user
+export const getNotifications = async (userID) => {
+    
+        let success = false
+        let data = null
+    
+        const {data:notificationData, error} = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', userID)
+    
+        if(error){
+            console.log(error)
+        }
+        else{
+            success = true
+            data = notificationData
+        }
+    
+        return {success: success, data: data, error: error}
 }
