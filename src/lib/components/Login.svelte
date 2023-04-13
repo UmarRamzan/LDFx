@@ -132,6 +132,7 @@
     
     </div>
     {:else}
+    <div class="container">
     <h2>Reset Password</h2>
     <hr>
 
@@ -174,6 +175,7 @@
     </button>
     {/if}
   </div>
+</div>
     {/if}
   </div>
 </div>
