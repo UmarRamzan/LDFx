@@ -16,6 +16,8 @@
   let currentUser
   let currentPostId
 
+  let posterID = null;
+
   
   async function loadComments(donation_id) {
     tempDonationID = donation_id
@@ -32,7 +34,7 @@
   }
 
   const addComment = async () => {
-    let response = await addDonationComment(tempDonationID,$user.id,$username,commentText);
+    let response = await addDonationComment(posterID, tempDonationID,$user.id,$username,commentText);
     console.log(response);
   };
 
@@ -409,7 +411,7 @@
                     <input type="text" class="form-control" id="jobDescription" readonly value = {donationPost.description}>
                     <div class = "d-flex gap-3 mb-2">
                       <div class = "icon-1">
-                        <button class = "btn btn-light btn-block" data-bs-toggle="modal" data-bs-target="#comments-modal-donations" on:click={()=>{loadComments(donationPost.donation_id)}}>
+                        <button class = "btn btn-light btn-block" data-bs-toggle="modal" data-bs-target="#comments-modal-donations" on:click={()=>{loadComments(donationPost.donation_id); posterID=donationPost.user_id}}>
                           <div class = "icon"> 
                             <i class="bi bi-chat-square"></i>
                           </div>

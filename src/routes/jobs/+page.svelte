@@ -22,6 +22,7 @@
     let commentsPending = true;
     let commentText = ''
     let tempJobID
+    let posterID = null;
   
     async function loadComments(job_id) {
         tempJobID = job_id
@@ -36,7 +37,7 @@
     }
 
     const addComment = async () => {
-        let response = await addJobComment(tempJobID,$user.id,$username,commentText);
+        let response = await addJobComment(posterID, tempJobID,$user.id,$username,commentText);
         console.log(response);
     };
 
@@ -419,7 +420,7 @@
                             <input type="text" class="form-control" id="jobDescription" readonly value = {jobData.description}>
                             <div class = "d-flex gap-3 mb-2">
                               <div class = "icon-1">
-                                <button class = "btn btn-light btn-block" data-bs-toggle="modal" data-bs-target="#comments-modal-jobs" on:click={()=>{loadComments(jobData.job_posting_id)}}>
+                                <button class = "btn btn-light btn-block" data-bs-toggle="modal" data-bs-target="#comments-modal-jobs" on:click={()=>{loadComments(jobData.job_posting_id); posterID=jobData.user_id}}>
                                   <div class = "icon"> 
                                     <i class="bi bi-chat-square"></i>
                                   </div>

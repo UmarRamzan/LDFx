@@ -425,7 +425,7 @@ export const getDonationComments = async (donation_id) => {
     return {success: success, data: data, error: error}
 }
 
-export const addDonationComment = async (donation_id, user_id, username, comment) => {
+export const addDonationComment = async (poster_id, donation_id, user_id, username, comment) => {
     let success = false
     let data = null
 
@@ -437,6 +437,10 @@ export const addDonationComment = async (donation_id, user_id, username, comment
         console.log("Add Donation Comment: ", donationData)
         success = true
         data = donationData
+
+        //update notification table
+        const {data: notificationData, error} = await supabase.from('notifications').insert([{user_id: poster_id, type: "comment", text: "Comment on your donation post", type: "comment-donations"}]).select('*')
+        if (error) {console.log(error)}
     }
     return {success: success, data: data, error: error}
 }
@@ -455,7 +459,7 @@ export const getJobComments = async (job_id) => {
     return {success: success, data: data, error: error}
 }
 
-export const addJobComment = async (job_id, user_id, username, comment) => {
+export const addJobComment = async (poster_id, job_id, user_id, username, comment) => {
     let success = false
     let data = null
 
@@ -467,6 +471,10 @@ export const addJobComment = async (job_id, user_id, username, comment) => {
         console.log("Add Job Comment: ", donationData)
         success = true
         data = donationData
+
+        //update notification table
+        const {data: notificationData, error} = await supabase.from('notifications').insert([{user_id: poster_id, type: "comment", text: "Comment on your job post", type: "comment-jobs"}]).select('*')
+        if (error) {console.log(error)}
     }
     return {success: success, data: data, error: error}
 }

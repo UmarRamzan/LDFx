@@ -21,11 +21,9 @@
       user.set(userRes)
       const res = await getUsername(userRes.id);
       if (res.success){username.set(res.data[0].username)}
-      console.log(userRes.id)
+
       notifications = await getNotificationList(userRes.id)
     }  
-
-    
   })
 
   const handleLogout = async () => {
@@ -114,11 +112,44 @@
         <li class="nav-item dropdown mx-5">
             <button class="nav-link" id="notification-button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-bell"></i></button>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <div class="container" id="notifications-container">
             {#each notifications as notification (notification.id)}
-              {#if notification.type == "swap"}
-              <li on:click={()=>goto('/swaps')}><p class="dropdown-item">{notification.text}</p></li>
-              {/if}
+              
+                {#if notification.type == "swap"}
+                <div class="notification-item" on:click={()=>goto('/swaps')}>
+                    <div class="row">
+                      <p>{notification.text}</p>
+                    <div class="row notification-date">
+                      <small class="text-muted">{new Date(notification.created_at).toLocaleString()}</small>
+                    </div>
+                  </div>
+                </div>
+                {:else if notification.type == "comment-donations"}
+                <div class="notification-item" on:click={()=>goto('/donations')}>
+                  <div class="row">
+                    <p>{notification.text}</p>
+                  <div class="row notification-date">
+                    <small class="text-muted">{new Date(notification.created_at).toLocaleString()}</small>
+                  </div>
+                </div>
+              </div>
+                
+                {:else if notification.type == "comment-jobs"}
+                <div class="notification-item" on:click={()=>goto('/jobs')}>
+                  <div class="row">
+                    <li><p>{notification.text}</p></li>
+                  <div class="row notification-date">
+                    <small class="text-muted">{new Date(notification.created_at).toLocaleString()}</small>
+                  </div>
+                </div>
+              </div>
+                
+                {/if}
+              
+
+             
             {/each}
+          </div>
           </ul>
         </li>
         </ul>
@@ -194,15 +225,36 @@
   }
 
   #notification-button {
-    background-color: var(--button-background);
+    background-color: var(--secondary);
     border-color: var(--button-background);
     width: 80px;
-    color: white;
+    color: var(--button-background);
     border-radius: 20px;
   }
 
+  #notifications-container {
+    max-height: 300px;
+    overflow-y: auto;
+    width: 300px;
+  }
+
   #notification-button:hover {
-    background-color: var(--button-hover-primary)
+    background-color: var(--button-hover-primary);
+    color: white;
+  }
+
+  .notification-item {
+    padding: 10px;
+    margin: 10px;
+    border-radius: 20px;
+    border: 2px solid var(--other-primary);
+    background-color: var(--primary);
+    text-align: center;
+  }
+
+  .notification-item:hover {
+    background-color: var(--quaternary);
+    cursor: pointer;
   }
 
   .bi {
