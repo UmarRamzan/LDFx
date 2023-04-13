@@ -212,6 +212,7 @@
   padding: 40px;
   box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
   max-width: 900px;
+  border: 5px solid var(--other-primary);
 }
 
 #back-button {

@@ -80,6 +80,7 @@
     background-color: var(--secondary);
     padding: 20px;
     box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
+    border: 5px solid var(--other-primary);
   }
 
     h2 {

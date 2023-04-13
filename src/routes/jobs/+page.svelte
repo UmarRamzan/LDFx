@@ -81,16 +81,70 @@
     let payRange = '';
     let description = '';
 
+    const resetValues = () => {
+        organization = '';
+        contactNumber = '';
+        jobType = '';
+        payRange = '';
+        description = '';
+    }
+
+    let currentPostId = null;
+
     const createJobPosting = async () => {
         let response = await addJobPost(currentUser.id, organization, contactNumber, jobType, payRange, description)
         console.log(response)
-        jobPostings.push({userID: currentUser.id, organization: organization, contact_number: contactNumber, job_type: jobType, pay_range: payRange, description: description})
-        jobPostings = jobPostings;
+
+        let newPost = {user_id: currentUser.id, organization: organization, contact_number: contactNumber, job_type: jobType, pay_range: payRange, description: description}
+        jobPostings = [newPost, ...jobPostings]
     }
 
-    const editJobposting = async () => {
+    const openEditModal = (postId) => {
+
+        currentPostId = postId;
+
+        // find the post in the array
+        let post = jobPostings.find((post) => {
+            return post.job_posting_id == postId;
+        });
+
+        // update the values
+        organization = post.organization;
+        contactNumber = post.contact_number;
+        jobType = post.job_type;
+        payRange = post.pay_range;
+        description = post.description;
 
     }
+
+    const handleEdit = async (postId) => {
+
+        
+    let response = await editJobPost(
+        organization,
+        contactNumber,
+        payRange,
+        jobType,
+        description,
+        currentPostId
+    );
+
+    // edit the post in the array
+    jobPostings = jobPostings.map((post) => {
+        if (post.job_posting_id == currentPostId) {
+            post.contact_number = contactNumber;
+            post.organization = organization;
+            post.pay_range = payRange;
+            post.job_type = jobType;
+            post.description = description;
+        }
+        return post;
+    });
+
+    if (response.error) {console.log(error)}
+
+    console.log(response);
+  };
 
     //save the disabled likes and dislikes dictionary to local storage with user id as key
     const saveDisabledState = () => {
@@ -99,11 +153,9 @@
     }
 
     const deleteJobPosting = async (jobPostingID) => {
+        jobPostings = jobPostings.filter((posting) => {posting.job_posting_id != jobPostingID})
         let { success, data, error } = deleteJobPost(jobPostingID)
         if (error) {console.log(error)}
-        else {
-            jobPostings = jobPostings.filter((posting) => {posting.job_posting_id != jobPostingID})
-        }
     }
 
     let postLikes = {}
@@ -177,9 +229,9 @@
 
 </script>
 
-<div class="content">
+<div class="container-md content">
 
-<div class="container mt-4">
+<div class="mt-4">
     <div class="row align-items-center">
 
         <!-- Page title -->
@@ -209,7 +261,7 @@
             <div class="modal-title fs-5" id="staticBackdropLabel">
                 <p class = "col-4">Create Post</p>
             </div>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" on:abort={resetValues}></button>
         </div>
         
         <div class="modal-body">
@@ -269,7 +321,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="cancel-button" data-bs-dismiss="modal"><h6>Cancel</h6></button>
-            <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={createJobPosting}><h6>Create</h6></button>
+            <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={handleEdit}><h6>Create</h6></button>
         </div>
         </div>
     </div>
@@ -288,7 +340,7 @@
           </button>
         </div>
         {#if commentsPending}
-          <p>Loading...</p>
+          <p style="margin: auto;">Loading...</p>
         {:else}
           <div class="modal-body">
             {#each comments as comment}
@@ -420,10 +472,10 @@
             </div>     
             </div>
 
-            {#if currentUser && currentUser.id == jobData.user_id}
+            {#if $user && $user.id == jobData.user_id}
             <div class="row mt-3">
                 <div class="col w-10">
-                    <button type="button" class="edit-button" id="edit-posting-button" data-bs-toggle="modal" data-bs-target="#edit-posting-modal">
+                    <button type="button" class="edit-button" id="edit-posting-button" data-bs-toggle="modal" data-bs-target="#edit-posting-modal" on:click={()=>openEditModal(jobData.job_posting_id)}>
                         <h6>Edit</h6>
                     </button>
                 </div>
@@ -481,7 +533,7 @@
     }
     .content 
     {
-        width: 80%;
+        max-width: 1000px;
         margin: auto;
         margin-top: 40px;
         border: None;

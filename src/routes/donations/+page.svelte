@@ -9,11 +9,12 @@
   import { getDonationPosts,addDonationPosts,editDonationPosts,deleteDonationPosts,getUserData,getDonationComments,addDonationComment,getDonationLikes,addDonationLike,editDonationLike } from "$lib/api/csFunctions";
   import { user,username } from "../../routes/UserStore";
   let donationPosts = [];
-  let comments = ["dummy1","dummy2"];
+  let comments = [];
   let commentsPending = true;
   let commentText = ''
   let tempDonationID
   let currentUser
+  let currentPostId
 
   
   async function loadComments(donation_id) {
@@ -22,6 +23,7 @@
     let { success, data, error } = await getDonationComments(donation_id);
     if (success) {
       comments = data;
+      console.log(comments)
       commentsPending = false;
     } else {
       console.log(error);
@@ -80,6 +82,7 @@
   let description = "";
 
   const createDonationPost = async () => {
+
     let response = await addDonationPosts(
       fullName,
       contactNumber,
@@ -88,19 +91,49 @@
       description,
       $user.id
     );
+
     console.log(response);
-    donationPosts.push({
-      userID: $user.id,
+
+    let newPost = {
+      donation_id: response.data[0].donation_id,
+      user_id: $user.id,
       full_name: fullName,
       contact_number: contactNumber,
       email_address: emailAddress,
       related_tags: relatedTages,
       description: description,
-    });
-    donationPosts = donationPosts;
+    }
+    donationPosts = [newPost, ...donationPosts]
+
   };
 
-  const editDonationPost = async () => {};
+  const handleEdit = async () => {
+    let response = await editDonationPosts(
+      fullName,
+      contactNumber,
+      emailAddress,
+      relatedTages,
+      description,
+      currentPostId
+    );
+
+    // edit the post in the array
+    donationPosts = donationPosts.map((post) => {
+      if (post.donation_id == currentPostId) {
+        post.full_name = fullName;
+        post.contact_number = contactNumber;
+        post.email_address = emailAddress;
+        post.related_tags = relatedTages;
+        post.description = description;
+        
+      }
+      return post;
+    });
+
+    if (response.error) {console.log(error)}
+
+    console.log(response);
+  };
 
   const deleteDonationPost = async (donationPostID) => {
     console.log(donationPostID)
@@ -109,7 +142,7 @@
       console.log(error);
     } else {
       donationPosts = donationPosts.filter(
-        (posting) => posting.donation_posting_id != donationPostID
+        (posting) => posting.donation_id != donationPostID
       );
     }
   };
@@ -190,9 +223,9 @@
 
 </script>
 
-<div class="content">
+<div class="container-md content">
 
-<div class="container mt-4">
+<div class="mt-4">
   <div class="row align-items-center">
 
       <!-- Page title -->
@@ -282,7 +315,7 @@
       </div>
       <div class="modal-footer">
           <button type="button" class="cancel-button" data-bs-dismiss="modal"><h6>Cancel</h6></button>
-          <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={createDonationPost}><h6>Create</h6></button>
+          <button type="button" class="create-button" id="submit-button" data-bs-dismiss="modal" on:click={handleEdit}><h6>Create</h6></button>
       </div>
       </div>
   </div>
@@ -301,7 +334,7 @@
         </button>
       </div>
       {#if commentsPending}
-        <p>Loading...</p>
+        <p style="margin: auto;">Loading...</p>
       {:else}
         <div class="modal-body">
           {#each comments as comment}
@@ -430,7 +463,7 @@
           {#if $user && $user.id == donationPost.user_id}
           <div class="row mt-3">
               <div class="col w-10">
-                  <button type="button" class="edit-button" id="edit-posting-button" data-bs-toggle="modal" data-bs-target="#edit-posting-modal" on:click={()=>{fullName = donationPost.full_name;contactNumber=donationPost.contact_number;emailAddress=donationPost.email_address;relatedTages=donationPost.related_tags;description=donationPost.description} }>
+                  <button type="button" class="edit-button" id="edit-posting-button" data-bs-toggle="modal" data-bs-target="#edit-posting-modal" on:click={()=>{fullName = donationPost.full_name;contactNumber=donationPost.contact_number;emailAddress=donationPost.email_address;relatedTages=donationPost.related_tags;description=donationPost.description; currentPostId = donationPost.donation_id} }>
                       <h6>Edit</h6>
                   </button>
               </div>
@@ -478,7 +511,7 @@
 
   .content 
   {
-      width: 80%;
+      max-width: 1000px;
       margin: auto;
       margin-top: 40px;
       border: None;
@@ -557,14 +590,14 @@
   .form-control-1
   {
     background-color: var(--senary);
-    border-radius: 20px;
-    width: 100%;
-    color: var(--quinary);
-    font-family: 'Chakra Petch';
-    padding-left: 2%;
-    border: None;
-    margin-top: 1%;
-    margin-bottom: -1.5%;
+        border-radius: 20px;
+        width: 100%;
+        color: var(--quinary);
+        font-family: 'Chakra Petch';
+        padding-left: 2%;
+        border: None;
+        margin-top: 1%;
+        margin-bottom: -5%;
   }
   .modal-footer
   {

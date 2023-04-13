@@ -193,12 +193,13 @@
     padding: 50px 25px;
     border-radius: 10px;
     max-width: 450px;
-    margin: 10% auto;;
+    margin: 10% auto;
     text-align: center;
     background: var(--secondary);
     border-radius: 40px;
     border: 5px solid var(--other-primary);
     color: navy;
+
   }
 
   .btn {

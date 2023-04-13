@@ -285,6 +285,11 @@ export const getJobPost = async () => {
 
     const {data: jobData, error} = await supabase.from('job_posting').select().eq('deleted', false||null)
 
+    // sort by date
+    jobData.sort((a, b) => {
+        return new Date(b.created_at) - new Date(a.created_at)
+    })
+
     if (error) {console.log(error)}
     else {success = true, data = jobData}
 
@@ -345,6 +350,11 @@ export const getDonationPosts = async () => {
 
     const {data: donationData, error} = await supabase.from('donationposting').select('*').eq('deleted', false)
 
+    // sort by date
+    donationData.sort((a, b) => {
+        return new Date(b.created_at) - new Date(a.created_at)
+    })
+
     if (error) {console.log(error)}
     else {success = true, data = donationData}
     console.log("Get Donation Posts: ", data)
@@ -373,7 +383,7 @@ export const addDonationPosts = async (fullName, contactNumber, emailAddress, re
 export const editDonationPosts = async (fullName, contactNumber, emailAddress, relatedTags, descriptionDon, donation_id) => {
     let success = false
     let data = null
-    const {data:donationData, error} = await supabase.from('donationposting').update({full_name: fullName, contact_number: contactNumber, email_address: emailAddress, related_tags: relatedTags, description: descriptionDon}).eq('id', donation_id).select()
+    const {data:donationData, error} = await supabase.from('donationposting').update({full_name: fullName, contact_number: contactNumber, email_address: emailAddress, related_tags: relatedTags, description: descriptionDon}).eq('donation_id', donation_id).select()
     if(error){
         console.log(error)
     }

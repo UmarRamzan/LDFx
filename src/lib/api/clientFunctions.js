@@ -212,6 +212,11 @@ export const getJobPost = async () => {
 
     const {data: jobData, error} = await supabase.from('job_posting').select().eq('deleted', false)
 
+    // sort by date
+    jobData.sort((a, b) => {
+        return new Date(b.created_at) - new Date(a.created_at)
+    })
+
     if (error) {console.log(error)}
     else {success = true, data = jobData}
 
@@ -235,10 +240,10 @@ export const addJobPost = async (userID, organization, contactNumber, jobType, p
 }
 
 // edit an existing job posting
-export const editJobPost = async (organizationName, contactNumber, payRange, emailAddress, jobType, description_job, job_id) => {
+export const editJobPost = async (organization, contactNumber, payRange, jobType, description, job_id) => {
     let success = false
     let data = null
-    const {data:jobData, error} = await supabase.from('jobposting').update({description: description_job, organization_name: organizationName, contact_number: contactNumber, email_address: emailAddress, pay_range: payRange, job_type: jobType}).eq('id', job_id).select()
+    const {data:jobData, error} = await supabase.from('job_posting').update({organization: organization, contact_number: contactNumber, job_type: jobType, pay_range: payRange, description: description}).eq('job_posting_id', job_id).select()
     if(error){
         console.log(error)
     }
