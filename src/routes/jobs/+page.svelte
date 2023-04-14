@@ -98,7 +98,7 @@
         let response = await addJobPost(currentUser.id, organization, contactNumber, jobType, payRange, description)
         console.log(response)
 
-        let newPost = {user_id: currentUser.id, organization: organization, contact_number: contactNumber, job_type: jobType, pay_range: payRange, description: description}
+        let newPost = {job_posting_id: response.data[0].job_posting_id, user_id: currentUser.id, organization: organization, contact_number: contactNumber, job_type: jobType, pay_range: payRange, description: description}
         jobPostings = [newPost, ...jobPostings]
     }
 
@@ -156,8 +156,11 @@
     }
 
     const deleteJobPosting = async (jobPostingID) => {
-        jobPostings = jobPostings.filter((posting) => {posting.job_posting_id != jobPostingID})
-        let { success, data, error } = deleteJobPost(jobPostingID)
+        // filter out the post from the array
+        jobPostings = jobPostings.filter((post) => {
+            return post.job_posting_id != jobPostingID;
+        });
+        let { success, data, error } = await deleteJobPost(jobPostingID)
         if (error) {console.log(error)}
     }
 
