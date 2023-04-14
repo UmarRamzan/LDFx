@@ -236,7 +236,7 @@ const deleteAccount = async () => {
       </div>
 
       {#if changesSaved}
-      <div class="alert alert-success" role="alert">
+      <div class="alert alert-success mt-2" role="alert">
         Changes Saved Successfully!
       </div>
       {/if}

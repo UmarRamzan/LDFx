@@ -112,6 +112,9 @@
             <button class="nav-link" id="notification-button" data-bs-toggle="dropdown" aria-expanded="false" on:click={getNotificationList}><i class="bi bi-bell"></i></button>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <div class="container" id="notifications-container">
+              {#if notifications.length == 0}
+                <p style="text-align: center; margin-top:15px">No Notification</p>
+              {:else}
             {#each notifications as notification (notification.id)}
               
                 {#if notification.type == "swap"}
@@ -148,6 +151,7 @@
 
              
             {/each}
+            {/if}
           </div>
           </ul>
         </li>
