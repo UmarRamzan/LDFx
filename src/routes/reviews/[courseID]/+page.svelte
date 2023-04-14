@@ -72,6 +72,11 @@
         if (error) {console.log(error)}
         else {reviewList = data}
 
+        // sort reviews by date
+        reviewList.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+
         const { data:courseData, error:courseError } = await supabase
         .from('courses')
         .select('course_title')
@@ -120,8 +125,8 @@
                   </div>
                   <div class="d-flex justify-content-between align-items-center">
                       {#if $user && $user.id === review.user_id}
-                      <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#EditReviewModal" id="edit-review-button" on:click={openEditModal(review.review_id)}>Edit</button>
-                      <button type="button" class="ecancel-button" on:click={handleDelete(review.review_id)}>Delete</button>
+                      <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#EditReviewModal" id="edit-review-button" on:click={openEditModal(review.review_id)}><p style="margin-bottom: 10px;">Edit</p></button>
+                      <button type="button" class="ecancel-button" on:click={handleDelete(review.review_id)}><p style="margin-bottom: 10px;">Delete</p></button>
                       {/if}
                   </div>
               </div>
