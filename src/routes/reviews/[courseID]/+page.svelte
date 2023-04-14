@@ -1,4 +1,6 @@
 <script>
+// @ts-nocheck
+
     import AddReview from "$lib/components/AddReview.svelte";
     import { supabase } from "$lib/supabaseClient";
     import { onMount } from "svelte/internal";
@@ -6,6 +8,7 @@
     import { user } from "../../UserStore";
     import { Card, CardBody } from 'sveltestrap';
     import { addReview } from "$lib/api/clientFunctions";
+    import { deleteReview,editReview } from "$lib/api/csFunctions";
     import { fade } from "svelte/transition";
     import { goto } from "$app/navigation";
 
@@ -14,18 +17,50 @@
     let reviewText = '';
     let reviewRating = 0;
     let courseTitle = '';
-    
+    let editReviewid
 
     const handleReview = async () => {
       const {data, error} = await supabase
       .from('reviews')
-      .insert({ review_text: reviewText, rating: reviewRating})
+      .insert({ review_text: reviewText, rating: reviewRating, course_id:courseID, user_id: $user.id})
       .select()
 
       if (error) {console.log(error)}
       else {"data", console.log(data)}
 
-      reviewList = [{review_id: data[0].review_id, course_id: data[0].course_id, review_text: reviewText, rating: reviewRating, created_at: data[0].created_at }, ...reviewList]
+      reviewList = [{review_id: data[0].review_id, course_id: data[0].course_id, review_text: reviewText, rating: reviewRating, created_at: data[0].created_at ,deleted:data[0].deleted, user_id:data[0].user_id}, ...reviewList]
+    }
+
+    const handleDelete = async (review_id)=>{
+      let {data, error} = await deleteReview(review_id)
+      if (error) {console.log(error)}
+      else {console.log(data)}
+      reviewList = reviewList.filter((review) => review.review_id !== review_id)
+    }
+
+    const handleEdit = async (review_id)=>{
+      let {data, error} = await editReview(review_id, reviewText, reviewRating)
+      if (error) {console.log(error)}
+      else {console.log(data)}
+      //replace review with edited review by matching review_id
+      let editedReview = reviewList.filter((review) => review.review_id === review_id)
+      editedReview[0].review_text = data[0].review_text
+      editedReview[0].rating = data[0].rating
+
+      console.log(editedReview)
+
+      reviewList = reviewList.filter((review) => review.review_id !== review_id)
+      reviewList = [editedReview[0], ...reviewList]
+      editReviewid = null
+    }
+
+    const openEditModal = async (review_id) =>{
+      //fetch review from review list and populate modal with review text and rating
+      let review = reviewList.filter((review) => review.review_id === review_id)
+      console.log(review)
+      reviewText = review[0].review_text
+      reviewRating = review[0].rating
+      editReviewid = review_id
     }
 
     onMount(async () => {
@@ -72,6 +107,8 @@
 <ul class="list-group">
             
   {#each reviewList as review (review.review_id)}
+      <!-- check if review.deleted === false then print -->
+      {#if !review.deleted}
       <li class="list-group-item">
 
           <div class="card">
@@ -81,10 +118,17 @@
                       <small class="text-muted">{new Date(review.created_at).toLocaleString()}</small>
                       <span class="badge bg-primary">{review.rating}/10</span>
                   </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                      {#if $user && $user.id === review.user_id}
+                      <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#EditReviewModal" id="edit-review-button" on:click={openEditModal(review.review_id)}>Edit</button>
+                      <button type="button" class="ecancel-button" on:click={handleDelete(review.review_id)}>Delete</button>
+                      {/if}
+                  </div>
               </div>
           </div>
           
       </li>
+      {/if}
   {/each}
 
 </ul>
@@ -113,6 +157,34 @@
           <div class="modal-footer">
               <button type="button" class="btn btn-secondary" id="closeButton" data-bs-dismiss="modal">Close</button>
               <button type="button" class="btn btn-primary" id="submitReviewButton" data-bs-dismiss="modal" on:click={handleReview}>Submit Review</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Edit Review Modal -->
+<div class="modal fade" id="EditReviewModal" tabindex="-1" aria-labelledby="addReviewModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="addReviewModalLabel">Edit Review</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form>
+                  <div class="mb-3">
+                      <label for="reviewText" class="form-label">Review Text</label>
+                      <textarea class="form-control" id="reviewText" rows="3" bind:value={reviewText}></textarea>
+                  </div>
+                  <div class="mb-3">
+                      <label for="reviewRating" class="form-label">Rating (out of 10)</label>
+                      <input type="number" class="form-control" id="reviewRating" min="1" max="10" bind:value={reviewRating}>
+                  </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" id="closeButton" data-bs-dismiss="modal" on:click={()=>{editReviewid=null}}>Close</button>
+              <button type="button" class="btn btn-primary" id="submitReviewButton" data-bs-dismiss="modal" on:click={handleEdit(editReviewid)}>Edit Review</button>
           </div>
       </div>
   </div>
@@ -209,6 +281,47 @@
     background-color: #fcfbf2;
 
   }
+
+  .ecancel-button
+    {
+        font-family: 'Chau Philomene One';
+        border: None;
+        background-color: var(--octonary); 
+        color: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        width: 32%;
+        font-size: 15px;
+        margin-left: 50%;
+        margin-top: 3%;
+        padding-top: 2%;
+    }
+    .ecancel-button:hover
+    {
+        background-color: var(--primary);
+        color: var(--octonary);
+        font-family: 'Chau Philomene One';
+    }
+    .edit-button
+    {
+        font-family: 'Chau Philomene One';
+        border: None;
+        color: #ffffff;
+        background-color: var(--septanry);
+        border-radius: 20px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        width: 30%;
+        margin-top: 3%;
+        font-size: 16px;
+        margin-left: 8%;
+        padding-top: 2%;
+    }
+    .edit-button:hover 
+    {
+        background-color: var(--primary);
+        color: var(--quinary);
+        font-family: 'Chau Philomene One';
+    }
   
 </style>
 
