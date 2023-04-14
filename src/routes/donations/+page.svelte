@@ -159,6 +159,10 @@
   let disableDislike = {}
 
   const likePost = async (donation_id) => {
+    if (!currentUser) {
+            alert("Please log in to like a post")
+            return
+    }
     if (disableLike[donation_id]) {
       return
     }
@@ -192,6 +196,10 @@
 
   
   const dislikePost = async (donation_id) => {
+    if (!currentUser) {
+            alert("Please log in to like a post")
+            return
+    }
     if (disableDislike[donation_id]) {
       return
     }
@@ -349,7 +357,9 @@
       {/if}
       <div class="modal-footer">
         <button type="button" class="close-button" data-bs-dismiss="modal"><h6>Close</h6></button>
+        {#if currentUser}
         <button type="button" class="comment-button" data-bs-toggle="modal" data-bs-target="#comment-posting-modal" data-bs-dismiss="modal"><h6>Add Comment</h6></button>
+        {/if}
       </div>
     </div>
   </div>
