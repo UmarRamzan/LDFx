@@ -4,7 +4,7 @@
 import { supabase } from "$lib/supabaseClient";
 import { user } from "../../routes/UserStore";
 
-let redirectLink = "http://localhost:5174//emailVerified"
+let redirectLink = "https://ldfx.vercel.app/emailVerified"
 
 export const signup = async (email, password, accountType, username) => {
 
@@ -130,7 +130,7 @@ export const resetPassword =  async (email) => {
     let data = null
     let error = null
 
-    const {data:passResetData, error:passResetError} = await supabase.auth.resetPasswordForEmail(email, {redirectTo: 'http://localhost:5174/resetPassword',})
+    const {data:passResetData, error:passResetError} = await supabase.auth.resetPasswordForEmail(email, {redirectTo: "https://ldfx.vercel.app/resetPassword",})
     
     if(passResetError){
         console.log(passResetError)
