@@ -28,7 +28,7 @@
             
             
             <div class="image">
-                <img src="src\routes\Homepage.png" alt="Homepage" class="responsive">
+                <img src="images/Homepage.png" alt="Homepage" class="responsive">
             </div>
   
   

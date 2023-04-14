@@ -179,18 +179,17 @@ const deleteAccount = async () => {
   
   <div class="modal fade" id="password-popup" tabindex="-1" aria-labelledby="password-popup-label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+      <div class="modal-content" id="password-modal">
         <div class="modal-header">
           <h5 class="modal-title" id="password-popup-label">Enter New Password</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <label class="popup-data" for="password"><b>New Password</b></label>
           <br>
-          <input type="password" class="form-control" placeholder="New Password" name="password" required bind:value={password}>
+          <input type="password" class="form-control w-100" placeholder="New Password" name="password" required bind:value={password}>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-success" data-bs-dismiss="modal" on:click={()=>{if(password.length < 6){alert("password must be greater than 6 characters")}}}>Save</button>
+          <button type="button" class="btn btn-success w-50" data-bs-dismiss="modal" on:click={()=>{if(password.length < 6){alert("password must be greater than 6 characters")}}}>Save</button>
         </div>
       </div>
     </div>
@@ -236,7 +235,7 @@ const deleteAccount = async () => {
       </div>
 
       {#if changesSaved}
-      <div class="alert alert-success" role="alert">
+      <div class="alert alert-success mt-2" role="alert">
         Changes Saved Successfully!
       </div>
       {/if}
@@ -267,6 +266,17 @@ const deleteAccount = async () => {
   .nav-tabs:hover {
     cursor: pointer;
   }
+
+  #password-modal {
+    padding: 50px 25px;
+    border-radius: 10px;
+    max-width: 450px;
+    margin: 10% auto;;
+    background: var(--secondary);
+    border-radius: 40px;
+    color: navy;
+    border: 5px solid var(--other-primary);
+  }
   
   .content, .content2{
     width: 60%;
@@ -277,6 +287,7 @@ const deleteAccount = async () => {
     padding: 30px 50px;
     box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
   }
+
 
   #save-button {
     width: 100%;

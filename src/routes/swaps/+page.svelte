@@ -223,6 +223,7 @@
     margin: 10% auto;;
     text-align: center;
     background: var(--secondary);
+    border: 5px solid var(--other-primary); 
   }
 
     #login-error {
@@ -299,6 +300,7 @@
         text-align: center;
         border: 1px solid rgb(0, 0, 0, 0.5);
         border-radius: 10px;
+        
      }
 
      .bi {
