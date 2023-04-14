@@ -38,6 +38,11 @@ export const signup = async (email, password, accountType, username) => {
             error = usernameError
             success = false
         }
+
+        //set default settings for user
+        const { data: settingsData, error: settingsError} = await supabase.from('settings').insert([
+            {user_id: signupData.user.id}
+        ])
     }
 
     return {success: success, data: data, error: error}
@@ -361,6 +366,7 @@ export const checkSwap = async (swapID, userID) => {
     .from('have')
     .select()
     .in('course_id', wantList.map(course => course.course_id))
+    .neq('found', true)
 
     console.log("Matches", matchList)
 
@@ -384,6 +390,7 @@ export const checkSwap = async (swapID, userID) => {
         .from('want')
         .select()
         .eq('swap_id', match.swap_id)
+        .neq('found', true)
 
         console.log("Want List: ", matchWantList)
 
@@ -393,6 +400,17 @@ export const checkSwap = async (swapID, userID) => {
             haveList.forEach(async haveCourse => {
                 if (haveCourse.course_id == wantCourse.course_id) {
                     success = true;
+
+                    // set status of have and want courses to 'found'
+                    const { data:swapDataOne, error:swapErrorOne } = await supabase
+                    .from('have')
+                    .update({ found: true })
+                    .in('swap_id', [swapID, match.swap_id])
+
+                    const { data:swapDataTwo, error:swapErrorTwo } = await supabase
+                    .from('want')
+                    .update({ found: true })
+                    .in('swap_id', [swapID, match.swap_id])
 
                     // set status of both swaps to 'found'
                     const { data:swapData, error:swapError } = await supabase
@@ -409,13 +427,34 @@ export const checkSwap = async (swapID, userID) => {
                     .from('swap_matches')
                     .insert({ user_id_one: userID, user_id_two: match_user_id, swap_id_one: swapID, swap_id_two: match.swap_id, course_id_one: haveCourse.course_id, course_id_two: match.course_id })
 
-                    // add notifications to both users
-                    const { data:notificationData, error:notificationError } = await supabase
-                    .from('notifications')
-                    .insert([{ user_id: userID, text: "A swap has been found", type: "swap" }, { user_id: match_user_id, text: "A swap has been found", type: "swap" }])
+                    // check settings for this user
+                    const { data:settingsDataOne, error:settingsErrorOne } = await supabase
+                    .from('settings')
+                    .select('*')
+                    .eq('user_id', userID)
 
-                    if (notificationError) {console.log(notificationError)}
-                    if (matchError) {console.log(matchError)}
+                    if (settingsErrorOne) {console.log(settingsErrorOne)}
+                    else {console.log(settingsDataOne)}
+
+                    if (settingsDataOne[0].swaps) {
+                        // add notifications for this user
+                        const { data:notificationDataOne, error:notificationErrorOne } = await supabase
+                        .from('notifications')
+                        .insert({ user_id: userID, text: "A swap has been found", type: "swap" })
+                    }
+
+                    // check settings for this user
+                    const { data:settingsDataTwo, error:settingsErrorTwo } = await supabase
+                    .from('settings')
+                    .select()
+                    .eq('user_id', match_user_id)
+
+                    if (settingsDataTwo[0].swaps){
+                        // add notifications for this user
+                        const { data:notificationDataTwo, error:notificationErrorTwo } = await supabase
+                        .from('notifications')
+                        .insert({ user_id: match_user_id, text: "A swap has been found", type: "swap" })
+                    }
 
                     return;
                 }
@@ -542,11 +581,55 @@ export const getNotifications = async (userID) => {
         }
         else{
             success = true
-            
+
             // sort by date
             notificationData.sort((a, b) => (a.created_at > b.created_at) ? -1 : 1)
             data = notificationData
         }
     
         return {success: success, data: data, error: error}
+}
+
+// return user settings for a given user
+export const getUserSettings = async (userID) => {
+    
+        let success = false
+        let data = null
+    
+        const {data:settingsData, error} = await supabase
+        .from('settings')
+        .select('*')
+        .eq('user_id', userID)
+    
+        if(error){
+            console.log(error)
+        }
+        else{
+            success = true
+            data = settingsData
+        }
+    
+        return {success: success, data: data, error: error}
+}
+
+// update user settings for a given user
+export const updateUserSettings = async (userID, settings) => {
+        
+            let success = false
+            let data = null
+        
+            const {data:settingsData, error} = await supabase
+            .from('settings')
+            .update(settings)
+            .eq('user_id', userID)
+        
+            if(error){
+                console.log(error)
+            }
+            else{
+                success = true
+                data = settingsData
+            }
+        
+            return {success: success, data: data, error: error}
 }

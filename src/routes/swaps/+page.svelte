@@ -6,11 +6,12 @@
     import { fade } from "svelte/transition";
 
     let pending = false;
+    let showMatchPending = false;
 
     let statusColors = {
-        "Found": "#7272cb",
-        "Pending": "#e67b21",
-        "Not Found": "#fa5741",
+        "Found": "#9798CF",
+        "Pending": "#F1C29A",
+        "Not Found": "#D98888",
     }
 
     let swapTableData = [];
@@ -23,7 +24,13 @@
             pending = true;
             let {success, data, error} = await getSwapRequests($user.id);
             if (error) {console.log(error)}
-            else {swapTableData = data;}
+            else {
+                //sort by date
+                data.sort((a, b) => {
+                    return new Date(b.date_created) - new Date(a.date_created);
+                })
+                swapTableData = data;
+            }
             pending = false;
         }
     }
@@ -41,6 +48,9 @@
     }
 
     const showSwapMatch = async (swapID) => {
+        showMatchPending = true;
+        showMatchModal = true;
+
         let {success, data, error} = await getSwapMatch(swapID);
         if (error) {console.log(error)}
         else {swapMatchData = data[0]}
@@ -58,11 +68,15 @@
         let {success: success5, data: data5, error: error5} = await getCourseTitle(swapMatchData.course_id_two);
         swapMatchData.course_title_two = data5[0].course_title;
 
-        showMatchModal = true;
-        console.log(data)
+        showMatchPending = false;
     }
 
 </script>
+
+<header>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</header>
+
 
 {#if !$user}
 
@@ -74,6 +88,7 @@
 {:else}
 
 {#if showMatchModal}
+{#if !showMatchPending}
 <div class="custom-backdrop" on:click|self={()=>showMatchModal=false} transition:fade>
   <div class="custom-modal">
     <h2>Swap Found!</h2>
@@ -97,6 +112,15 @@
 
   </div>
 </div>
+{:else}
+<div class="custom-backdrop" on:click|self={()=>showMatchModal=false} transition:fade>
+    <div class="custom-modal">
+
+        <div class="spinner-border text-primary" role="status"></div>
+  
+    </div>
+  </div>
+{/if}
 {/if}
 
 <div class="container-md" id="content">
@@ -149,13 +173,13 @@
                                 <div class="row">
                                     <div class="col-8">
                                         {#if swap.status=="Found"}
-                                            <div class="status m-auto" style="background-color: {statusColors[swap.status]}; cursor: pointer" on:click={showSwapMatch(swap.swap_id)}><p style="margin: 0px; padding: 0px; color: white;">{swap.status}</p></div>
+                                        <div class="status m-auto" style="background-color: {statusColors[swap.status]}; cursor: pointer; color: #4D4DD0" on:click={showSwapMatch(swap.swap_id)}>{swap.status}</div>
                                         {:else}
-                                            <div class="status m-auto" style="background-color: {statusColors[swap.status]};"><p style="margin: 0px; padding: 0px; color: white;">{swap.status}</p></div>
+                                        <div class="status m-auto" style="background-color: {statusColors[swap.status]}; color: #E67B21">{swap.status}</div>
                                         {/if}
                                     </div>
                                     <div class="col">
-                                        <i class="bi bi-x-circle" id="remove-swap" on:click={()=>{handleDeleteSwap(swap.swap_id)}}></i>
+                                        <i class="bi bi-trash" id="remove-swap" on:click={()=>{handleDeleteSwap(swap.swap_id)}}></i>
                                     </div>
                                 </div>
                             </div>
@@ -253,11 +277,16 @@
 
      #swap-table {
         text-align: center;
-        border: 1px solid rgba(0,0,0,0.5);
-        border-radius: 1rem;
+        border:  Solid rgba(0, 0, 0, 0.11);
+        border-radius: 20px;
         overflow: hidden;
         box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
         background-color: var(--quaternary);
+     }
+
+     #remove-swap
+     {
+        color: var(--quniary);
      }
 
      #create-swap-icon {
@@ -278,7 +307,31 @@
 
      #remove-swap:hover {
         cursor: pointer;
-        color: red;
+        color: var(--septanry);
+     }
+
+     .btn-outline-success
+     {
+         color: #ffffff;
+         border-radius: 20px;
+         background-color: var(--septanry);
+         font-family: 'Chau Philomene One';
+         border: None;
+     }
+     .btn-outline-success:hover
+     {
+        background-color: var(--other-primary);
+        color: var(--quinary);
+        font-family: 'Chau Philomene One';
+     }
+     .fa-sync
+     {
+        font-size: 20px;
+        padding-left: 10px;
+     }
+     .m-auto
+     {
+         border: None;
      }
 
 </style>

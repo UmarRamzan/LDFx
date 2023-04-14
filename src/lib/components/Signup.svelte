@@ -94,7 +94,7 @@
               <span class="input-group-text input-icon justify-content-center" id="basic-addon1"><i class="bi bi-hash"></i></span>
             </div>
             <div class="col-10">
-              <input type="password" class="form-control input-text" id="password" placeholder="Username" bind:value={username}>
+              <input type="text" class="form-control input-text" id="password" placeholder="Username" bind:value={username}>
             </div>
           </div>
   
@@ -176,6 +176,7 @@
 
   .submit-button {
     background-color: var(--button-background);
+    border: 0px solid;
     color: white;
   }
 

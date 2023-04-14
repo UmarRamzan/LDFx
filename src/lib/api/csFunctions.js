@@ -438,9 +438,22 @@ export const addDonationComment = async (poster_id, donation_id, user_id, userna
         success = true
         data = donationData
 
+        // check settings for this user
+        const { data:settingsDataOne, error:settingsErrorOne } = await supabase
+        .from('settings')
+        .select('*')
+        .eq('user_id', user_id)
+
+        if (settingsErrorOne) {console.log(settingsErrorOne)}
+        else {console.log(settingsDataOne)}
+
+        if (settingsDataOne[0].donations) {
+
         //update notification table
         const {data: notificationData, error} = await supabase.from('notifications').insert([{user_id: poster_id, type: "comment", text: "Comment on your donation post", type: "comment-donations"}]).select('*')
         if (error) {console.log(error)}
+
+        }
     }
     return {success: success, data: data, error: error}
 }
@@ -472,9 +485,21 @@ export const addJobComment = async (poster_id, job_id, user_id, username, commen
         success = true
         data = donationData
 
-        //update notification table
-        const {data: notificationData, error} = await supabase.from('notifications').insert([{user_id: poster_id, type: "comment", text: "Comment on your job post", type: "comment-jobs"}]).select('*')
-        if (error) {console.log(error)}
+        // check settings for this user
+        const { data:settingsDataOne, error:settingsErrorOne } = await supabase
+        .from('settings')
+        .select('*')
+        .eq('user_id', user_id)
+
+        if (settingsErrorOne) {console.log(settingsErrorOne)}
+        else {console.log(settingsDataOne)}
+
+        if (settingsDataOne[0].jobs) {
+
+            //update notification table
+            const {data: notificationData, error} = await supabase.from('notifications').insert([{user_id: poster_id, type: "comment", text: "Comment on your job post", type: "comment-jobs"}]).select('*')
+            if (error) {console.log(error)}
+        }
     }
     return {success: success, data: data, error: error}
 }

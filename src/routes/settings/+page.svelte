@@ -9,14 +9,17 @@
   import { user, username} from "../../routes/UserStore";
   import { updateUsername } from "$lib/api/csFunctions";
   import { goto } from "$app/navigation";
+  import { getUserSettings, updateUserSettings } from "$lib/api/clientFunctions";
     
   const dispatch = createEventDispatcher();
-
     
   let email = "";
   let password = "";
   let accountType = "";
   let usernameInput = $username;
+  let settings = null;
+
+  let changesSaved = false;
   
   const getData = async () => {
 
@@ -57,6 +60,22 @@ const saveChanges = async () => {
   }
 };
 
+const handleSave = async () => {
+
+  let response = await updateUserSettings($user.id, settings)
+  if (response.error) {console.log(response.error)}
+  else {console.log(response)}
+
+  changesSaved = true;
+
+}
+
+const deleteAccount = async () => {
+  const { data, error } = await supabase.auth.admin.deleteUser($user.id);
+  if (error) {console.log(error)}
+}
+
+
   
   //this works but it should be in the updateData function
   const _updateUsername = async()=>{
@@ -65,8 +84,16 @@ const saveChanges = async () => {
       return res.success
   }
     
-  onMount(() => {getData();usernameInput = $username;});
-  
+  onMount( async () => {
+    await getData();
+    usernameInput = $username;
+    console.log($user.id)
+    let settingsResponse = await getUserSettings($user.id);
+    console.log(settingsResponse)
+    settings = settingsResponse.data[0];
+    console.log(settings)
+  });
+
   let activeTab = 0;
   
     function setActiveTab(index) {
@@ -97,7 +124,7 @@ const saveChanges = async () => {
 
       <hr>
 
-      <div class="container" id="account-settings">
+      <div class="container p-0 m-0" id="account-settings">
         <div class="row">
           <label class="settings-data"><b>Username </b></label>
           <input type="text" bind:value={usernameInput} />
@@ -123,12 +150,13 @@ const saveChanges = async () => {
         <!-- <div class="row">
           <button type="button" class="btn btn-danger">Delete Account</button>
         </div> -->
+        <div class="row">
+          <button type="button" class="btn btn-danger" style="width: 24%;margin-right: 4px; margin-left: 0px" on:click={()=>goto('/')}>Cancel</button>
+          <button type="button" class="btn btn-primary" style="width: 25%;margin-left: 4px; background-color: light-blue; border-color: light-blue;" on:click={saveChanges}>Save Changes</button>
+        </div>
       </div>
 
-        <div class="d-flex">
-          <button type="button" class="btn btn-danger" style="margin-right: 200px;">Cancel</button>
-          <button type="button" class="btn btn-primary" style="background-color: light-blue; border-color: light-blue;" on:click={saveChanges}>Save Changes</button>
-        </div>
+        
 
         
     </div>
@@ -170,7 +198,7 @@ const saveChanges = async () => {
   
     {:else if activeTab === 1}
     
-  
+  {#if settings}
   <div class="content2">
   
       <h1 style="padding: 0px;">Notifications</h1>
@@ -179,45 +207,56 @@ const saveChanges = async () => {
       <hr>
   
       <div class="form-check form-switch form-switch-md">
-        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked={settings.swaps} on:change={()=>{settings.swaps=!settings.swaps}}>
         <label class="form-check-label" for="flexSwitchCheckDefault">
           <h3>Swaps</h3>
-          <p>Alerts if swap found or not</p>
+          <p>Alerts if a swap has been found</p>
         </label>
       </div>
   
       <div class="form-check form-switch form-switch-md">
-        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked={settings.jobs} on:change={()=>{settings.jobs=!settings.jobs}}>
         <label class="form-check-label" for="flexSwitchCheckDefault">
           <h3>Job Posts</h3>
-          <p>Alerts if job offer posted</p>
+          <p>Alert if someone comments under your job posting</p>
         </label>
       </div>
   
       <div class="form-check form-switch form-switch-md">
-        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked={settings.donations} on:change={()=>{settings.donations=!settings.donations}}>
         <label class="form-check-label" for="flexSwitchCheckDefault">
-          <h3>Posts</h3>
-          <p>Alerts if Donation request posted</p>
-        </label>
-      </div>
-  
-      <div class="form-check form-switch form-switch-md">
-        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-        <label class="form-check-label" for="flexSwitchCheckDefault">
-          <h3>Comments</h3>
-          <p>Comments on your posts and replies to comments</p>
+          <h3>Donation Posts</h3>
+          <p>Alert if someone comments under your donation request</p>
         </label>
       </div>
 
+      <div>
+      <button type="button" class="btn btn-danger" style="width: 25%; margin-right: 1px;" on:click={()=>goto('/')}>Cancel</button>
+      <button type="button" class="btn btn-primary" style="width: 25%; background-color: light-blue; border-color: light-blue;" on:click={handleSave}>Save Changes</button>
+      </div>
+
+      {#if changesSaved}
+      <div class="alert alert-success" role="alert">
+        Changes Saved Successfully!
+      </div>
+      {/if}
+
   </div>
-  
-  
+  {/if}
   
     {/if}
   </div>
   
   <style>
+
+  @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;1,300&family=Chau+Philomene+One&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;1,300&display=swap');
+    p {
+      font-family: 'Chakra Petch';
+    }
+    h1 {
+        font-family: 'Chau Philomene One';
+    }
 
   .nav-tabs {
     width: 60%;
@@ -239,6 +278,15 @@ const saveChanges = async () => {
     box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
   }
 
+  #save-button {
+    width: 100%;
+    background-color: var(--primary);
+    color: white;
+    border: 1px solid var(--primary);
+    border-radius: 20px;
+    padding: 10px;
+    margin-top: 20px;
+  }
   .form-check-input {
     height: 1.5rem;
     width: 2.75rem;
@@ -250,8 +298,16 @@ const saveChanges = async () => {
     background-color: red;
   }
 
+  .form-check {
+    padding-left: 0px;
+  }
+
   .settings-data {
     padding-left: 0px;
+  }
+
+  .form-switch {
+    padding-left: 40px;
   }
 
   h1 {
@@ -267,7 +323,7 @@ const saveChanges = async () => {
 
   #account-settings {
     font-size: 20px;
-    margin-left: 0px;
+    
   }
 
   #account-settings .row {
@@ -281,7 +337,7 @@ const saveChanges = async () => {
   input {
     width: 50%;
     padding: 5px 15px;
-    margin: 10px 0;
+    
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -290,7 +346,6 @@ const saveChanges = async () => {
 
   #account-type-select {
     width: 50%;
-    margin: 0px;
   }
   
     .popup {

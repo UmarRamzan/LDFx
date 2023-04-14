@@ -9,7 +9,17 @@
 
 <style>
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;1,300&family=Chau+Philomene+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;1,300&display=swap');
+
+
+    :global(h2) {
+        font-family: 'Chau Philomene One';
+    }
+
+    :global(p) {
+        font-family: 'Chakra Petch';
+    }
 
 :root {
 
