@@ -102,6 +102,15 @@ const deleteAccount = async () => {
   
   </script>
 
+{#if !$user}
+
+<div id="login-error">
+    <i class="bi bi-arrow-left-right" id="error-icon"></i>
+    <h3>You must be logged in to view settings</h3>  
+</div>
+    
+{:else}
+
   <ul class="nav nav-tabs">
     <li class="nav-item">
       <a class="nav-link " id="account-tab" href="#account-tab" on:click={()=>{setActiveTab(0)}}>Account</a>
@@ -245,6 +254,8 @@ const deleteAccount = async () => {
   
     {/if}
   </div>
+
+  {/if}
   
   <style>
 
@@ -304,6 +315,28 @@ const deleteAccount = async () => {
     border-radius: 20px;
     margin-right: 20px;
   }
+
+  #login-error {
+        width: 50%;
+        padding: 50px;
+        text-align: center;
+        border: 1px solid rgba(0,0,0,0.5);
+        box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: auto;
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    #error-icon {
+        font-size: 3rem;
+        margin-right: 40px;
+    }
 
   .form-check-input:checked {
     background-color: red;
