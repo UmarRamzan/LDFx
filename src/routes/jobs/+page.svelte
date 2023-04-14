@@ -16,6 +16,8 @@
     import { onMount } from "svelte";
     import { user,username } from "../../routes/UserStore";
 
+    import { fade } from "svelte/transition";
+
     let currentUser = null;
     let jobPostings = []
     let comments = ["dummy1","dummy2"];
@@ -230,7 +232,7 @@
 
 </script>
 
-<div class="container-md content">
+<div class="container-md content" in:fade>
 
 <div class="mt-4">
     <div class="row align-items-center">
@@ -607,6 +609,28 @@
         display: inline;
         font-size: 12px;
         color: var(--quinary);
+    }
+    .bi-chat-square 
+    {
+        font-size: 1.5rem;
+        color: var(--quinary);
+    }
+    .bi-chat-square:hover {
+        color: blue;
+    }
+    .bi-hand-thumbs-up {
+        font-size: 1.5rem;
+        color: var(--quinary);
+    }
+    .bi-hand-thumbs-up:hover {
+        color: green;
+    }
+    .bi-hand-thumbs-down {
+        font-size: 1.5rem;
+        color: var(--quinary);
+    }
+    .bi-hand-thumbs-down:hover {
+        color: red;
     }
     .col-4
     {

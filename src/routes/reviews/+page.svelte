@@ -98,11 +98,11 @@
 
     #search-bar {
         margin: auto 30px;
-        width: 70%;
+        width: 80%;
     }
 
     .search-results {
-        width: 70%;
+        width: 80%;
         color: black;
         margin: auto;
         padding: 10px;
@@ -111,6 +111,10 @@
     #search-card {
         background-color: var(--primary);
         box-shadow: 0px 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
+
+    #search-card:hover {
+        background-color: var(--quaternary);
     }
 
     a {

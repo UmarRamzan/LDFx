@@ -8,6 +8,8 @@
   import { onMount } from "svelte";
   import { getDonationPosts,addDonationPosts,editDonationPosts,deleteDonationPosts,getUserData,getDonationComments,addDonationComment,getDonationLikes,addDonationLike,editDonationLike } from "$lib/api/csFunctions";
   import { user,username } from "../../routes/UserStore";
+  import { fade } from "svelte/transition";
+
   let donationPosts = [];
   let comments = [];
   let commentsPending = true;
@@ -225,7 +227,7 @@
 
 </script>
 
-<div class="container-md content">
+<div class="container-md content" in:fade>
 
 <div class="mt-4">
   <div class="row align-items-center">
@@ -532,6 +534,28 @@
     width: 98%;
     margin-left: 1%;
   }
+  .bi-chat-square 
+    {
+        font-size: 1.5rem;
+        color: var(--quinary);
+    }
+    .bi-chat-square:hover {
+        color: blue;
+    }
+    .bi-hand-thumbs-up {
+        font-size: 1.5rem;
+        color: var(--quinary);
+    }
+    .bi-hand-thumbs-up:hover {
+        color: green;
+    }
+    .bi-hand-thumbs-down {
+        font-size: 1.5rem;
+        color: var(--quinary);
+    }
+    .bi-hand-thumbs-down:hover {
+        color: red;
+    }
   #create-posting-content 
   {
     background-color: var(--secondary);
